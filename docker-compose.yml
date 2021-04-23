@@ -12,4 +12,4 @@ services:
     image: mongo:latest
     container_name: mongodb
     volumes:
-      - "/apps/mongodbfreelance:/data/db"
+      - "${GITLABRUNNERDB}/mongodbfreelance:/data/db"
