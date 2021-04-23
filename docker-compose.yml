@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  #----------  HTML/Fetch Services  -------
+  freelancenow:
+    build: ./
+    container_name: freelancenow
+    depends_on:
+      - mongodb
+
+  #-----------      DATABASE     ----------
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - "/apps/mongodbfreelance:/data/db"

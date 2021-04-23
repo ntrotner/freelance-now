@@ -1,8 +1,21 @@
 image: node
 
+stages:
+    - linter
+    - deploy
+
 before_script:
     - npm install
 
 linter:
+    stage: linter
     script:
         - npm run linter
+
+deploy_stage:
+    tags:
+        - deploy
+    script:
+        - docker-compose up -d --build
+    only:
+        - master

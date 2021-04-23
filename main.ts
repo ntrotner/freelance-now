@@ -3,3 +3,5 @@ import * as ui from './ui'
 
 server.startServer()
 ui.startUI()
+
+console.log("Started")
