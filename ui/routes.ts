@@ -3,6 +3,8 @@ import path = require('path');
 const routes = {
   '/': '/home/home.html',
   '/home.css': '/home/home.css',
+  '/login': '/login/login.html',
+  '/login.css': '/login/login.css',
   '/default.css': '/default.css'
 }
 
