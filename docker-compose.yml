@@ -4,8 +4,12 @@ services:
   freelancenow:
     build: ./
     container_name: freelancenow
+    ports:
+      - 8080:8080
     depends_on:
       - mongodb
+    environment:
+      - EXPRESSPORT=8080
 
   #-----------      DATABASE     ----------
   mongodb:
