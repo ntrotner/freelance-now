@@ -5,6 +5,7 @@ import { hashPassword, verifyPassword } from './password';
 import { Client } from '../database/schemas/client_schema';
 import { Developer } from '../database/schemas/developer_schema';
 import { validInputLogin } from '../components/validator';
+import { resetUserCredentials, setUserCredentials } from './session_manager';
 
 
 /**
@@ -65,18 +66,18 @@ export async function createUser(username: string, password: string, email: stri
  * @param res
  */
 export async function loginUser(req, res): Promise<void> {
-  if (!validInputLogin(req.body)) return res.status(406).send('Ungeeignete Eingabe');
+  if (!validInputLogin(req.body)) return resetUserCredentials(req, res, 406, 'Ungeeignete Eingabe');
 
   let foundUser;
   if (req.body.email) foundUser = await findUser({email: req.body.email})
 
-  if (!foundUser) return res.status(404).send('Nutzer nicht gefunden')
-  if (!req.body.password) return res.status(404).send('Passwort nicht gueltig')
+  if (!foundUser) return resetUserCredentials(req, res, 404, 'Nutzer nicht gefunden')
+  if (!req.body.password) return resetUserCredentials(req, res, 404, 'Passwort nicht gueltig')
 
   verifyPassword(foundUser.password_hash, req.body.password)
       .then((isVerified) => {
-        if (isVerified) res.json(foundUser)
+        if (isVerified) setUserCredentials(req, res, foundUser)
         else res.status(404).send('Falsches Passwort')
       })
-      .catch(() => res.status(500).send('Unerwartetes Problem'));
+      .catch(() => resetUserCredentials(req, res, 500, 'Unerwartetes Problem'))
 }
