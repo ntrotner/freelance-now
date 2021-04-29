@@ -3,6 +3,9 @@ import { getRoute } from './routes';
 
 export function startUI(): void {
   app.get('*', (req, res) => {
-    res.sendFile(getRoute(req.originalUrl));
+    if (req.url.includes('.js')) {
+      res.type('.js');
+    }
+    getRoute(req.originalUrl, req, res);
   });
 }
