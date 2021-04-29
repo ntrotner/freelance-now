@@ -1,6 +1,8 @@
-import { createDeveloper } from './user_management/developer_control';
-import { createClient } from './user_management/client_control';
-import { loginUser } from './user_management/user_control';
+import { createDeveloper } from './user_authentication/developer_control';
+import { createClient } from './user_authentication/client_control';
+import { loginUser, updateSettings } from './user_authentication/user_control';
+import { sendSessionStorage } from './user_action/credentials';
+
 
 /**
  * simple health check of server
@@ -17,13 +19,15 @@ function healthCheck(req, res) {
  *
  * @param req
  * @param res
+ * @param message
  */
-function error(req, res) {
-  res.sendStatus(404);
+export function error(req, res, message = 'Fehler') {
+  res.status(404).send(message);
 }
 
 const getRoutes = {
-  '/api/health': healthCheck
+  '/api/health': healthCheck,
+  '/api/sessionCredentials': sendSessionStorage
 }
 
 /**
@@ -40,7 +44,8 @@ export function getRoute(route: string, req, res): void {
 const postRoutes = {
   '/api/newDeveloper': createDeveloper,
   '/api/newClient': createClient,
-  '/api/login': loginUser
+  '/api/login': loginUser,
+  '/api/updateSettings': updateSettings
 }
 
 /**

@@ -1,5 +1,6 @@
 import { getRoute, postRoute } from './routes';
 
+const MongoStore = require('connect-mongo');
 const express = require('express');
 const session = require('express-session')
 const bodyParser = require('body-parser');
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 app.use(session({
   secret: process.env.EXPRESS_SESSION_SECRET,
   resave: false,
+  store: MongoStore.create({mongoUrl: 'mongodb://mongodb:27017/expressSession'}),
   saveUninitialized: true,
   cookie: {
     maxAge: 1000 * 60 * 60 * 6 // max six hours
