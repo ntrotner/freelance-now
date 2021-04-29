@@ -1,0 +1,89 @@
+#subwelcome {
+    display: flex;
+}
+
+.imagecontainer {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.imagecontainer > img {
+    object-fit: cover;
+    width: 80%;
+}
+
+.imagecontainer > h1, .imagecontainer > span {
+    position: absolute;
+    color: white;
+    width: 80%;
+}
+
+.imagecontainer > h1 {
+    top: 8px;
+    left: 16px;
+}
+
+.imagecontainer > span {
+    top: 64px;
+    left: 16px;
+}
+
+.top {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 24px;
+}
+
+
+.registration {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
+    width: 100%;
+    justify-content: center;
+    margin: 16px auto;
+}
+
+.registrationcard {
+    display: grid;
+    width: fit-content;
+    line-height: 2;
+    border: 1px black solid;
+    margin: 0 48px;
+    padding: 0px 12px;
+    padding-bottom: 24px;
+    border-radius: 4px;
+}
+
+.middle {
+    height: 200px;
+    width: 75%;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.middle > p {
+    text-align: justify;
+}
+
+#menu {
+    margin: 32px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#menu li {
+    margin: 0 16px;
+}
+
+.material-icons {
+    padding: 0 6px;
+}
+
+p {
+    font-size: 18px;
+}

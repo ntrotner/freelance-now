@@ -1,0 +1,15 @@
+.settings {
+    margin: 16px 26px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form > input {
+    margin: 8px 0;
+}

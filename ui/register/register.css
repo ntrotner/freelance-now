@@ -1,10 +1,11 @@
-#login {
+#register {
     display: grid;
     width: fit-content;
     line-height: 2;
     margin: 10% auto;
     border: 1px black solid;
     padding: 0px 12px;
+    padding-bottom: 12px;
     border-radius: 4px;
 }
 
@@ -28,4 +29,18 @@ button {
     width: 50%;
     margin: 0 auto;
     margin-top: 20px;
+    transition: 0s;
+}
+
+label {
+    margin: 2px 0;
+}
+
+.usertype {
+    display: inline-table;
+}
+
+.usertypebtn {
+    width: 48%;
+    margin: 0 2px;
 }

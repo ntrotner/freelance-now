@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+    <link rel="stylesheet" href="default.css">
+</head>
+
+<style>
+    div {
+        display: grid;
+        width: fit-content;
+        line-height: 2;
+        margin: 20% auto;
+        border: 1px black solid;
+        padding: 0px 12px;
+        padding-bottom: 24px;
+        border-radius: 4px;
+    }
+
+    #wait {
+        position: absolute;
+    }
+
+    #infotext {
+        padding-right: 25px;
+    }
+</style>
+<body>
+
+<div class="shadow">
+
+    <h2>Logout Erfolgreich!</h2>
+    <span id="infotext">Sie werden jeden Moment weitergeleitet<span id="wait">...</span></span>
+
+</div>
+
+<script type="module">
+    import {redirectHome} from './session_manager.js';
+
+    sessionStorage.clear();
+
+    let counter = 0;
+    var x = document.getElementById("wait");
+
+    function addDots(amount) {
+        x.innerText = '.'.repeat(amount)
+    }
+
+    setInterval(() => {
+        addDots(counter);
+        counter += 1;
+        counter %= 4;
+    }, 500);
+
+    setTimeout(redirectHome, 2600);
+</script>
+
+</body>
+</html>

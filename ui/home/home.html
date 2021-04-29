@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="sidebar.js" defer></script>
 </head>
 <body>
+<sidebar-component></sidebar-component>
+<main>
+    <div id="welcome">
+        <h2 id="user"></h2>
+        <div>
+            <i onclick="location.href='/settings'" class="material-icons md-26 link">settings</i>
+            <i class="material-icons md-26 link" id="logout">logout</i>
+        </div>
+    </div>
+</main>
 
+
+<script type="module">
+    import {checkSession} from './check_session.js';
+    import {unauthorize} from './session_manager.js'
+
+    var x = document.getElementById("logout");
+    x.addEventListener("click", unauthorize);
+
+    checkSession(() => {
+        var x = document.getElementById("user");
+        x.innerText = "Hallo " + sessionStorage.getItem("username");
+
+        x = document.getElementById("welcome");
+        x.style.visibility = 'visible';
+    }, unauthorize);
+</script>
 </body>
 </html>

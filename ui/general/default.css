@@ -1,0 +1,47 @@
+* {
+    font-family: monospace, Arial, sans-serif;
+}
+
+main {
+    margin-left: 155px;
+}
+
+#sidebar {
+    width: 155px;
+}
+
+.material-icons.md-26 {
+    font-size: 26px;
+}
+
+.link {
+    opacity: 0.83;
+    transition: 0.3s;
+}
+
+.link:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.shadow {
+    -webkit-box-shadow: -2px 3px 3px -2px #373737;
+    box-shadow: -2px 3px 3px -2px #373737;
+}
+
+button {
+    background: black;
+    color: white;
+    font-weight: bold;
+    border: 8px black solid;
+    border-left: 2px;
+    border-right: 2px;
+    opacity: 0.75;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 1;
+}

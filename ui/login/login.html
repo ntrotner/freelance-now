@@ -4,43 +4,46 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="snackbar.css">
 </head>
 <body>
 
-<form>
+<form id="login" class="shadow">
+    <h3>Freelance Now!</h3>
+
     <label for="email">Email</label>
     <input type="email" name="email" id="email"/>
 
     <label for="password">Password</label>
     <input type="password" name="password" id="password"/>
-    <button type="submit">Submit</button>
+    <button type="submit">Login</button>
+
+    <h5 id="register" class="link">Kein Account?</h5>
 </form>
 
-<script>
+<script type="module">
+    import {sendLogin, redirectRegister} from './session_manager.js';
+
+    sessionStorage.clear();
+
     function handleSubmit(event) {
+        console.log(event)
         event.preventDefault();
         const data = new FormData(event.target);
         const email = data.get('email');
         const password = data.get('password');
-        console.log({email, password});
 
-        var xhr = new XMLHttpRequest();
-        var url = "/api/login";
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var json = JSON.parse(xhr.responseText);
-                console.log(json);
-            }
-        };
-        var sendData = JSON.stringify({email, password});
-        xhr.send(sendData);
+        sendLogin(email, password);
     }
 
     const form = document.querySelector('form');
     form.addEventListener('submit', handleSubmit);
+
+    var x = document.getElementById("register");
+    x.addEventListener("click", redirectRegister);
 </script>
 
+<div id="snackbar"></div>
 </body>
 </html>

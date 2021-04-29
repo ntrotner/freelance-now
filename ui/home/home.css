@@ -1,0 +1,15 @@
+#welcome {
+    width: 95%;
+    border-bottom: 1px black solid;
+    visibility: hidden;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.material-icons {
+    margin-right: 10px;
+}
+
+
