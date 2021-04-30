@@ -71,3 +71,8 @@ export function validInputLogin(body) {
         isASCII(body.password) && body.password.length <= MAX_PASSWORD_LENGTH
   }
 }
+
+export function validMessage(body) {
+  return body.to && isEMail(body.to) &&
+      body.message && isASCII(body.message)
+}

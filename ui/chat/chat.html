@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="snackbar.css">
+    <link rel="stylesheet" href="chat.css">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="sidebar.js" defer></script>
+</head>
+<body>
+<sidebar-component></sidebar-component>
+<main>
+    <div>
+        <form id="search">
+            <h3>Nutzer Suchen</h3>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email"/>
+            <button type="submit">Chat erstellen</button>
+        </form>
+    </div>
+    <div id="chatWrapper">
+        <div>
+            <ul id="users">
+            </ul>
+        </div>
+        <div class="chatWindow">
+            <ul id="chatContent">
+            </ul>
+
+            <form autocomplete="off" id="send">
+                <label for="sendMessage"></label>
+                <input id="sendMessage"/>
+            </form>
+        </div>
+    </div>
+</main>
+<script type="module">
+    import {checkSession} from './check_session.js';
+    import {unauthorize} from './session_manager.js';
+    import {startChat, getAllChats, getChatContent, sendMessage} from './chat.js';
+
+    let currentUser;
+    let prevLen = 0;
+
+    const form = document.getElementById('search');
+    form.addEventListener('submit', handleSearch);
+
+    const x = document.querySelector("#send");
+    x.addEventListener('submit', (event) => event.preventDefault())
+
+    function initUI() {
+        checkSession(() => {
+            refreshUI();
+        }, unauthorize);
+    }
+
+    function refreshUI() {
+        const listRef = $('#users');
+        getAllChats((msg) => {
+            clearChatList();
+            msg.chats.forEach((user) => {
+                listRef.append($('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`));
+                const tempElement = document.getElementById(user.email);
+                tempElement.addEventListener('click', () => getChat(user.email, true));
+            })
+        }, (msg) => {
+            console.error(msg)
+        });
+        if (currentUser) getChat(currentUser, false)
+    }
+
+
+    function handleSearch(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        const email = data.get('email');
+
+        startChat(email, (msg) => {
+            refreshUI()
+        }, () => {
+        })
+    }
+
+
+    function updateChatUI(messageArray) {
+        const listRef = $('#chatContent');
+        messageArray.forEach((user) => {
+            listRef.append($('<li>').attr('id', String(user.ownMessage))
+                .text(`${user.message}`)).append($('<li>').attr('id', String(user.ownMessage))
+                .attr('class', 'date').text((new Date(user.date)).toLocaleString()));
+        })
+        if (prevLen !== messageArray.length) {
+            var messageBody = document.querySelector('#chatContent');
+            messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+            prevLen = messageArray.length;
+        }
+    }
+
+    function clearChatUI() {
+        $('#chatContent').empty();
+    }
+
+    function clearChatList() {
+        $('#users').empty();
+    }
+
+    function getChat(email) {
+        getChatContent(email,
+            (updatedChat) => {
+                const x = document.querySelector("#send");
+                var new_element = x.cloneNode(true);
+                x.parentNode.replaceChild(new_element, x);
+
+                new_element.addEventListener("submit", (event) => sendChatMessage(event, email));
+                clearChatUI();
+                updateChatUI(updatedChat['update'])
+                currentUser = email
+            },
+            () => {
+            }
+        )
+    }
+
+    function sendChatMessage(event, email) {
+        event.preventDefault();
+        sendMessage(email, String(document.getElementById('sendMessage').value), (msg) => {
+                document.getElementById('sendMessage').value = ''
+                clearChatUI();
+                updateChatUI(msg['update'])
+            },
+            (err) => {
+                console.log(err)
+            }
+        )
+    }
+
+    setInterval(refreshUI, 10000);
+    initUI();
+</script>
+<div id="snackbar"></div>
+
+</body>
+</html>

@@ -28,7 +28,6 @@
     sessionStorage.clear();
 
     function handleSubmit(event) {
-        console.log(event)
         event.preventDefault();
         const data = new FormData(event.target);
         const email = data.get('email');

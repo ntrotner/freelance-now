@@ -30,7 +30,7 @@ export function POST(url, reqHeader, payload, success, failed) {
             } catch {
                 success(xhr.responseText);
             }
-        } else {
+        } else if (xhr.readyState === 4 && (`${xhr.status}`.startsWith('4') || `${xhr.status}`.startsWith('5'))) {
             failed(xhr.response);
         }
     };

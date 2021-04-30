@@ -7,6 +7,7 @@ const register = (req, res, fct) => fct('/register/register.html', res);
 const logout = (req, res, fct) => fct('/logout/logout.html', res);
 const welcome = (req, res, fct) => fct('/welcome/welcome.html', res);
 const settings = (req, res, fct) => fct('/settings/settings.html', res);
+const chat = (req, res, fct) => fct('/chat/chat.html', res);
 const error = (req, res, fct) => fct('/error/error.html', res);
 
 const homecss = (req, res, fct) => fct('/home/home.css', res);
@@ -15,6 +16,7 @@ const logincss = (req, res, fct) => fct('/login/login.css', res);
 const settingscss = (req, res, fct) => fct('/settings/settings.css', res);
 const defaultcss = (req, res, fct) => fct('/general/default.css', res);
 const welcomecss = (req, res, fct) => fct('/welcome/welcome.css', res);
+const chatcss = (req, res, fct) => fct('/chat/chat.css', res);
 const snackbarcss = (req, res, fct) => fct('/general/snackbar.css', res);
 
 const welcometoppng = (req, res, fct) => fct('/general/welcome-top.png', res);
@@ -24,6 +26,7 @@ const http_requests = (req, res, fct) => fct('/scripts/http_requests.js', res);
 const session_manager = (req, res, fct) => fct('/scripts/session_manager.js', res);
 const snackbar = (req, res, fct) => fct('/scripts/snackbar.js', res);
 const check_session = (req, res, fct) => fct('/scripts/check_session.js', res);
+const chatjs = (req, res, fct) => fct('/scripts/chat.js', res);
 const sidebar = (req, res, fct) => fct('/components/sidebar.js', res);
 
 const sendFile = (pathFile, res) => res.sendFile(path.join(__dirname + pathFile));
@@ -62,6 +65,15 @@ function registerPage(req, res, _) {
   }
 }
 
+function checkChat(req, res, _) {
+  if (isAuthenticated(req)) {
+    chat(req, res, sendFile);
+  } else {
+    redirect('/', res);
+  }
+}
+
+
 const routes = {
   '/': isAuthorized,
   '/home.css': homecss,
@@ -76,6 +88,8 @@ const routes = {
   '/welcome-top.png': welcometoppng,
   '/settings': checkSettings,
   '/settings.css': settingscss,
+  '/chat': checkChat,
+  '/chat.css': chatcss,
   '/error': error,
   '/default.css': defaultcss,
   '/snackbar.css': snackbarcss,
@@ -84,6 +98,7 @@ const routes = {
   '/session_manager.js': session_manager,
   '/snackbar.js': snackbar,
   '/check_session.js': check_session,
+  '/chat.js': chatjs,
   '/sidebar.js': sidebar
 }
 

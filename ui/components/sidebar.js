@@ -50,7 +50,7 @@ class Sidebar extends HTMLElement {
         </div>
             <ul class="sidelinks">
               <li onclick="location.href='/'">Home</li>
-              <li onclick="location.href='/messages'">Nachrichten</li>
+              <li onclick="location.href='/chat'">Nachrichten</li>
               <li onclick="location.href='/contracs'">Aufträge</li>
               <li onclick="location.href='/search'">Suche</li>
             </ul>  

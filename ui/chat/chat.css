@@ -1,0 +1,72 @@
+#chatWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 32px 0;
+}
+
+#users {
+    list-style-type: none;
+    min-width: 15vw;
+}
+
+#users > li {
+    overflow-wrap: anywhere;
+    width: 15vw;
+    padding: 10px 25px;
+    margin: 8px 0;
+    outline: 1px #333333 solid;
+    cursor: pointer;
+    white-space: pre-line;
+}
+
+.chatWindow {
+    width: -webkit-fill-available;
+    outline: 1px black solid;
+    margin: 16px 64px;
+    height: 67vh;
+    position: relative;
+    padding-bottom: 32px;
+}
+
+.chatWindow > #send {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: -webkit-fill-available;
+    height: 32px;
+}
+
+#sendMessage {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+}
+
+#chatContent {
+    height: 100%;
+    overflow: auto;
+    margin: 0 0 32px 0;
+    line-height: 2;
+    list-style-type: none;
+    padding-left: 36px;
+    padding-right: 36px;
+}
+
+#true, #false {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+#true {
+    text-align: right;
+}
+
+#false {
+    text-align: left;
+}
+
+.date {
+    opacity: 0.7;
+    font-size: 14px;
+    margin-top: -8px;
+}

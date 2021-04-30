@@ -72,6 +72,11 @@
 
         x = document.getElementById("welcome");
         x.style.visibility = 'visible';
+        x.addEventListener("click", unauthorize);
+
+        document.getElementById("name").value = sessionStorage.getItem(("username"));
+        document.getElementById("email").value = sessionStorage.getItem(("email"));
+        document.getElementById("password").value = sessionStorage.getItem(("password"));
     }
 
     checkSession(updateHeader, unauthorize);

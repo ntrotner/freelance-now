@@ -20,7 +20,7 @@ export async function existsEMail(email, model: Model<IClient> | Model<IDevelope
   return {exists: !!foundModel, user: !!foundModel ? foundModel : null}
 }
 
-export async function existsAnyEMail(email) {
+export async function existsAnyEMail(email): Promise<boolean> {
   const emailCheckClient = await existsEMail(email, Client);
   const emailCheckDev = await existsEMail(email, Developer);
 
@@ -47,7 +47,7 @@ export async function findUser(property: Object): Promise<IDeveloper | IClient> 
  * @param options
  */
 export async function createUser(req, res, model: Model<IDeveloper> | Model<IClient>, options: Object) {
-  if (existsAnyEMail(req.body.email)) return resetUserCredentials(req, res, 400, 'E-Mail existiert schon');
+  if (await existsAnyEMail(req.body.email)) return resetUserCredentials(req, res, 400, 'E-Mail existiert schon');
 
   const password_hash = await hashPassword(req.body.password);
   const newModel = new model({

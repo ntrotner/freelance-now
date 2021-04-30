@@ -2,6 +2,7 @@ import { createDeveloper } from './user_authentication/developer_control';
 import { createClient } from './user_authentication/client_control';
 import { loginUser, updateSettings } from './user_authentication/user_control';
 import { sendSessionStorage } from './user_action/credentials';
+import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat';
 
 
 /**
@@ -27,7 +28,8 @@ export function error(req, res, message = 'Fehler') {
 
 const getRoutes = {
   '/api/health': healthCheck,
-  '/api/sessionCredentials': sendSessionStorage
+  '/api/sessionCredentials': sendSessionStorage,
+  '/api/getActiveChats': sendActiveChats,
 }
 
 /**
@@ -45,7 +47,11 @@ const postRoutes = {
   '/api/newDeveloper': createDeveloper,
   '/api/newClient': createClient,
   '/api/login': loginUser,
-  '/api/updateSettings': updateSettings
+  '/api/updateSettings': updateSettings,
+  '/api/startChat': startChat,
+  '/api/getAllChats': sendWholeChat,
+  '/api/sendMessage': addMessage,
+  '/api/updateMessages': sendChatUpdate
 }
 
 /**
