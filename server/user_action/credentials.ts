@@ -1,4 +1,4 @@
-import { isAuthenticated, resetUserCredentials } from '../user_authentication/session_manager';
+import { isAuthenticated, isClient, resetUserCredentials } from '../user_authentication/session_manager';
 import { findUser } from '../user_authentication/user_control';
 
 
@@ -18,5 +18,9 @@ export async function sendSessionStorage(req, res) {
   });
   if (!foundUser) return resetUserCredentials(req, res, 401, 'Nicht Authentifiziert');
 
-  res.status(200).json({username: foundUser.username, email: foundUser.email});
+  res.status(200).json({
+    username: foundUser.username,
+    email: foundUser.email,
+    type: isClient(req) ? 'client' : 'dev'
+  });
 }

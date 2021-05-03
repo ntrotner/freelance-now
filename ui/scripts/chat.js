@@ -33,10 +33,24 @@ export function getChatContent(email, success, failed) {
     );
 }
 
-export function sendMessage(email, message, success, failed) {
+export function checkChatUpdate(email, index, success, failed) {
+    POST('/api/updateMessages',
+        [{name: "Content-Type", value: "application/json"}],
+        {to: email, index},
+        (msg) => {
+            success(msg)
+        },
+        (msg) => {
+            error(msg);
+            failed();
+        }
+    )
+}
+
+export function sendMessage(email, message, index, success, failed) {
     POST('/api/sendMessage',
         [{name: "Content-Type", value: "application/json"}],
-        {to: email, message},
+        {to: email, message, index},
         (msg) => {
             success(msg)
         },

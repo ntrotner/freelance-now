@@ -1,6 +1,6 @@
 #login {
     display: grid;
-    width: fit-content;
+    width: max-content;;
     line-height: 2;
     margin: 10% auto;
     border: 1px black solid;

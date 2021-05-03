@@ -59,7 +59,7 @@ export async function sendChatUpdate(req, res, options?: { chat: IChat, index: n
     index = options.index;
   }
 
-  const messages = chat.messages.map((input) => {
+  const messages = chat.messages.splice(index).map((input) => {
     return {
       ownMessage: String(req.session._id) === String(input.from) ? true : false,
       date: input.date,
@@ -78,9 +78,9 @@ export async function addMessage(req, res) {
   const existiertChat = await existsChat(req.session._id, foundUser._id);
   if (!existiertChat) return error(req, res, 'Chat existiert nicht')
 
-  const newLength = existiertChat.messages.push({from: req.session._id, date: new Date(), message: req.body.message});
+  existiertChat.messages.push({from: req.session._id, date: new Date(), message: req.body.message});
   await existiertChat.save();
-  sendChatUpdate(req, res, {chat: existiertChat, index: 0})
+  sendChatUpdate(req, res, {chat: existiertChat, index: req.body.index ? req.body.index : 0})
 }
 
 export async function startChat(req, res) {

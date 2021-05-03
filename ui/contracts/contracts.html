@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contracts</title>
+    <script src="sidebar.js" defer></script>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="contracts.css">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<sidebar-component></sidebar-component>
+
+<main>
+
+    <div id="topWrapper">
+        <h3>Aufträge</h3>
+        <button id="newContractButton" onclick="location.href='/create/contract'">Neuer Auftrag</button>
+    </div>
+
+    <hr>
+
+    <div id="bottomWrapper">
+    </div>
+</main>
+<script type="module">
+    import {getPersonalContracts} from './contracts.js';
+
+    if (sessionStorage.getItem('type') === 'dev') $('#newContractButton').remove()
+
+    getPersonalContracts(
+        (response) => {
+            $('#bottomWrapper').append(
+                response.map((contract) => {
+                    return $('<div>').attr('class', 'contract shadow')
+                        .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
+                        .append(
+                            Object.keys(contract).map((key) => {
+                                if (key === '_id') return
+                                let value = contract[key];
+                                if (key === 'isDone') value = contract[key] ?
+                                    'Fertig'
+                                    : contract['participant'] ? 'In Arbeit' : 'Kein Auftragnehmer'
+                                if (key === 'reward') value += '€'
+
+
+                                return $('<p>').attr('class', 'contractInfo').text(value)
+                            }))
+                })
+            )
+        },
+        (error) => {
+
+        }
+    )
+
+</script>
+</body>
+</html>

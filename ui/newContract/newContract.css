@@ -1,0 +1,45 @@
+#description {
+    width: 100%;
+    height: 100%;
+}
+
+#newContract {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#upperContract {
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
+    justify-content: center;
+    align-items: center;
+}
+
+#leftUpperContract {
+    display: flex;
+    flex-direction: column;
+    margin: 0 36px 0 0px;
+}
+
+#bottomContract {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 350px;
+    height: 200px;
+}
+
+#upperContract > label {
+    margin: 12px 0 0 0;
+}
+
+form > * {
+    margin: 24px 0 0 0;
+}
+
+#reward::after {
+    content: 'Hello'
+}

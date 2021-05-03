@@ -1,0 +1,45 @@
+.link {
+    margin: 0 12px;
+}
+
+#description {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 720px;
+}
+
+#name {
+    margin: 16px 0 0 16px;
+}
+
+#nameWrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
+#type {
+    margin: 8px 0 32px 16px;
+}
+
+#leftWrapper, #rightWrapper, #ratingWrapper {
+    padding: 4px 16px;
+    border: 1px black solid;
+    margin: 8px 36px;
+}
+
+#leftWrapper {
+    min-height: 50vh;
+    min-width: 350px;
+    max-width: 40vw;
+    margin: 8px 0;
+}
+
+#rightWrapper {
+    min-width: 10vw;
+}
+
+#git {
+    width: max-content;
+}

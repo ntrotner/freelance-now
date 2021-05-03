@@ -3,6 +3,14 @@ import { createClient } from './user_authentication/client_control';
 import { loginUser, updateSettings } from './user_authentication/user_control';
 import { sendSessionStorage } from './user_action/credentials';
 import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat';
+import { getProfile } from './user_action/profile';
+import {
+  addDeveloperReward,
+  createContract, finishContract,
+  getContractInformation,
+  getContractsMeta,
+  getPersonalContracts, selectDeveloper
+} from './user_action/contracts';
 
 
 /**
@@ -30,6 +38,7 @@ const getRoutes = {
   '/api/health': healthCheck,
   '/api/sessionCredentials': sendSessionStorage,
   '/api/getActiveChats': sendActiveChats,
+  '/api/getPersonalContracts': getPersonalContracts
 }
 
 /**
@@ -51,7 +60,14 @@ const postRoutes = {
   '/api/startChat': startChat,
   '/api/getAllChats': sendWholeChat,
   '/api/sendMessage': addMessage,
-  '/api/updateMessages': sendChatUpdate
+  '/api/updateMessages': sendChatUpdate,
+  '/api/getProfile': getProfile,
+  '/api/getContractsMeta': getContractsMeta,
+  '/api/createContract': createContract,
+  '/api/getContractInformation': getContractInformation,
+  '/api/finishContract': finishContract,
+  '/api/selectDeveloper': selectDeveloper,
+  '/api/newDeveloperReward': addDeveloperReward
 }
 
 /**

@@ -1,16 +1,15 @@
-import { Document, Schema } from 'mongoose';
+import { Document, Types, Schema } from 'mongoose';
 
 
 export interface IContract extends Document {
-  client: Schema.Types.ObjectId,
-  developer: Schema.Types.ObjectId,
+  client: Types.ObjectId,
+  developer: Types.ObjectId,
   name: string,
   reward: number,
   isDone: boolean,
   details: {
     stack: Array<string>,
-    git: string,
-    stage: string
+    description: string
   },
   starting_date: Date,
   end_date: Date,
@@ -19,19 +18,20 @@ export interface IContract extends Document {
     communication: number,
     speed: number,
     quality: number
-  };
+  },
+  potentialDevelopers: Array<{ email: string, reward: number }>
 }
 
 export const Contract_Definitions = {
   client: {type: Schema.Types.ObjectId, ref: 'client'},
-  developer: {type: Schema.Types.ObjectId, ref: 'developer'},
+  developer: {type: Schema.Types.ObjectId, ref: 'developer', required: false},
   name: {type: String, required: true},
   reward: {type: Number, required: true},
   isDone: {type: Boolean, required: false, default: false},
   details: {
-    type: {stack: Array, git: String, stage: String},
+    type: {stack: Array, description: String},
     required: false,
-    default: {stack: [], git: '', stage: 'Not Started'}
+    default: {stack: [], description: ''}
   },
   starting_date: {type: Date, required: true},
   end_date: {type: Date, required: true},
@@ -45,4 +45,5 @@ export const Contract_Definitions = {
     required: false,
     default: {requirements_fulfilled: null, communication: null, speed: null, quality: null}
   },
+  potentialDevelopers: {type: Array, required: false, default: []}
 }

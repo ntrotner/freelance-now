@@ -20,6 +20,9 @@
             <button type="submit">Chat erstellen</button>
         </form>
     </div>
+
+    <hr>
+
     <div id="chatWrapper">
         <div>
             <ul id="users">
@@ -33,42 +36,43 @@
                 <label for="sendMessage"></label>
                 <input id="sendMessage"/>
             </form>
+            <a id="profileRef"></a>
         </div>
     </div>
 </main>
 <script type="module">
     import {checkSession} from './check_session.js';
     import {unauthorize} from './session_manager.js';
-    import {startChat, getAllChats, getChatContent, sendMessage} from './chat.js';
+    import {startChat, getAllChats, sendMessage, checkChatUpdate} from './chat.js';
 
     let currentUser;
+    let username;
     let prevLen = 0;
 
-    const form = document.getElementById('search');
-    form.addEventListener('submit', handleSearch);
-
-    const x = document.querySelector("#send");
-    x.addEventListener('submit', (event) => event.preventDefault())
-
     function initUI() {
+        document.getElementById('search').addEventListener('submit', handleSearch);
+        document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, getChatLength()));
         checkSession(() => {
-            refreshUI();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('email')) {
+                currentUser = urlParams.get('email');
+                startChat(currentUser, () => {
+                    refreshUI();
+                })
+            } else {
+                refreshUI();
+            }
         }, unauthorize);
     }
 
+
     function refreshUI() {
-        const listRef = $('#users');
-        getAllChats((msg) => {
-            clearChatList();
-            msg.chats.forEach((user) => {
-                listRef.append($('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`));
-                const tempElement = document.getElementById(user.email);
-                tempElement.addEventListener('click', () => getChat(user.email, true));
-            })
-        }, (msg) => {
-            console.error(msg)
-        });
-        if (currentUser) getChat(currentUser, false)
+        getAllChats((response) => {
+            clearChatReceiver();
+            setChatReceiver(response.chats);
+        }, (msg) => console.error(msg));
+
+        if (currentUser) getChat(currentUser, getChatLength())
     }
 
 
@@ -77,66 +81,104 @@
         const data = new FormData(event.target);
         const email = data.get('email');
 
-        startChat(email, (msg) => {
-            refreshUI()
-        }, () => {
-        })
+        startChat(email, refreshUI, () => {
+        });
     }
 
 
     function updateChatUI(messageArray) {
-        const listRef = $('#chatContent');
-        messageArray.forEach((user) => {
-            listRef.append($('<li>').attr('id', String(user.ownMessage))
-                .text(`${user.message}`)).append($('<li>').attr('id', String(user.ownMessage))
-                .attr('class', 'date').text((new Date(user.date)).toLocaleString()));
-        })
-        if (prevLen !== messageArray.length) {
-            var messageBody = document.querySelector('#chatContent');
+        addChatMessages(messageArray)
+
+        // jump to most recent message
+        if (prevLen !== (messageArray.length + prevLen)) {
+            const messageBody = document.querySelector('#chatContent');
             messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-            prevLen = messageArray.length;
         }
+        prevLen += messageArray.length;
     }
 
     function clearChatUI() {
         $('#chatContent').empty();
     }
 
-    function clearChatList() {
+    function clearChatReceiver() {
         $('#users').empty();
     }
 
-    function getChat(email) {
-        getChatContent(email,
-            (updatedChat) => {
-                const x = document.querySelector("#send");
-                var new_element = x.cloneNode(true);
-                x.parentNode.replaceChild(new_element, x);
 
-                new_element.addEventListener("submit", (event) => sendChatMessage(event, email));
-                clearChatUI();
-                updateChatUI(updatedChat['update'])
+    function getChat(email, index) {
+        checkChatUpdate(email, index,
+            (updatedChat) => {
+                updateChatUI(updatedChat.update)
                 currentUser = email
+                setProfileRef()
             },
             () => {
             }
-        )
+        );
     }
 
-    function sendChatMessage(event, email) {
+    function sendChatMessage(event, index) {
         event.preventDefault();
-        sendMessage(email, String(document.getElementById('sendMessage').value), (msg) => {
-                document.getElementById('sendMessage').value = ''
-                clearChatUI();
-                updateChatUI(msg['update'])
-            },
-            (err) => {
-                console.log(err)
-            }
-        )
+        const content = String(document.getElementById('sendMessage').value);
+        if (currentUser && content.length > 0) {
+            closeInput();
+            sendMessage(currentUser, content, index, (msg) => {
+                    openInput()
+                    document.getElementById('sendMessage').value = '';
+                    updateChatUI(msg['update']);
+                },
+                (err) => {
+                    openInput()
+                    console.error(err)
+                })
+
+        } else {
+            openInput();
+        }
     }
 
-    setInterval(refreshUI, 10000);
+    function closeInput() {
+        document.getElementById("sendMessage").disabled = true;
+    }
+
+    function openInput() {
+        document.getElementById("sendMessage").disabled = false;
+
+    }
+
+    function setProfileRef() {
+        $('#profileRef').attr('href', `/profile?email=${currentUser}`).text(`Zum Profil: ${currentUser}`);
+    }
+
+    function addChatMessages(messageArray) {
+        const listRef = $('#chatContent');
+        messageArray.forEach((user) => {
+            listRef.append($('<li>').attr('id', String(user.ownMessage))
+                .text(`${user.message}`)).append($('<li>').attr('id', String(user.ownMessage))
+                .attr('class', 'date').text((new Date(user.date)).toLocaleString()));
+        })
+    }
+
+    function setChatReceiver(chats) {
+        const listRef = $('#users');
+        chats.forEach((user) => {
+            listRef.append($('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`));
+            const tempElement = document.getElementById(user.email);
+            tempElement.addEventListener('click', () => {
+                clearChatUI();
+                openInput();
+                prevLen = 0;
+                getChat(user.email, 0);
+            });
+        });
+    }
+
+    function getChatLength() {
+        return Number($('#chatContent li').length / 2)
+    }
+
+    setInterval(refreshUI, 5000);
     initUI();
 </script>
 <div id="snackbar"></div>

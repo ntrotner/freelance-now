@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="settings.css">
     <link rel="stylesheet" href="snackbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
     <script src="sidebar.js" defer></script>
 </head>
 <body>
@@ -16,43 +17,111 @@
     <div id="welcome">
         <h2 id="user"></h2>
         <div>
+            <i class="material-icons md-26 link" id="person">person</i>
             <i onclick="location.href='/settings'" class="material-icons md-26 link">settings</i>
             <i class="material-icons md-26 link" id="logout">logout</i>
         </div>
     </div>
 
     <div class="settings">
-        <div>
-            <form id="cname">
-                <h3>Name</h3>
-                <label for="name">Ändern</label>
-                <input type="name" name="name" id="name"/>
-                <label for="repname">Wiederholen</label>
-                <input type="name" name="repname" id="repname"/>
-                <button type="submit">Speichern</button>
-            </form>
+        <div class="row">
+            <div>
+                <form id="cabout">
+                    <h3>Über Mich</h3>
+                    <label for="about">Ändern</label>
+                    <textarea type="text" name="about" id="about"></textarea>
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
+            <div>
+                <form id="cgit">
+                    <h3>Git</h3>
+                    <label for="git">Ändern</label>
+                    <input type="text" name="git" id="git"/>
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
+
+            <div>
+                <form id="cskill">
+                    <h3>Skills</h3>
+                    <div>
+                        <input type="checkbox" id="frontend" name="frontend" value="front">
+                        <label for="frontend">Front-End</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="backend" name="backend">
+                        <label for="backend">Back-End</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="servermanagement" name="servermanagement">
+                        <label for="servermanagement">Server-Management</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="docker" name="docker">
+                        <label for="docker">Docker</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="js" name="js">
+                        <label for="js">JavaScript</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="php" name="php">
+                        <label for="php">PHP</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="angular" name="angular">
+                        <label for="angular">Angular</label>
+                    </div>
+
+                    <div>
+                        <input type="checkbox" id="vuejs" name="vuejs">
+                        <label for="vuejs">Vue.js</label>
+                    </div>
+
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
         </div>
 
-        <div>
-            <form id="cemail">
-                <h3>E-Mail</h3>
-                <label for="email">Ändern</label>
-                <input type="email" name="email" id="email"/>
-                <label for="repemail">Wiederholen</label>
-                <input type="email" name="repemail" id="repemail"/>
-                <button type="submit">Speichern</button>
-            </form>
-        </div>
+        <div class="row">
+            <div>
+                <form id="cname">
+                    <h3>Name</h3>
+                    <label for="name">Ändern</label>
+                    <input type="name" name="name" id="name"/>
+                    <label for="repname">Wiederholen</label>
+                    <input type="name" name="repname" id="repname"/>
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
 
-        <div>
-            <form id="cpassword">
-                <h3>Passwort</h3>
-                <label for="password">Ändern</label>
-                <input type="password" name="password" id="password"/>
-                <label for="reppassword">Wiederholen</label>
-                <input type="password" name="reppassword" id="reppassword"/>
-                <button type="submit">Speichern</button>
-            </form>
+            <div>
+                <form id="cemail">
+                    <h3>E-Mail</h3>
+                    <label for="email">Ändern</label>
+                    <input type="email" name="email" id="email"/>
+                    <label for="repemail">Wiederholen</label>
+                    <input type="email" name="repemail" id="repemail"/>
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
+            <div>
+                <form id="cpassword">
+                    <h3>Passwort</h3>
+                    <label for="password">Ändern</label>
+                    <input type="password" name="password" id="password"/>
+                    <label for="reppassword">Wiederholen</label>
+                    <input type="password" name="reppassword" id="reppassword"/>
+                    <button type="submit">Speichern</button>
+                </form>
+            </div>
         </div>
 
     </div>
@@ -60,8 +129,9 @@
 
 <script type="module">
     import {checkSession} from './check_session.js';
-    import {unauthorize, changeAttribute} from './session_manager.js';
+    import {unauthorize, changeAttribute, redirect} from './session_manager.js';
     import {callSnackbar} from './snackbar.js';
+    import {getProfile} from './profile.js';
 
     var x = document.getElementById("logout");
     x.addEventListener("click", unauthorize);
@@ -70,32 +140,57 @@
         var x = document.getElementById("user");
         x.innerText = "Hallo " + sessionStorage.getItem("username");
 
+        document.getElementById("person").addEventListener('click', () =>
+            redirect(`/profile?email=${sessionStorage.getItem('email')}`))
+
         x = document.getElementById("welcome");
         x.style.visibility = 'visible';
-        x.addEventListener("click", unauthorize);
 
         document.getElementById("name").value = sessionStorage.getItem(("username"));
         document.getElementById("email").value = sessionStorage.getItem(("email"));
         document.getElementById("password").value = sessionStorage.getItem(("password"));
+        getProfile(sessionStorage.getItem(("email")), (response) => {
+            $('#about').value = response.about;
+            document.getElementById("about").value = response.about ? response.about : ''
+            document.getElementById("git").value = response.git ? response.git : ''
+
+            if (response.type === 'dev') {
+                $('#cgit').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
+                $('#cskill').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
+            }
+            console.log(response)
+            if (response) response.stack.forEach((skill) => document.getElementById(skill).checked = true)
+
+        }, (response) => console.error(response))
     }
 
     checkSession(updateHeader, unauthorize);
 
+
     x = document.getElementById('cname');
-    x.addEventListener("submit", handleSubmitChange);
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'name', true));
+
+    x = document.getElementById('cgit');
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'git', false));
+
+    x = document.getElementById('cabout');
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'about', false));
 
     x = document.getElementById("cemail");
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'email'));
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'email', true));
 
     x = document.getElementById("cpassword");
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'password'));
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'password', true));
+
+    x = document.getElementById("cskill");
+    x.addEventListener("submit", (event) => handleSubmitChange(event, 'stack', false));
 
 
-    function handleSubmitChange(event, type = 'name') {
+    function handleSubmitChange(event, type = 'name', check) {
         event.preventDefault();
         const data = new FormData(event.target);
         const inputData = data.get(type);
-        const repInputData = data.get('rep' + type);
+        const repInputData = data.get(check ? 'rep' : '' + type);
 
         if (inputData === repInputData) {
             switch (type) {
@@ -108,8 +203,33 @@
                 case 'password':
                     changeAttribute({password: inputData})
                     break;
+                case 'git':
+                    changeAttribute({git: inputData})
+                    break;
+                case 'about':
+                    changeAttribute({about: inputData})
+                    break;
+                case 'stack':
+                    changeAttribute({
+                            stack:
+                                [
+                                    ['frontend', document.getElementById("frontend")],
+                                    ['backend', document.getElementById("backend")],
+                                    ['servermanagement', document.getElementById("servermanagement")],
+                                    ['docker', document.getElementById("docker")],
+                                    ['js', document.getElementById("js")],
+                                    ['php', document.getElementById("php")],
+                                    ['angular', document.getElementById("angular")],
+                                    ['vuejs', document.getElementById("vuejs")]
+                                ].map((element) => {
+                                    if (element[1].checked) return element[0]
+                                }).filter((element) => element)
+                        }
+                    )
+                    break;
             }
-        } else callSnackbar('Datenfelder stimmen nicht überein')
+        } else
+            callSnackbar('Datenfelder stimmen nicht überein')
     }
 </script>
 

@@ -4,7 +4,7 @@ import { IClient } from '../database/interfaces/client_interface';
 import { hashPassword, verifyPassword } from './password';
 import { Client } from '../database/schemas/client_schema';
 import { Developer } from '../database/schemas/developer_schema';
-import { isEMail, isValidName, isValidPassword, validInputLogin } from '../components/validator';
+import { isASCII, isEMail, isValidName, isValidPassword, validInputLogin } from '../components/validator';
 import { resetUserCredentials, setUserCredentials } from './session_manager';
 import { error } from '../routes';
 
@@ -110,6 +110,27 @@ export async function updateSettings(req, res): Promise<void> {
         const updatedUser = await foundUser.save();
         setUserCredentials(req, res, updatedUser);
       } else error(req, res, 'Passwort ungültig')
+      break;
+    case 'about':
+      if (isASCII(req.body.about)) {
+        foundUser.about = req.body.about;
+        const updatedUser = await foundUser.save();
+        setUserCredentials(req, res, updatedUser);
+      } else error(req, res, 'Eingabe Ungültig')
+      break;
+    case 'git':
+      if (isASCII(req.body.git) && typeof foundUser['git'] === 'string') {
+        foundUser['git'] = req.body.git;
+        const updatedUser = await foundUser.save();
+        setUserCredentials(req, res, updatedUser);
+      } else error(req, res, 'Eingabe Ungültig')
+      break;
+    case 'stack':
+      if (typeof foundUser['stack'] === 'object') {
+        foundUser['stack'] = req.body.stack;
+        const updatedUser = await foundUser.save();
+        setUserCredentials(req, res, updatedUser);
+      } else error(req, res, 'Eingabe Ungültig')
       break;
   }
 

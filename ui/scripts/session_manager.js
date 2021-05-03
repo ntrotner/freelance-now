@@ -73,6 +73,6 @@ export function unauthorize() {
     redirect('/logout');
 }
 
-function redirect(url) {
+export function redirect(url) {
     window.location.replace(url);
 }
