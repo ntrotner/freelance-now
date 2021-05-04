@@ -9,7 +9,7 @@ import {
   createContract, finishContract,
   getContractInformation,
   getContractsMeta,
-  getPersonalContracts, selectDeveloper
+  getPersonalContracts, searchContracts, selectDeveloper
 } from './user_action/contracts';
 
 
@@ -67,7 +67,8 @@ const postRoutes = {
   '/api/getContractInformation': getContractInformation,
   '/api/finishContract': finishContract,
   '/api/selectDeveloper': selectDeveloper,
-  '/api/newDeveloperReward': addDeveloperReward
+  '/api/newDeveloperReward': addDeveloperReward,
+  '/api/searchContracts': searchContracts
 }
 
 /**

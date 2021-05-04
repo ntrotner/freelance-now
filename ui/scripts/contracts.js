@@ -60,3 +60,12 @@ export function sendDeveloperReward(_id, email, reward, success, failed) {
         (error) => failed(error)
     )
 }
+
+export function searchContract(searchObject, success, failed) {
+    POST('/api/searchContracts',
+        [{name: "Content-Type", value: "application/json"}],
+        searchObject,
+        (response) => success(response),
+        (error) => failed(error)
+    )
+}

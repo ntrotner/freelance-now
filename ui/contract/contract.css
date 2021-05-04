@@ -4,12 +4,42 @@ th, td {
     border-bottom: 1px black solid;
 }
 
-main {
+table {
+    max-width: 50vw;
+}
+
+#bottomMain {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#bottomMain > * {
+    margin: 18px 36px;
+}
+
+#middleWrapper {
+    display: flex;
+    flex-direction: row;
+    height: 25px;
+    text-align: center;
 }
 
 .checked {
     color: orange;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background: whitesmoke;
+    border-right: 2px black solid;
+    border-left: 2px black solid;
+}
+
+.progressWrapper {
+    width: 33%;
 }
 
 span.fa-star {
@@ -20,13 +50,41 @@ span.fa-star {
     padding: 25px;
     border: 1px black solid;
     margin: 12px 0 0 26px;
+    opacity: 0;
+}
+
+#devs {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+#devs, #finish {
+    margin-top: 32px;
+}
+
+#submit {
+    margin-top: 16px;
+}
+
+#developer {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+#developer .link {
+    margin: 0 8px;
 }
 
 .dev {
     border: 1px black solid;
     padding: 0 12px;
-    cursor: pointer;
     margin: 4px 0 0 0;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .inputWrapper {

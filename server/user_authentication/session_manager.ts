@@ -63,7 +63,6 @@ export function isClient(req): boolean {
 
 export async function isInContract(req, _id) {
   if (req.session.type === 'client') {
-    console.log({_id: Types.ObjectId(_id), client: Types.ObjectId(req.session._id)})
     return Contract.findOne({_id: Types.ObjectId(_id), client: Types.ObjectId(req.session._id)});
   } else {
     return Contract.findOne({_id: Types.ObjectId(_id), developer: Types.ObjectId(req.session._id)});

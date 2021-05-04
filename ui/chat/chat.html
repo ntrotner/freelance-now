@@ -71,7 +71,6 @@
             clearChatReceiver();
             setChatReceiver(response.chats);
         }, (msg) => console.error(msg));
-
         if (currentUser) getChat(currentUser, getChatLength())
     }
 
@@ -81,7 +80,12 @@
         const data = new FormData(event.target);
         const email = data.get('email');
 
-        startChat(email, refreshUI, () => {
+        startChat(email, () => {
+            currentUser = email;
+            clearChatUI();
+            refreshUI();
+            getChat(email, 0)
+        }, () => {
         });
     }
 

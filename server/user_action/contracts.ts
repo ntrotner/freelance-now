@@ -13,14 +13,14 @@ export async function getContractsMeta(req, res) {
   foundUser = await findUser({email: req.body.email});
 
   if (!foundUser) return error(req, res, 'Nutzer nicht gefunden')
-  const client = foundUser.git ? req.session._id : foundUser._id
-  const developer = foundUser.git ? foundUser._id : req.session._id
 
-  const foundContract = await Contract.find({client, developer})
+  let foundContract;
+  if (foundUser.stack) foundContract = await Contract.find({developer: foundUser._id})
+  else foundContract = await Contract.find({client: foundUser._id})
+
   if (!foundContract) return error(req, res, 'Kein Auftrag gefunden')
 
   let amountOfRatings = 0;
-  console.log(foundContract)
 
   const rating = foundContract.map((contract) =>
       contract.rating ?
@@ -28,16 +28,10 @@ export async function getContractsMeta(req, res) {
           : undefined)
       .filter((rating) => rating)
       .reduce((prev, next) => {
-        amountOfRatings += 1;
+        amountOfRatings += next[0] || next[1] || next[2] ? 1 : 0;
         return [prev[0] + next[0], prev[1] + next[1], prev[2] + next[2]]
       }, [0, 0, 0])
 
-  console.log(foundContract.map((contract) =>
-      contract.rating ?
-          [contract.rating.communication, contract.rating.speed, contract.rating.quality]
-          : undefined))
-
-  console.log(rating)
   if (amountOfRatings === 0) return res.status(200).json({rating: [0, 0, 0], amount: 0})
 
   res.status(200).json({rating: rating.map((number) => number / amountOfRatings), amount: amountOfRatings});
@@ -50,29 +44,33 @@ export async function getPersonalContracts(req, res) {
   if (req.session.type === 'client') allContracts = await Contract.find({client: req.session._id})
   else allContracts = await Contract.find({developer: req.session._id})
 
+  const finalArray = [];
 
-  res.status(200).json(allContracts.map((contract) => {
+  for (const contract of allContracts) {
     let participant: Types.ObjectId | string = req.session.type === 'client' ? contract.developer : contract.client
-    if (!participant) participant = 'Kein Nutzer'
-    return {
+    if (!participant) participant = ''
+    else participant = (await findUser({_id: participant})).email
+    finalArray.push({
       _id: contract._id,
       name: contract.name,
       participant,
       reward: contract.reward,
       isDone: contract.isDone
-    }
-  }))
+    })
+  }
+
+  res.status(200).json(finalArray)
 
 }
 
 export async function createContract(req, res) {
   if (!isAuthenticated(req) || !isClient(req)) return error(req, res, 'Nutzer darf kein Auftrag erstellen');
 
-  if (!req.body.title || req.body.title.length < 4 || !isASCII(req.body.title)) return error(req, res, 'Titel unzulässig');
+  if (!req.body.title || req.body.title.length < 1 || !isASCII(req.body.title)) return error(req, res, 'Titel unzulässig');
   if (isNaN(req.body.reward) || req.body.reward < 0) return error(req, res, 'Entlohnung unzulässig');
   if (isNaN((new Date(req.body.startDate).getMilliseconds()))) return error(req, res, 'Start Datum unzulässig');
   if (isNaN((new Date(req.body.endDate).getMilliseconds()))) return error(req, res, 'End Datum unzulässig');
-  if (!req.body.description || req.body.description.length < 4) return error(req, res, 'Beschreibung unzulässig');
+  if (!req.body.description || req.body.description.length < 1) return error(req, res, 'Beschreibung unzulässig');
   if (!req.body.stack || req.body.stack.length < 0) return error(req, res, 'Beschreibung unzulässig');
 
   const newContract = new Contract({
@@ -100,7 +98,11 @@ export async function getContractInformation(req, res) {
   let foundContract = await isInContract(req, req.body._id);
   if (!foundContract) foundContract = await Contract.findOne({_id: req.body._id});
 
-  res.status(200).json(foundContract);
+  res.status(200).json({
+    ...foundContract['_doc'],
+    developerEmail: foundContract.developer ? String((await findUser({_id: foundContract.developer})).email) : '',
+    clientEmail: foundContract.client ? String((await findUser({_id: foundContract.client})).email) : ''
+  });
 }
 
 export async function finishContract(req, res) {
@@ -152,13 +154,27 @@ export async function selectDeveloper(req, res) {
 }
 
 export async function addDeveloperReward(req, res) {
-  console.log(!isAuthenticated(req), !req.body._id, !req.body.email, !req.body.reward, isClient(req))
   if (!isAuthenticated(req) || !req.body._id || !req.body.email || !req.body.reward || isClient(req)) return error(req, res, 'Nicht Authentifiziert');
 
   let foundContract = await Contract.findOne({_id: req.body._id})
   if (!foundContract) return error(req, res, 'Interner Fehler');
 
+  if (foundContract.developer) return error(req, res, 'Auftrag wurde schon von einem Entwickler angenommen');
+
   foundContract.potentialDevelopers.push({email: req.body.email, reward: req.body.reward});
   await foundContract.save()
   res.status(200).send('Abgeschickt')
+}
+
+export async function searchContracts(req, res) {
+  if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
+
+  const finalQuery = (await Contract.find()).filter((contract) => {
+    return (!contract.developer == req.body.needDeveloper) &&
+        (contract.reward >= req.body.minReward) && (contract.reward <= req.body.maxReward) &&
+        (contract.starting_date >= new Date(req.body.starting_date)) &&
+        (contract.end_date <= new Date(req.body.end_date))
+  });
+
+  res.status(200).send(finalQuery);
 }

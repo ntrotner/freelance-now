@@ -40,9 +40,10 @@
                                 let value = contract[key];
                                 if (key === 'isDone') value = contract[key] ?
                                     'Fertig'
-                                    : contract['participant'] ? 'In Arbeit' : 'Kein Auftragnehmer'
+                                    : contract['participant'] ? 'In Arbeit' : 'Nicht Angefangen'
                                 if (key === 'reward') value += '€'
 
+                                if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler'
 
                                 return $('<p>').attr('class', 'contractInfo').text(value)
                             }))

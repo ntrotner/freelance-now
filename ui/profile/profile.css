@@ -20,24 +20,28 @@
 }
 
 #type {
-    margin: 8px 0 32px 16px;
+    margin: 16px 0 18px 16px;
 }
 
-#leftWrapper, #rightWrapper, #ratingWrapper {
+#leftWrapper, #detailWrapper, #ratingWrapper {
     padding: 4px 16px;
     border: 1px black solid;
     margin: 8px 36px;
 }
 
-#leftWrapper {
-    min-height: 50vh;
-    min-width: 350px;
-    max-width: 40vw;
-    margin: 8px 0;
+#ratingWrapper {
+    margin-top: 32px;
 }
 
-#rightWrapper {
-    min-width: 10vw;
+#leftWrapper {
+    min-height: 35vh;
+    min-width: 25vw;
+    max-width: 40vw;
+    margin: 8px 26px;
+}
+
+#ratingWrapper, #detailWrapper {
+    min-width: 20vw;
 }
 
 #git {

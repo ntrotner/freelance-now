@@ -1,3 +1,16 @@
+#searchForm {
+    display: flex;
+    flex-direction: row;
+}
+
+#searchForm > div {
+    margin: 0 26px;
+}
+
+#submitButtonWrapper {
+    margin: 24px 32px;
+}
+
 .contract {
     display: grid;
     border: 1px black solid;

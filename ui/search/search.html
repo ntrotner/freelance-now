@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="sidebar.js" defer></script>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+<sidebar-component></sidebar-component>
+
+<main>
+    <div id="topWrapper">
+        <h3>Suche</h3>
+    </div>
+    <hr>
+
+    <form id="searchFormWrapper">
+        <div id="searchForm">
+            <div>
+                <h4>Status</h4>
+                <input type="checkbox" id="devSearch" name="devSearch" value="search">
+                <label for="devSearch">Entwickler Gesucht</label><br>
+            </div>
+
+            <div>
+                <h4>Zeitraum</h4>
+                <label for="startSearch">Start</label>
+                <input type="date" name="startSearch" id="startSearch" value="01-01-1970"><br>
+                <label for="endSearch">End</label>
+                <input type="date" name="endSearch" id="endSearch" value="01-01-2050">
+            </div>
+
+            <div>
+                <h4>Entlohnung</h4>
+                <label for="startSearch">Von</label>
+                <input type="number" min="0.00" step="0.01" name="rewardLower" id="rewardLower"> € <br>
+                <label for="endSearch">Bis</label>
+                <input type="number" min="0.00" step="0.01" name="rewardUpper" id="rewardUpper"> €
+            </div>
+        </div>
+        <div id="submitButtonWrapper">
+            <button type="submit" id="search">Suchen</button>
+        </div>
+
+    </form>
+
+    <div id="bottomWrapper">
+    </div>
+
+</main>
+
+<script type="module">
+    import {searchContract} from '/contracts.js';
+
+    document.getElementById("searchFormWrapper")
+        .addEventListener("submit", handleSubmit);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        const devSearch = data.get('devSearch');
+
+        const startDate = data.get('startSearch');
+        const endDate = data.get('endSearch');
+
+        const minReward = data.get('rewardLower');
+        const maxReward = data.get('rewardUpper');
+        searchContract({
+                needDeveloper: !!devSearch,
+                starting_date: new Date(startDate),
+                end_date: new Date(endDate),
+                minReward,
+                maxReward
+            },
+            (response) => {
+                $('#bottomWrapper > *').remove();
+                $('#bottomWrapper').append(
+                    response.map((contract) => {
+                        return $('<div>').attr('class', 'contract shadow')
+                            .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
+                            .append(
+                                Object.keys(contract).map((key) => {
+                                    if (key === '_id') return
+                                    let value = contract[key];
+                                    if (key === 'isDone') value = contract[key] ?
+                                        'Fertig'
+                                        : contract['participant'] ? 'In Arbeit' : 'Nicht Angefangen'
+                                    if (key === 'reward') value += '€'
+
+                                    if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler'
+
+                                    return $('<p>').attr('class', 'contractInfo').text(value)
+                                }))
+                    })
+                )
+            },
+            (error) => {
+                console.error(error)
+            }
+        )
+    }
+</script>
+</body>
+</html>

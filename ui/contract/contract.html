@@ -9,46 +9,69 @@
     <link rel="stylesheet" href="snackbar.css">
     <script src="https://code.jquery.com/jquery-latest.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 <sidebar-component></sidebar-component>
 
 <main>
-    <table>
-        <tr>
-            <td>Title</td>
-            <td id="name"></td>
-        </tr>
-        <tr>
-            <td>Entlohnung</td>
-            <td id="reward"></td>
-        </tr>
-        <tr>
-            <td>Fertig</td>
-            <td id="isDone"></td>
-        </tr>
+    <div id="topWrapper">
+        <h3>Auftrag</h3>
+    </div>
+    <hr>
 
-        <tr>
-            <td>Skills</td>
-            <td id="stack"></td>
-        </tr>
+    <div id="middleWrapper">
+        <div class="progressWrapper">
+            <div class="progress" id="finding"></div>
+            <div>Entwickler Finden</div>
 
-        <tr>
-            <td>Start</td>
-            <td id="starting_date"></td>
-        </tr>
+        </div>
+        <div class="progressWrapper">
+            <div class="progress" id="working"></div>
+            <div>In Arbeit</div>
 
-        <tr>
-            <td>Ende</td>
-            <td id="end_date"></td>
-        </tr>
+        </div>
+        <div class="progressWrapper">
+            <div class="progress" id="doneContract"></div>
+            <div>Fertig</div>
 
-        <tr>
-            <td>Beschreibung</td>
-            <td id="description"></td>
-        </tr>
-    </table>
-    <div>
+        </div>
+    </div>
+
+    <div id="bottomMain">
+        <table>
+            <tr>
+                <td>Title</td>
+                <td id="name"></td>
+            </tr>
+            <tr>
+                <td>Entlohnung</td>
+                <td id="reward"></td>
+            </tr>
+            <tr>
+                <td>Entwickler</td>
+                <td id="developer"></td>
+            </tr>
+            <tr>
+                <td>Skills</td>
+                <td id="stack"></td>
+            </tr>
+
+            <tr>
+                <td>Start</td>
+                <td id="starting_date"></td>
+            </tr>
+
+            <tr>
+                <td>Ende</td>
+                <td id="end_date"></td>
+            </tr>
+
+            <tr>
+                <td>Beschreibung</td>
+                <td id="description"></td>
+            </tr>
+        </table>
         <div id="finish" class="shadow">
             <label for="progress">In Arbeit</label>
             <input type="radio" id="progress" name="status" value="In Arbeit">
@@ -89,19 +112,23 @@
             <button id="submit">Abschließen</button>
         </div>
 
-        <div id="devs" class="shadow">
-            <h4 id="devsTitle">Entwickler Auswählen</h4>
-        </div>
+        <div>
 
-        <div id="apply" class="shadow">
-            <h4 id="applyTitle">Bewerben für den Auftrag</h4>
-            <div class="inputWrapper">
-                <input type="number" min="0.00" step="0.01" name="reward" id="rewardInput">
-                €
+            <div id="devs" class="shadow">
+                <div>
+                    <h4 id="devsTitle">Entwickler Auswählen</h4>
+                </div>
             </div>
-            <button id="newOffer">Bieten</button>
-        </div>
 
+            <div id="apply" class="shadow">
+                <h4 id="applyTitle">Bewerben für den Auftrag</h4>
+                <div class="inputWrapper">
+                    <input type="number" min="0.00" step="0.01" name="reward" id="rewardInput">
+                    €
+                </div>
+                <button id="newOffer">Bieten</button>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -147,12 +174,26 @@
         )
     }
 
+    function setBarArea(n) {
+        switch (n) {
+            case 3:
+                $(`#middleWrapper #doneContract`).css('background-color', '#558b2f')
+            case 2:
+                $(`#middleWrapper #working`).css('background-color', '#558b2f')
+            case 1:
+                $(`#middleWrapper #finding`).css('background-color', '#558b2f')
+        }
+    }
+
     getContract(_id,
         (response) => {
             console.log(response)
+            if (!response.developer) $('#finish').remove()
+            else $('#devs').remove()
+
             Object.keys(response).forEach((key) => {
                 if (key === 'reward') {
-                    document.getElementById(key).innerText = response[key] + '€'
+                    document.getElementById(key).innerText = response[key] + ' €'
                     return
                 }
 
@@ -161,36 +202,57 @@
                     return
                 }
 
-                if (key === 'isDone') {
-                    document.getElementById(key).innerText = response[key] ? 'Abgeschlossen' : 'Nein'
-                    if (response[key]) $('#apply').remove()
+                if (key === 'developerEmail') {
+                    if (response.developer)
+                        $('#developer').text(response[key]).append(
+                            $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`))
+                        )
+                    else $('#developer').html('&nbsp;').append($('<i>'))
+                    return
+                }
 
-                    if (response[key] || (sessionStorage.getItem('type') == 'dev')) {
+                if (key === 'isDone') {
+                    response[key] ? setBarArea(3) : (response.developer ? setBarArea(2) : setBarArea(1))
+                    if (response[key]) {
+                        $('#apply').remove()
                         $('#finish').remove()
-                        $('#devs').remove()
+                    }
+
+                    if (sessionStorage.getItem('type') == 'dev') {
+                        $('#apply').css('opacity', '1')
+                        $('#finish').remove()
                     }
                     return
                 }
 
                 if (key === 'potentialDevelopers') {
-                    if (response[key].length === 0 && response.developer) {
+                    if (response.developer) {
                         $('#devs').remove()
+                        $('#apply').remove()
                         return
                     }
 
+                    response[key] = response[key].sort((a, b) => a.reward - b.reward)
+
                     response[key].forEach((dev) => {
                         $('#devs')
-                            .append($('<div>').attr('class', 'dev').click(() => {
-                                    selectDeveloper(_id, dev.email, dev.reward,
-                                        (response) => redirect(`/contract?_id=${_id}`),
-                                        (error) => console.error(error)
-                                    );
+                            .append($('<div>').attr('class', sessionStorage.getItem('email') === response['clientEmail'] ? 'dev clickable' : 'dev').click(() => {
+                                    if (sessionStorage.getItem('type') === 'client') {
+                                        selectDeveloper(_id, dev.email, dev.reward,
+                                            (response) => redirect(`/contract?_id=${_id}`),
+                                            (error) => console.error(error)
+                                        );
+                                    }
                                 })
                                     .append($('<p>').text(dev.email))
                                     .append($('<p>').text(`Entlohnung: ${dev.reward}€`))
                             )
-
                     })
+                    if (response[key].length === 0) {
+                        $('#devs').append($('<p>').text('Keine Entwickler'))
+                    }
+
+                    $('#devs').css('opacity', '1')
                     return
                 }
 
@@ -198,11 +260,9 @@
                     Object.keys(response[key]).forEach((key2) => {
                         try {
                             if (key2 === 'stack') {
-                                document.getElementById(key2).innerText =
-                                    response[key][key2].map((skill) => prettifySkill(skill))
+                                response[key][key2].forEach((skill) => $(`#${key2}`).append($('<li>').text(prettifySkill(skill))));
                                 return;
-                            }
-                            document.getElementById(key2).innerText = response[key][key2]
+                            } else document.getElementById(key2).innerText = response[key][key2]
                         } catch {
                             console.log("Skip Element")
                         }
@@ -214,11 +274,15 @@
                 } catch {
                     console.log("Skip Element")
                 }
-            })
+            });
+            if (sessionStorage.getItem('type') === 'client') {
+                $('#apply').remove()
+                $('#finish').css('opacity', '1')
+            } else {
+                $('#devsTitle').text('Entwickler')
+            }
         },
         (error) => console.error(error))
-
-    if (sessionStorage.getItem('type') === 'client') $('#apply').remove()
 </script>
 <div id="snackbar"></div>
 </body>

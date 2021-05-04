@@ -12,6 +12,7 @@ const profile = (req, res, fct) => fct('/profile/profile.html', res);
 const newContract = (req, res, fct) => fct('/newContract/newContract.html', res);
 const contracts = (req, res, fct) => fct('/contracts/contracts.html', res);
 const contract = (req, res, fct) => fct('/contract/contract.html', res);
+const search = (req, res, fct) => fct('/search/search.html', res);
 const error = (req, res, fct) => fct('/error/error.html', res);
 
 const homecss = (req, res, fct) => fct('/home/home.css', res);
@@ -26,6 +27,7 @@ const snackbarcss = (req, res, fct) => fct('/general/snackbar.css', res);
 const newContractcss = (req, res, fct) => fct('/newContract/newContract.css', res);
 const contractcss = (req, res, fct) => fct('/contract/contract.css', res);
 const contractscss = (req, res, fct) => fct('/contracts/contracts.css', res);
+const searchcss = (req, res, fct) => fct('/search/search.css', res);
 
 const welcometoppng = (req, res, fct) => fct('/general/welcome-top.png', res);
 
@@ -106,6 +108,14 @@ async function checkContract(req, res, _) {
   }
 }
 
+async function checkSearch(req, res, _) {
+  if (isAuthenticated(req)) {
+    search(req, res, sendFile);
+  } else {
+    redirect('/', res);
+  }
+}
+
 const routes = {
   '/': isAuthorized,
   '/home.css': homecss,
@@ -120,6 +130,8 @@ const routes = {
   '/welcome-top.png': welcometoppng,
   '/settings': checkSettings,
   '/settings.css': settingscss,
+  '/search': checkSearch,
+  '/search.css': searchcss,
   '/chat': checkChat,
   '/chat.css': chatcss,
   '/profile': checkProfile,
