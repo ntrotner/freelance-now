@@ -1,3 +1,24 @@
+.topWrapper {
+    margin: 16px 12px;
+}
+
+#searchForm {
+    display: flex;
+    flex-direction: row;
+}
+
+#searchForm > div > input {
+    margin: 6px 0;
+}
+
+#searchForm > div {
+    margin: 0 26px;
+}
+
+#submitButtonWrapper {
+    margin: 24px 32px;
+}
+
 .contract {
     display: grid;
     border: 1px black solid;

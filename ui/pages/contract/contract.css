@@ -2,10 +2,16 @@ th, td {
     padding: 25px 15px;
     margin: 0 -1px;
     border-bottom: 1px black solid;
+    overflow-wrap: anywhere;
+}
+
+tr {
+    text-align: center;
 }
 
 table {
-    max-width: 50vw;
+    width: 50vw;
+    table-layout: fixed;
 }
 
 #bottomMain {
@@ -56,9 +62,10 @@ span.fa-star {
 #devs {
     max-height: 50vh;
     overflow: auto;
+    margin-top: 16px;
 }
 
-#devs, #finish {
+#finish {
     margin-top: 32px;
 }
 
@@ -70,25 +77,36 @@ span.fa-star {
     display: flex;
     align-items: center;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 #developer .link {
     margin: 0 8px;
 }
 
-.dev {
-    border: 1px black solid;
-    padding: 0 12px;
-    margin: 4px 0 0 0;
+#topWrapper {
+    margin: 16px 12px;
 }
 
-.clickable {
+.dev {
+    border-top: 1px black solid;
+    border-bottom: 1px black solid;
+    padding: 0 12px;
+    margin: 12px 0 0 0;
+    transition: 0.1s;
+}
+
+.clickable:hover {
     cursor: pointer;
+    background: whitesmoke;
 }
 
 .inputWrapper {
     margin: 12px;
+}
+
+.progressDescription {
+    margin: 6px 0;
 }
 
 #devsTitle, #applyTitle {

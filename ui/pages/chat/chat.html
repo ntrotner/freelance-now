@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Chat</title>
@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="snackbar.css">
     <link rel="stylesheet" href="chat.css">
     <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script src="sidebar.js" defer></script>
+    <script src="sidebar.js" type="module"></script>
 </head>
 <body>
 <sidebar-component></sidebar-component>
+
 <main>
     <div>
         <form id="search">
@@ -23,12 +24,15 @@
 
     <hr>
 
-    <div id="chatWrapper">
-        <div>
+    <div id="chatWrapper" class="shadow">
+        <div id="usersWrapper">
             <ul id="users">
             </ul>
         </div>
         <div class="chatWindow">
+            <div id="profileTop">
+                <a id="profileRef"></a>
+            </div>
             <ul id="chatContent">
             </ul>
 
@@ -36,22 +40,23 @@
                 <label for="sendMessage"></label>
                 <input id="sendMessage"/>
             </form>
-            <a id="profileRef"></a>
         </div>
     </div>
 </main>
 <script type="module">
     import {checkSession} from './check_session.js';
-    import {unauthorize} from './session_manager.js';
+    import {unauthorize, error} from './session_manager.js';
     import {startChat, getAllChats, sendMessage, checkChatUpdate} from './chat.js';
 
     let currentUser;
     let username;
     let prevLen = 0;
+    let previousSelectedUser;
 
     function initUI() {
         document.getElementById('search').addEventListener('submit', handleSearch);
         document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, getChatLength()));
+
         checkSession(() => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('email')) {
@@ -59,21 +64,17 @@
                 startChat(currentUser, () => {
                     refreshUI();
                 })
-            } else {
-                refreshUI();
-            }
+            } else refreshUI();
         }, unauthorize);
     }
-
 
     function refreshUI() {
         getAllChats((response) => {
             clearChatReceiver();
             setChatReceiver(response.chats);
-        }, (msg) => console.error(msg));
+        }, (msg) => error(msg));
         if (currentUser) getChat(currentUser, getChatLength())
     }
-
 
     function handleSearch(event) {
         event.preventDefault();
@@ -101,15 +102,6 @@
         prevLen += messageArray.length;
     }
 
-    function clearChatUI() {
-        $('#chatContent').empty();
-    }
-
-    function clearChatReceiver() {
-        $('#users').empty();
-    }
-
-
     function getChat(email, index) {
         checkChatUpdate(email, index,
             (updatedChat) => {
@@ -117,8 +109,7 @@
                 currentUser = email
                 setProfileRef()
             },
-            () => {
-            }
+            (msg) => error(msg)
         );
     }
 
@@ -132,14 +123,48 @@
                     document.getElementById('sendMessage').value = '';
                     updateChatUI(msg['update']);
                 },
-                (err) => {
+                (msg) => {
                     openInput()
-                    console.error(err)
+                    error(msg)
                 })
 
-        } else {
-            openInput();
-        }
+        } else openInput();
+
+    }
+
+    function addChatMessages(messageArray) {
+        const listRef = $('#chatContent');
+        messageArray.forEach((user) => {
+            listRef.append($('<li>').attr('id', String(user.ownMessage))
+                .text(`${user.message}`)).append(
+                $('<li>').attr('id', String(user.ownMessage)).attr('class', 'date')
+                    .text((new Date(user.date)).toLocaleString())
+            );
+        })
+    }
+
+    function setChatReceiver(chats) {
+        const listRef = $('#users');
+        chats.forEach((user) => {
+            listRef.append(
+                $('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`)
+            );
+            document.getElementById(user.email)
+                .addEventListener('click', () => {
+                    clearChatUI();
+                    openInput();
+                    prevLen = 0;
+                    getChat(user.email, 0);
+                });
+        });
+    }
+
+    function setProfileRef() {
+        $('#profileRef').attr('href', `/profile?email=${currentUser}`).text(`Zum Profil: ${currentUser}`);
+    }
+
+    function getChatLength() {
+        return Number($('#chatContent li').length / 2)
     }
 
     function closeInput() {
@@ -148,38 +173,14 @@
 
     function openInput() {
         document.getElementById("sendMessage").disabled = false;
-
     }
 
-    function setProfileRef() {
-        $('#profileRef').attr('href', `/profile?email=${currentUser}`).text(`Zum Profil: ${currentUser}`);
+    function clearChatUI() {
+        $('#chatContent').empty();
     }
 
-    function addChatMessages(messageArray) {
-        const listRef = $('#chatContent');
-        messageArray.forEach((user) => {
-            listRef.append($('<li>').attr('id', String(user.ownMessage))
-                .text(`${user.message}`)).append($('<li>').attr('id', String(user.ownMessage))
-                .attr('class', 'date').text((new Date(user.date)).toLocaleString()));
-        })
-    }
-
-    function setChatReceiver(chats) {
-        const listRef = $('#users');
-        chats.forEach((user) => {
-            listRef.append($('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`));
-            const tempElement = document.getElementById(user.email);
-            tempElement.addEventListener('click', () => {
-                clearChatUI();
-                openInput();
-                prevLen = 0;
-                getChat(user.email, 0);
-            });
-        });
-    }
-
-    function getChatLength() {
-        return Number($('#chatContent li').length / 2)
+    function clearChatReceiver() {
+        $('#users').empty();
     }
 
     setInterval(refreshUI, 5000);

@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>New Contract</title>
-    <script src="/sidebar.js" defer></script>
+    <script src="/sidebar.js" type="module"></script>
     <link rel="stylesheet" href="/default.css">
+    <link rel="stylesheet" href="/snackbar.css">
     <link rel="stylesheet" href="contract.css">
 </head>
 <body>
 <sidebar-component></sidebar-component>
 
 <main>
-    <form id="newContract">
+    <div id="topWrapper">
         <h3>Neuer Auftrag</h3>
+    </div>
+
+    <hr>
+
+    <form id="newContract">
         <div id="upperContract">
             <div id="leftUpperContract">
                 <label for="contractTitle">Titel</label>
@@ -29,7 +35,7 @@
                 <label for="enddate">End Datum</label>
                 <input type="date" name="enddate" id="enddate">
             </div>
-            <div>
+            <div id="rightUpperSkills">
                 <h4>Skills</h4>
                 <div>
                     <input type="checkbox" id="frontend" name="frontend" value="front">
@@ -85,7 +91,7 @@
 
 <script type="module">
     import {createContract} from '/contracts.js';
-    import {redirect} from '/session_manager.js';
+    import {redirect, error} from '/session_manager.js';
 
     const x = document.getElementById("newContract")
     x.addEventListener("submit", handleSubmit);
@@ -114,9 +120,10 @@
 
         createContract(title, reward, startdate, enddate, description, checkedStack,
             (response) => redirect('/contracts'),
-            (error) => console.error(error))
+            (err) => error(err)
+        )
     }
 </script>
-
+<div id="snackbar"></div>
 </body>
 </html>

@@ -9,18 +9,13 @@
     <link rel="stylesheet" href="snackbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script src="sidebar.js" defer></script>
+    <script src="sidebar.js" type="module"></script>
 </head>
 <body>
 <sidebar-component></sidebar-component>
 <main>
     <div id="welcome">
         <h2 id="user"></h2>
-        <div>
-            <i class="material-icons md-26 link" id="person">person</i>
-            <i onclick="location.href='/settings'" class="material-icons md-26 link">settings</i>
-            <i class="material-icons md-26 link" id="logout">logout</i>
-        </div>
     </div>
 
     <div class="settings">
@@ -33,7 +28,7 @@
                     <button type="submit">Speichern</button>
                 </form>
             </div>
-            <div>
+            <div class="devFields">
                 <form id="cgit">
                     <h3>Git</h3>
                     <label for="git">Ändern</label>
@@ -41,9 +36,8 @@
                     <button type="submit">Speichern</button>
                 </form>
             </div>
-
-            <div>
-                <form id="cskill">
+            <div class="devFields">
+                <form id="cstack">
                     <h3>Skills</h3>
                     <div>
                         <input type="checkbox" id="frontend" name="frontend" value="front">
@@ -95,9 +89,9 @@
                 <form id="cname">
                     <h3>Name</h3>
                     <label for="name">Ändern</label>
-                    <input type="name" name="name" id="name"/>
+                    <input type="text" name="name" id="name"/>
                     <label for="repname">Wiederholen</label>
-                    <input type="name" name="repname" id="repname"/>
+                    <input type="text" name="repname" id="repname"/>
                     <button type="submit">Speichern</button>
                 </form>
             </div>
@@ -129,37 +123,28 @@
 
 <script type="module">
     import {checkSession} from './check_session.js';
-    import {unauthorize, changeAttribute, redirect} from './session_manager.js';
-    import {callSnackbar} from './snackbar.js';
+    import {unauthorize, changeAttribute, error} from './session_manager.js';
     import {getProfile} from './profile.js';
 
-    var x = document.getElementById("logout");
-    x.addEventListener("click", unauthorize);
-
     function updateHeader() {
-        var x = document.getElementById("user");
-        x.innerText = "Hallo " + sessionStorage.getItem("username");
+        $('#user').text("Hallo " + sessionStorage.getItem("username"));
 
-        document.getElementById("person").addEventListener('click', () =>
-            redirect(`/profile?email=${sessionStorage.getItem('email')}`))
-
-        x = document.getElementById("welcome");
-        x.style.visibility = 'visible';
+        document.getElementById("welcome").style.visibility = 'visible';
 
         document.getElementById("name").value = sessionStorage.getItem(("username"));
         document.getElementById("email").value = sessionStorage.getItem(("email"));
-        document.getElementById("password").value = sessionStorage.getItem(("password"));
+
         getProfile(sessionStorage.getItem(("email")), (response) => {
-            $('#about').value = response.about;
-            document.getElementById("about").value = response.about ? response.about : ''
-            document.getElementById("git").value = response.git ? response.git : ''
+            $('#about').text(response.about ? response.about : '')
+            $('#git').text(response.git ? response.git : '')
 
             if (response.type === 'dev') {
                 $('#cgit').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
-                $('#cskill').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
+                $('#cstack').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
+            } else {
+                $('.devFields').remove()
             }
-            console.log(response)
-            if (response) response.stack.forEach((skill) => document.getElementById(skill).checked = true)
+            if (response.stack) response.stack.forEach((skill) => document.getElementById(skill).checked = true)
 
         }, (response) => console.error(response))
     }
@@ -167,23 +152,8 @@
     checkSession(updateHeader, unauthorize);
 
 
-    x = document.getElementById('cname');
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'name', true));
-
-    x = document.getElementById('cgit');
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'git', false));
-
-    x = document.getElementById('cabout');
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'about', false));
-
-    x = document.getElementById("cemail");
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'email', true));
-
-    x = document.getElementById("cpassword");
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'password', true));
-
-    x = document.getElementById("cskill");
-    x.addEventListener("submit", (event) => handleSubmitChange(event, 'stack', false));
+    ['name', 'git', 'about', 'email', 'password', 'stack']
+        .forEach((desc) => document.getElementById('c' + desc).addEventListener("submit", (event) => handleSubmitChange(event, desc, true)))
 
 
     function handleSubmitChange(event, type = 'name', check) {
@@ -229,7 +199,7 @@
                     break;
             }
         } else
-            callSnackbar('Datenfelder stimmen nicht überein')
+            error('Datenfelder stimmen nicht überein')
     }
 </script>
 

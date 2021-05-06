@@ -1,9 +1,8 @@
-import { IClient } from '../database/interfaces/client_interface';
-import { IDeveloper } from '../database/interfaces/developer_interface';
-import { sendSessionStorage } from '../user_action/credentials';
-import { Contract } from '../database/schemas/contracts_schema';
-import { Schema, Types } from 'mongoose';
-
+import { IClient } from '../database/interfaces/client_interface'
+import { IDeveloper } from '../database/interfaces/developer_interface'
+import { sendSessionStorage } from '../user_action/credentials'
+import { Contract } from '../database/schemas/contracts_schema'
+import { Schema, Types } from 'mongoose'
 
 /**
  * set credentials of user to identify them through the session
@@ -12,13 +11,13 @@ import { Schema, Types } from 'mongoose';
  * @param res
  * @param user
  */
-export function setUserCredentials(req, res, user: IClient | IDeveloper) {
-  req.session._id = user._id;
-  req.session.email = user.email;
-  req.session.password_hash = user.password_hash;
-  req.session.type = user['stack'] ? 'dev' : 'client';
-  console.log(`User ${user.email} authenticated as ${req.session.type}`);
-  sendSessionStorage(req, res);
+export function setUserCredentials (req, res, user: IClient | IDeveloper) {
+  req.session._id = user._id
+  req.session.email = user.email
+  req.session.password_hash = user.password_hash
+  req.session.type = user['stack'] ? 'dev' : 'client'
+  console.log(`User ${user.email} authenticated as ${req.session.type}`)
+  sendSessionStorage(req, res)
 }
 
 /**
@@ -26,13 +25,13 @@ export function setUserCredentials(req, res, user: IClient | IDeveloper) {
  *
  * @param req
  */
-export function unauthenticate(req) {
-  console.log(`Session ${req.session.email} unauthenticated`);
-  delete req.session._id;
-  delete req.session.email;
-  delete req.session.password_hash;
-  delete req.type;
-  return req;
+export function unauthenticate (req) {
+  console.log(`Session ${req.session.email} unauthenticated`)
+  delete req.session._id
+  delete req.session.email
+  delete req.session.password_hash
+  delete req.type
+  return req
 }
 
 /**
@@ -43,9 +42,9 @@ export function unauthenticate(req) {
  * @param code
  * @param message
  */
-export function resetUserCredentials(req, res, code: number, message: string) {
-  unauthenticate(req);
-  res.status(code ? code : 400).send(message ? message : '');
+export function resetUserCredentials (req, res, code: number, message: string) {
+  unauthenticate(req)
+  res.status(code || 400).send(message || '')
 }
 
 /**
@@ -53,18 +52,15 @@ export function resetUserCredentials(req, res, code: number, message: string) {
  *
  * @param req
  */
-export function isAuthenticated(req): boolean {
-  return req.session._id && req.session.email && req.session.password_hash && req.session.type;
+export function isAuthenticated (req): boolean {
+  return req.session._id && req.session.email && req.session.password_hash && req.session.type
 }
 
-export function isClient(req): boolean {
+/**
+ * check if user is client
+ *
+ * @param req
+ */
+export function isClient (req): boolean {
   return req.session.type === 'client'
-}
-
-export async function isInContract(req, _id) {
-  if (req.session.type === 'client') {
-    return Contract.findOne({_id: Types.ObjectId(_id), client: Types.ObjectId(req.session._id)});
-  } else {
-    return Contract.findOne({_id: Types.ObjectId(_id), developer: Types.ObjectId(req.session._id)});
-  }
 }

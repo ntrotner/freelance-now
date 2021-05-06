@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
-    <script src="sidebar.js" defer></script>
+    <script src="sidebar.js" type="module"></script>
     <link rel="stylesheet" href="default.css">
     <link rel="stylesheet" href="profile.css">
     <script src="https://code.jquery.com/jquery-latest.js"></script>
@@ -14,7 +14,7 @@
 <main>
     <div id="nameWrapper">
         <h2 id="name"></h2>
-        <i class="material-icons md-26 link" id="person">
+        <i class="material-icons md-26 link" id="emailIcon">
             email
         </i>
     </div>
@@ -87,16 +87,13 @@
             } else {
                 fillPastContracts(response.email)
                 response.stack.forEach((skill) => $(`#stack`).append($('<li>').text(prettifySkill(skill))));
-                if (!response.stack.length) $(`#stack`).append($('<p>').text('None'))
-                response.git ? document.getElementById('git').innerText = response.git : null
+                if (!response.stack.length) $(`#stack`).append($('<p>').text('Keine'))
+                if (response.git) document.getElementById('git').innerText = response.git
             }
+            $('#emailIcon').click(() => redirect(`/chat?email=${response.email}`))
 
-            document.getElementById('person').onclick = () => {
-                redirect(`/chat?email=${response.email}`)
-            }
-
-        }, (response) => console.error(response))
-    }
+        }, (response) => redirect('/'))
+    } else redirect('/')
 
     function fillPastContracts(email) {
         getContracts(email, (response) => {

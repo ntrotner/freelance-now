@@ -1,0 +1,33 @@
+.contract {
+    display: grid;
+    border: 1px black solid;
+    margin: 12px 6px;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    cursor: pointer;
+    text-align: center;
+}
+
+.contractInfo {
+    margin: 24px 8px;
+}
+
+#topWrapper {
+    margin: 16px 12px;
+}
+
+#bottomWrapper div h4 {
+    margin: 8px 12px;
+}
+
+#bottomWrapper div {
+    display: grid;
+    text-align: center;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+}
+
+#bottomWrapper div p {
+    overflow-wrap: anywhere;
+}

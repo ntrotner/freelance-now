@@ -1,13 +1,12 @@
 const bcrypt = require('bcrypt')
 
-
 /**
  * takes an password and hashes it so it can be saved
  *
  * @param password
  */
-export async function hashPassword(password: string): Promise<string> {
-  return await bcrypt.hash(password, 10);
+export async function hashPassword (password: string): Promise<string> {
+  return await bcrypt.hash(password, 10)
 }
 
 /**
@@ -16,6 +15,6 @@ export async function hashPassword(password: string): Promise<string> {
  * @param hash
  * @param password
  */
-export async function verifyPassword(hash: any, password: string): Promise<boolean> {
-  return await bcrypt.compare(password, hash);
+export async function verifyPassword (hash: any, password: string): Promise<boolean> {
+  return await bcrypt.compare(password, hash)
 }

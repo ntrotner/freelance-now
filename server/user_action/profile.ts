@@ -1,12 +1,18 @@
-import { isEMail } from '../components/validator';
-import { error } from '../routes';
-import { findUser } from '../user_authentication/user_control';
+import { isEMail } from '../components/validator'
+import { error } from '../routes'
+import { findUser } from '../user_authentication/user_control'
 
+/**
+ * send user profile
+ *
+ * @param req
+ * @param res
+ */
 export async function getProfile(req, res) {
-  if (!isEMail(req.body.email)) return error(req, res, 'Falsche E-Mail');
+  if (!isEMail(req.body.email)) return error(req, res, 'Falsche E-Mail')
 
-  const foundUser = await findUser({email: req.body.email});
-  if (!foundUser) return error(req, res, 'Kein Nutzer gefunden');
+  const foundUser = await findUser({email: req.body.email})
+  if (!foundUser) return error(req, res, 'Kein Nutzer gefunden')
 
   const response = {
     username: foundUser.username,
@@ -14,9 +20,9 @@ export async function getProfile(req, res) {
     about: foundUser.about
   }
 
-  if (foundUser['stack']) response['stack'] = foundUser['stack'];
-  if (foundUser['git']) response['git'] = foundUser['git'];
-  response['type'] = foundUser['stack'] ? 'dev' : 'client';
+  if (foundUser['stack']) response['stack'] = foundUser['stack']
+  if (foundUser['git']) response['git'] = foundUser['git']
+  response['type'] = foundUser['stack'] ? 'dev' : 'client'
 
-  res.status(200).json(response);
+  res.status(200).json(response)
 }

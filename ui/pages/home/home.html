@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="sidebar.js" type="module"></script>
+</head>
+<body>
+<sidebar-component></sidebar-component>
+<main>
+    <div id="welcome">
+        <h2 id="user"></h2>
+    </div>
+</main>
+
+<script type="module">
+    import {checkSession} from './check_session.js';
+    import {unauthorize} from './session_manager.js'
+
+    checkSession(() => {
+        document.getElementById("user")
+            .innerText = "Hallo " + sessionStorage.getItem("username");
+        document.getElementById("welcome")
+            .style.visibility = 'visible';
+    }, unauthorize);
+</script>
+</body>
+</html>

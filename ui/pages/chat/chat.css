@@ -1,43 +1,61 @@
+#search {
+    margin: 16px 12px;
+}
+
 #chatWrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 8px 0;
+}
+
+#usersWrapper {
+    outline: 1px black solid;
+    margin: 0;
+    padding: 0;
+    border: 1px black solid;
 }
 
 #users {
     list-style-type: none;
     min-width: 15vw;
-    height: 67vh;
+    height: 71vh;
     overflow-y: auto;
+    margin: 0;
+    padding: 0;
 }
 
 #users > li {
     overflow-wrap: anywhere;
     width: 15vw;
     padding: 10px 25px;
-    margin: 8px 2px;
-    outline: 1px #333333 solid;
+    margin: 0 0;
+    border-bottom: 1px #333333 solid;
     cursor: pointer;
     white-space: pre-line;
 }
 
 #profileRef {
+    position: relative;
     height: 25px;
     margin: 10px 5px;
     text-decoration: none;
     color: black;
-    position: absolute;
 }
 
 #profileRef:hover {
     text-decoration: underline;
 }
 
+#profileTop {
+    border: 1px black solid;
+}
+
 .chatWindow {
     width: 100%;
     outline: 1px black solid;
-    margin: 16px 64px;
-    height: 67vh;
+    margin: 0;
+    height: 68vh;
     position: relative;
     padding-bottom: 32px;
 }
@@ -53,6 +71,7 @@
     flex-wrap: nowrap;
     width: 100%;
     justify-content: flex-end;
+    outline: 1px black solid;
 }
 
 #sendMessage {
@@ -61,13 +80,14 @@
 }
 
 #chatContent {
-    height: 100%;
+    height: 96%;
     overflow: auto;
     margin: 0 0 32px 0;
     line-height: 2;
     list-style-type: none;
     padding-left: 36px;
     padding-right: 36px;
+    border: 1px black solid;
 }
 
 
@@ -86,6 +106,6 @@
 
 .date {
     opacity: 0.7;
-    font-size: 14px;
+    font-size: 12px;
     margin-top: -8px;
 }

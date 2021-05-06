@@ -32,15 +32,11 @@
         const data = new FormData(event.target);
         const email = data.get('email');
         const password = data.get('password');
-
         sendLogin(email, password);
     }
 
-    const form = document.querySelector('form');
-    form.addEventListener('submit', handleSubmit);
-
-    var x = document.getElementById("register");
-    x.addEventListener("click", redirectRegister);
+    document.querySelector('form').addEventListener('submit', handleSubmit);
+    document.getElementById("register").addEventListener("click", redirectRegister);
 </script>
 
 <div id="snackbar"></div>

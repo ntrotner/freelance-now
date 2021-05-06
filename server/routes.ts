@@ -1,17 +1,16 @@
-import { createDeveloper } from './user_authentication/developer_control';
-import { createClient } from './user_authentication/client_control';
-import { loginUser, updateSettings } from './user_authentication/user_control';
-import { sendSessionStorage } from './user_action/credentials';
-import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat';
-import { getProfile } from './user_action/profile';
+import { createDeveloper } from './user_authentication/developer_control'
+import { createClient } from './user_authentication/client_control'
+import { loginUser, updateSettings } from './user_authentication/user_control'
+import { sendSessionStorage } from './user_action/credentials'
+import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat'
+import { getProfile } from './user_action/profile'
 import {
   addDeveloperReward,
   createContract, finishContract,
   getContractInformation,
   getContractsMeta,
   getPersonalContracts, searchContracts, selectDeveloper
-} from './user_action/contracts';
-
+} from './user_action/contracts'
 
 /**
  * simple health check of server
@@ -19,8 +18,8 @@ import {
  * @param req
  * @param res
  */
-function healthCheck(req, res) {
-  res.sendStatus(200);
+function healthCheck (req, res) {
+  res.sendStatus(200)
 }
 
 /**
@@ -30,8 +29,8 @@ function healthCheck(req, res) {
  * @param res
  * @param message
  */
-export function error(req, res, message = 'Fehler') {
-  res.status(404).send(message);
+export function error (req, res, message = 'Fehler') {
+  res.status(404).send(message)
 }
 
 const getRoutes = {
@@ -48,8 +47,8 @@ const getRoutes = {
  * @param req
  * @param res
  */
-export function getRoute(route: string, req, res): void {
-  (getRoutes[route] ? getRoutes[route] : error)(req, res);
+export function getRoute (route: string, req, res): void {
+  (getRoutes[route] ? getRoutes[route] : error)(req, res)
 }
 
 const postRoutes = {
@@ -78,6 +77,6 @@ const postRoutes = {
  * @param req
  * @param res
  */
-export function postRoute(route: string, req, res): void {
-  (postRoutes[route] ? postRoutes[route] : error)(req, res);
+export function postRoute (route: string, req, res): void {
+  (postRoutes[route] ? postRoutes[route] : error)(req, res)
 }

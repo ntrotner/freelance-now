@@ -1,101 +1,138 @@
-import { Chat } from '../database/schemas/chat_schema';
-import { Schema, Types } from 'mongoose';
-import { error } from '../routes';
-import { IChat } from '../database/interfaces/chat_interface';
-import { isASCII, isEMail, validMessage } from '../components/validator';
-import { findUser } from '../user_authentication/user_control';
-import { isAuthenticated } from '../user_authentication/session_manager';
+import { Chat } from '../database/schemas/chat_schema'
+import { Types } from 'mongoose'
+import { error } from '../routes'
+import { IChat } from '../database/interfaces/chat_interface'
+import { isEMail, validMessage } from '../components/validator'
+import { findUser } from '../user_authentication/user_control'
+import { isAuthenticated } from '../user_authentication/session_manager'
 
-export async function existsChat(from: string, to: string): Promise<IChat> {
+/**
+ * check and return if chat between two participants exists
+ *
+ * @param from
+ * @param to
+ */
+export async function existsChat (from: string, to: string): Promise<IChat> {
   return Chat.findOne({
-    participants: {$all: [Types.ObjectId(from), Types.ObjectId(to)]}
-  });
+    participants: { $all: [Types.ObjectId(from), Types.ObjectId(to)] }
+  })
 }
 
-export async function allChats(from: string): Promise<IChat[]> {
+/**
+ * get all chats where user is participating
+ *
+ * @param from
+ */
+export async function allChats (from: string): Promise<IChat[]> {
   return Chat.find({
-    participants: {$in: [Types.ObjectId(from)]}
-  });
+    participants: { $in: [Types.ObjectId(from)] }
+  })
 }
 
-export async function sendActiveChats(req, res) {
-  if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
+/**
+ * send cleaned list of chats with other users, so only email and name is transfered
+ *
+ * @param req
+ * @param res
+ */
+export async function sendActiveChats (req, res) {
+  if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert')
 
-  const chats = await allChats(req.session._id);
+  const chats = await allChats(req.session._id)
   const allParticipants = {}
-  for (let chat of chats) {
-    for (let participant of chat.participants) {
+  for (const chat of chats) {
+    for (const participant of chat.participants) {
       if (!allParticipants[String(participant)]) {
-        const foundUser = await findUser({_id: participant});
-        allParticipants[String(foundUser._id)] = {username: foundUser.username, email: foundUser.email}
+        const foundUser = await findUser({ _id: participant })
+        allParticipants[String(foundUser._id)] = { username: foundUser.username, email: foundUser.email }
       }
     }
   }
   delete allParticipants[req.session._id]
 
-  res.status(200).json({chats: Object.values(allParticipants)})
+  res.status(200).json({ chats: Object.values(allParticipants) })
 }
 
-export async function sendWholeChat(req, res, chat?: IChat) {
+/**
+ * send whole chat log to requester
+ *
+ * @param req
+ * @param res
+ * @param chat - optional
+ */
+export async function sendWholeChat (req, res, chat?: IChat) {
   if (chat) {
-    sendChatUpdate(req, res, {chat, index: 0});
+    sendChatUpdate(req, res, { chat, index: 0 })
   } else {
-    sendChatUpdate(req, res);
+    sendChatUpdate(req, res)
   }
 }
 
-export async function sendChatUpdate(req, res, options?: { chat: IChat, index: number }) {
-  let chat: IChat;
-  let index: number;
+/**
+ * send chat log which is chat.js friendly
+ *
+ * @param req
+ * @param res
+ * @param options
+ */
+export async function sendChatUpdate (req, res, options?: { chat: IChat, index: number }) {
+  let chat: IChat
+  let index: number
   if (!options) {
-    const toUser = await findUser({email: req.body.to});
+    const toUser = await findUser({ email: req.body.to })
     if (!toUser) return error(req, res, 'Empfänger existiert nicht')
-    chat = await existsChat(req.session._id, toUser._id);
+    chat = await existsChat(req.session._id, toUser._id)
 
     if (req.body.index) index = Number(req.body.index)
     else index = 0
   } else {
-    chat = options.chat;
-    index = options.index;
+    chat = options.chat
+    index = options.index
   }
 
   const messages = chat.messages.splice(index).map((input) => {
     return {
-      ownMessage: String(req.session._id) === String(input.from) ? true : false,
+      ownMessage: String(req.session._id) === String(input.from),
       date: input.date,
       message: input.message
     }
-  });
+  })
 
-  res.status(200).json({update: messages})
+  res.status(200).json({ update: messages })
 }
 
-export async function addMessage(req, res) {
+export async function addMessage (req, res) {
   if (!validMessage(req.body) || !isAuthenticated(req)) return error(req, res, 'Anfrage ungültig')
-  const foundUser = await findUser({email: req.body.to})
-  if (!foundUser) return error(req, res, 'Nutzer nicht gefunden');
+  const foundUser = await findUser({ email: req.body.to })
+  if (!foundUser) return error(req, res, 'Nutzer nicht gefunden')
 
-  const existiertChat = await existsChat(req.session._id, foundUser._id);
+  const existiertChat = await existsChat(req.session._id, foundUser._id)
   if (!existiertChat) return error(req, res, 'Chat existiert nicht')
 
-  existiertChat.messages.push({from: req.session._id, date: new Date(), message: req.body.message});
-  await existiertChat.save();
-  sendChatUpdate(req, res, {chat: existiertChat, index: req.body.index ? req.body.index : 0})
+  existiertChat.messages.push({ from: req.session._id, date: new Date(), message: req.body.message })
+  await existiertChat.save()
+  sendChatUpdate(req, res, { chat: existiertChat, index: req.body.index ? req.body.index : 0 })
 }
 
-export async function startChat(req, res) {
+/**
+ * create new chat object and send the chat to the requester
+ *
+ * @param req
+ * @param res
+ */
+export async function startChat (req, res) {
   if (!isEMail(req.body.to) || (req.session.email === req.body.to)) return error(req, res, 'Empfänger ungültig')
-  const toUser = await findUser({email: req.body.to});
-  if (!toUser) return error(req, res, 'Nutzer nicht gefunden');
+  const toUser = await findUser({ email: req.body.to })
+  if (!toUser) return error(req, res, 'Nutzer nicht gefunden')
 
-  const existiertChat = await existsChat(req.session._id, toUser._id);
-  if (existiertChat) return sendWholeChat(req, res, existiertChat);
+  const existiertChat = await existsChat(req.session._id, toUser._id)
+  if (existiertChat) return sendWholeChat(req, res, existiertChat)
 
   const newChat = new Chat({
     participants: [Types.ObjectId(req.session._id), Types.ObjectId(toUser._id)],
     messages: []
-  });
-  await newChat.populate('client').populate('developer').save();
+  })
+  await newChat.populate('client').populate('developer').save()
 
-  sendWholeChat(req, res, newChat);
+  sendWholeChat(req, res, newChat)
 }
