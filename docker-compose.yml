@@ -11,6 +11,9 @@ services:
     environment:
       - EXPRESSPORT=8080
       - EXPRESS_SESSION_SECRET=ADDSESSIONKEY
+      - BID=
+      - paypalUser=
+      - paypalPass=
 
   #-----------      DATABASE     ----------
   mongodb:
