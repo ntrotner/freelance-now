@@ -19,6 +19,10 @@
         </i>
     </div>
     <h3 id="type"></h3>
+    <div id="paypalWrapper">
+        <h4 id="paypalVerificated"></h4>
+        <i id="iconVerification" class="material-icons md-26"></i>
+    </div>
     <hr>
     <div id="description">
         <div class="shadow" id="leftWrapper">
@@ -69,7 +73,7 @@
 <script type="module">
     import {getProfile, prettifySkill} from './profile.js';
     import {getContracts} from './contracts.js';
-    import {redirect} from './session_manager.js';
+    import {redirect, checkPayPalVerification} from './session_manager.js';
 
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -80,10 +84,21 @@
             document.getElementById('type').innerText = response.type === 'client' ? 'Auftraggeber' : 'Entwickler'
             document.getElementById('about').innerText = response.about
 
+            checkPayPalVerification(response.email, (msg) => {
+                $('#paypalVerificated').html(msg ? 'Verifiziert' : 'Nicht Verifiziert')
+                $('#iconVerification').text(msg ? 'credit_score' : 'credit_card_off')
+            })
+
             if (response.type === 'client') {
-                $('#gitWrapper').remove()
-                $('#stackWrapper').remove()
-                $('#ratingWrapper').remove()
+                try {
+                    $('#gitWrapper').remove()
+                    $('#stackWrapper').remove()
+                    $('#ratingWrapper').remove()
+                    $('#paypalVerificated').remove()
+                    $('#iconVerification').remove()
+                } catch {
+
+                }
             } else {
                 fillPastContracts(response.email)
                 response.stack.forEach((skill) => $(`#stack`).append($('<li>').text(prettifySkill(skill))));

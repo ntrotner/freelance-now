@@ -5,6 +5,7 @@ import { error } from '../routes'
 import { isAuthenticated, isClient } from '../user_authentication/session_manager'
 import { IContract } from '../database/interfaces/contract_interface'
 import { Types } from 'mongoose'
+import { isPayPalVerficated } from './paypal';
 
 /**
  * send rating of a developer
@@ -67,7 +68,8 @@ export async function getPersonalContracts(req, res) {
       name: contract.name,
       participant,
       reward: contract.reward,
-      isDone: contract.isDone
+      isDone: contract.isDone,
+      isPaid: contract.isPaid
     })
   }
 
@@ -122,7 +124,8 @@ export async function getContractInformation(req, res) {
   res.status(200).json({
     ...foundContract['_doc'],
     developerEmail: foundContract.developer ? String((await findUser({_id: foundContract.developer})).email) : '',
-    clientEmail: foundContract.client ? String((await findUser({_id: foundContract.client})).email) : ''
+    clientEmail: foundContract.client ? String((await findUser({_id: foundContract.client})).email) : '',
+    developerMerchant: foundContract.developer ? String((await findUser({_id: foundContract.developer}))['merchant']) : ''
   })
 }
 
@@ -198,8 +201,9 @@ export async function addDeveloperReward(req, res) {
   if (!foundContract) return error(req, res, 'Interner Fehler')
 
   if (foundContract.developer) return error(req, res, 'Auftrag wurde schon von einem Entwickler angenommen')
+  if (!(await isPayPalVerficated(req.session.email))) return error(req, res, 'Bitte PayPal Account Verbinden')
 
-  foundContract.potentialDevelopers.push({email: req.body.email, reward: req.body.reward})
+  foundContract.potentialDevelopers.push({email: req.session.email, reward: req.body.reward})
   await foundContract.save()
   res.status(200).send('Abgeschickt')
 }
@@ -228,7 +232,8 @@ export async function searchContracts(req, res) {
       client: foundUser.email,
       developer: contract.developer ? (await findUser({_id: contract.developer})).email : null,
       reward: contract.reward,
-      isDone: contract.isDone
+      isDone: contract.isDone,
+      isPaid: contract.isPaid
     });
   }
 

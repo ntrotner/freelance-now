@@ -35,6 +35,15 @@ form > input {
     visibility: hidden;
 }
 
+#paypalWrapper {
+    width: 20vw;
+    opacity: 0;
+}
+
+#paypalWrapper > div {
+    margin: 8px 0;
+}
+
 
 .row {
     display: flex;

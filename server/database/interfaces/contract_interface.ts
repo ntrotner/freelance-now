@@ -6,6 +6,7 @@ export interface IContract extends Document {
   name: string,
   reward: number,
   isDone: boolean,
+  isPaid: boolean,
   details: {
     stack: Array<string>,
     description: string
@@ -22,18 +23,19 @@ export interface IContract extends Document {
 }
 
 export const Contract_Definitions = {
-  client: { type: Schema.Types.ObjectId, ref: 'client' },
-  developer: { type: Schema.Types.ObjectId, ref: 'developer', required: false },
-  name: { type: String, required: true },
-  reward: { type: Number, required: true },
-  isDone: { type: Boolean, required: false, default: false },
+  client: {type: Schema.Types.ObjectId, ref: 'client'},
+  developer: {type: Schema.Types.ObjectId, ref: 'developer', required: false},
+  name: {type: String, required: true},
+  reward: {type: Number, required: true},
+  isDone: {type: Boolean, required: false, default: false},
+  isPaid: {type: Boolean, required: false, default: false},
   details: {
-    type: { stack: Array, description: String },
+    type: {stack: Array, description: String},
     required: false,
-    default: { stack: [], description: '' }
+    default: {stack: [], description: ''}
   },
-  starting_date: { type: Date, required: true },
-  end_date: { type: Date, required: true },
+  starting_date: {type: Date, required: true},
+  end_date: {type: Date, required: true},
   rating: {
     type: {
       requirements_fulfilled: Boolean,
@@ -42,7 +44,7 @@ export const Contract_Definitions = {
       quality: Number
     },
     required: false,
-    default: { requirements_fulfilled: null, communication: null, speed: null, quality: null }
+    default: {requirements_fulfilled: null, communication: null, speed: null, quality: null}
   },
-  potentialDevelopers: { type: Array, required: false, default: [] }
+  potentialDevelopers: {type: Array, required: false, default: []}
 }

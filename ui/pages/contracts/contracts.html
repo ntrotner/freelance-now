@@ -36,17 +36,26 @@
 
     getPersonalContracts(
         (response) => {
+            response = response.sort((contract1, contract2) => {
+                const value1 = contract1.isPaid ? 4 : contract1.isDone ? 3 : contract1.participant ? 2 : 1;
+                const value2 = contract2.isPaid ? 4 : contract2.isDone ? 3 : contract2.participant ? 2 : 1;
+                return value1 - value2;
+            })
             $('#bottomWrapper').append(
                 response.map((contract) => {
+
                     return $('<div>').attr('class', 'contract shadow')
                         .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
                         .append(
                             Object.keys(contract).map((key) => {
                                 if (key === '_id') return
                                 let value = contract[key];
-                                if (key === 'isDone') value = contract[key] ?
-                                    'Fertig'
-                                    : contract['participant'] ? 'In Arbeit' : 'Nicht Angefangen'
+                                if (key === 'isPaid') return
+                                if (key === 'isDone') value =
+                                    contract['isPaid'] ?
+                                        'Bezahlt' : contract[key] ?
+                                        'Fertig (Bezahlung Offen)' : contract['participant'] ?
+                                            'In Arbeit' : 'Nicht Angefangen'
                                 if (key === 'reward') value += '€'
 
                                 if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler'

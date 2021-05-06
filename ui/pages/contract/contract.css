@@ -14,6 +14,14 @@ table {
     table-layout: fixed;
 }
 
+#paypal-button {
+    opacity: 0;
+}
+
+#paypal-button > div {
+    margin-top: 26px;
+}
+
 #bottomMain {
     display: flex;
     flex-direction: row;

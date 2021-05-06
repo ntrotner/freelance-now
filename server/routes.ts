@@ -11,6 +11,7 @@ import {
   getContractsMeta,
   getPersonalContracts, searchContracts, selectDeveloper
 } from './user_action/contracts'
+import { captureOrder, createOrder, hasConfirmedPayPal, loginPayPal, setMerchantID } from './user_action/paypal';
 
 /**
  * simple health check of server
@@ -18,7 +19,7 @@ import {
  * @param req
  * @param res
  */
-function healthCheck (req, res) {
+function healthCheck(req, res) {
   res.sendStatus(200)
 }
 
@@ -29,7 +30,7 @@ function healthCheck (req, res) {
  * @param res
  * @param message
  */
-export function error (req, res, message = 'Fehler') {
+export function error(req, res, message = 'Fehler') {
   res.status(404).send(message)
 }
 
@@ -37,7 +38,10 @@ const getRoutes = {
   '/api/health': healthCheck,
   '/api/sessionCredentials': sendSessionStorage,
   '/api/getActiveChats': sendActiveChats,
-  '/api/getPersonalContracts': getPersonalContracts
+  '/api/getPersonalContracts': getPersonalContracts,
+  '/api/paypalLogin': loginPayPal,
+  '/api/successPayPal': setMerchantID
+
 }
 
 /**
@@ -47,7 +51,7 @@ const getRoutes = {
  * @param req
  * @param res
  */
-export function getRoute (route: string, req, res): void {
+export function getRoute(route: string, req, res): void {
   (getRoutes[route] ? getRoutes[route] : error)(req, res)
 }
 
@@ -67,7 +71,10 @@ const postRoutes = {
   '/api/finishContract': finishContract,
   '/api/selectDeveloper': selectDeveloper,
   '/api/newDeveloperReward': addDeveloperReward,
-  '/api/searchContracts': searchContracts
+  '/api/searchContracts': searchContracts,
+  '/api/isPayPalConnected': hasConfirmedPayPal,
+  '/api/createOrder': createOrder,
+  '/api/captureOrder': captureOrder
 }
 
 /**
@@ -77,6 +84,6 @@ const postRoutes = {
  * @param req
  * @param res
  */
-export function postRoute (route: string, req, res): void {
+export function postRoute(route: string, req, res): void {
   (postRoutes[route] ? postRoutes[route] : error)(req, res)
 }

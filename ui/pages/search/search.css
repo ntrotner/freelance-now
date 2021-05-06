@@ -37,3 +37,19 @@
 #bottomWrapper {
     margin: 18px 0;
 }
+
+#bottomWrapper div h4 {
+    margin: 8px 12px;
+}
+
+#bottomWrapper div {
+    display: grid;
+    text-align: center;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+}
+
+#bottomWrapper div p {
+    overflow-wrap: anywhere;
+}
+

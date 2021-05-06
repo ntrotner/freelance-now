@@ -73,6 +73,7 @@
                 <td id="description"></td>
             </tr>
         </table>
+        <div id="paypal-button"></div>
         <div id="finish" class="shadow">
             <label for="progress">In Arbeit</label>
             <input type="radio" id="progress" name="status" value="In Arbeit">
@@ -144,8 +145,8 @@
     import {redirect, error, unauthorize} from './session_manager.js';
     import {checkSession} from './check_session.js';
 
-
     const _id = (new URLSearchParams(window.location.search)).get('_id')
+
 
     document.getElementById('submit')
         .addEventListener("click", finishContract);
@@ -171,6 +172,57 @@
             } catch {
             }
 
+            try {
+                if (response.isDone && !response.isPaid && response.clientEmail === sessionStorage.getItem('email')) {
+                    $('#paypal-button').css('opacity', 1)
+                    const clientID = 'AZSx6E9sfRj52Y5ry6XP3GNsvEjrAMjrM47BhbzZLd9Jqzl0YjFHBkJsqijl-cZGT0hefwqCQWlbueQe'
+                    const reqString = `https://www.paypal.com/sdk/js?&client-id=${clientID}&currency=EUR`
+                    $.ajaxSetup({
+                        cache: true
+                    });
+
+                    $.getScript(reqString, function (data, textStatus, jqxhr) {
+                        paypal.Buttons({
+                            createOrder: (data, actions) => {
+                                return fetch('/api/createOrder', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        contractID: _id
+                                    })
+                                }).then((res) => {
+                                    return res.json();
+                                }).then(function (data) {
+                                    return data.id;
+                                });
+                            },
+                            onApprove: function (data, actions) {
+                                return fetch('/api/captureOrder', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({id: data.orderID, contractID: _id})
+                                }).then(function (res) {
+                                    if (!res.ok) {
+                                        alert('Something went wrong');
+                                    }
+                                    redirect(`/contract?_id=${_id}`)
+                                });
+                            },
+                            style: {
+                                color: 'blue',
+                                label: 'paypal'
+                            }
+                        }).render('#paypal-button');
+                    });
+                } else $('#paypal-button').remove()
+            } catch {
+
+            }
+
             Object.keys(response).forEach((key) => {
                 if (key === 'reward') {
                     document.getElementById(key).innerText = response[key] + ' €'
@@ -191,6 +243,7 @@
 
                 if (key === 'isDone') {
                     response[key] ? setBarArea(3) : (response.developer ? setBarArea(2) : setBarArea(1))
+                    response[key] && response['isPaid'] ? setBarArea(4) : null
                     if (response[key]) {
                         try {
                             $('#apply').remove()
@@ -275,6 +328,8 @@
 
     function setBarArea(n) {
         switch (n) {
+            case 4:
+                $(`#middleWrapper #payContract`).css('background-color', '#558b2f')
             case 3:
                 $(`#middleWrapper #doneContract`).css('background-color', '#558b2f')
             case 2:

@@ -19,7 +19,7 @@
     align-items: flex-end;
 }
 
-#type {
+#type, #paypalWrapper {
     margin: 16px 0 18px 16px;
 }
 
@@ -50,4 +50,19 @@
 
 #stack {
     margin: 12px 18px;
+}
+
+#paypalVerificated {
+    margin: 0;
+}
+
+#paypalWrapper {
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
+    align-items: center;
+}
+
+.material-icons {
+    margin: 0 12px;
 }
