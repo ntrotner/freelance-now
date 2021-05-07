@@ -91,6 +91,7 @@ export async function createContract(req, res) {
   if (isNaN((new Date(req.body.endDate).getMilliseconds()))) return error(req, res, 'End Datum unzulässig')
   if (!req.body.description || req.body.description.length < 1) return error(req, res, 'Beschreibung unzulässig')
   if (!req.body.stack || req.body.stack.length < 0) return error(req, res, 'Beschreibung unzulässig')
+  if (new Date(req.body.startDate) > new Date(req.body.endDate)) return error(req, res, 'Datum Unzulässig')
 
   const newContract = new Contract({
     client: req.session._id,
@@ -216,6 +217,7 @@ export async function addDeveloperReward(req, res) {
  */
 export async function searchContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert')
+  if (new Date(req.body.starting_date) > new Date(req.body.end_date)) return error(req, res, 'Datum Unzulässig')
 
   const finalQuery = (await Contract.find()).filter((contract) => {
     return (!contract.developer == req.body.needDeveloper) &&
