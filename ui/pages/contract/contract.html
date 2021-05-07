@@ -50,6 +50,10 @@
                 <td id="reward"></td>
             </tr>
             <tr>
+                <td>Auftraggeber</td>
+                <td id="client"></td>
+            </tr>
+            <tr>
                 <td>Entwickler</td>
                 <td id="developer"></td>
             </tr>
@@ -232,6 +236,12 @@
 
                 if (['starting_date', 'end_date'].includes(key)) {
                     document.getElementById(key).innerText = (new Date(response[key])).toLocaleDateString()
+                    return
+                }
+
+                if (key === 'clientEmail') {
+                    $('#client').text(response[key]).append(
+                        $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)))
                     return
                 }
 
