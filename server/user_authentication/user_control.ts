@@ -14,9 +14,9 @@ import { error } from '../routes'
  * @param email
  * @param model
  */
-export async function existsEMail (email, model: Model<IClient> | Model<IDeveloper>): Promise<{ exists: boolean, user: IClient | IDeveloper }> {
-  const foundModel = await model.findOne({ email })
-  return { exists: !!foundModel, user: foundModel || null }
+export async function existsEMail(email, model: Model<IClient> | Model<IDeveloper>): Promise<{ exists: boolean, user: IClient | IDeveloper }> {
+  const foundModel = await model.findOne({email})
+  return {exists: !!foundModel, user: foundModel || null}
 }
 
 /**
@@ -24,7 +24,7 @@ export async function existsEMail (email, model: Model<IClient> | Model<IDevelop
  *
  * @param email
  */
-export async function existsAnyEMail (email): Promise<boolean> {
+export async function existsAnyEMail(email): Promise<boolean> {
   const emailCheckClient = await existsEMail(email, Client)
   const emailCheckDev = await existsEMail(email, Developer)
 
@@ -36,7 +36,7 @@ export async function existsAnyEMail (email): Promise<boolean> {
  *
  * @param property
  */
-export async function findUser (property: Object): Promise<IDeveloper | IClient> {
+export async function findUser(property: Object): Promise<IDeveloper | IClient> {
   let temp: IDeveloper | IClient = await Developer.findOne(property)
   if (!temp) temp = await Client.findOne(property)
   return temp
@@ -50,7 +50,7 @@ export async function findUser (property: Object): Promise<IDeveloper | IClient>
  * @param model
  * @param options
  */
-export async function createUser (req, res, model: Model<IDeveloper> | Model<IClient>, options: Object) {
+export async function createUser(req, res, model: Model<IDeveloper> | Model<IClient>, options: Object) {
   if (await existsAnyEMail(req.body.email)) return resetUserCredentials(req, res, 400, 'E-Mail existiert schon')
 
   const password_hash = await hashPassword(req.body.password)
@@ -71,21 +71,21 @@ export async function createUser (req, res, model: Model<IDeveloper> | Model<ICl
  * @param req
  * @param res
  */
-export async function loginUser (req, res): Promise<void> {
+export async function loginUser(req, res): Promise<void> {
   if (!validInputLogin(req.body)) return resetUserCredentials(req, res, 400, 'Ungeeignete Eingabe')
 
   let foundUser
-  if (req.body.email) foundUser = await findUser({ email: req.body.email })
+  if (req.body.email) foundUser = await findUser({email: req.body.email})
 
   if (!foundUser) return resetUserCredentials(req, res, 401, 'Nutzer nicht gefunden')
   if (!req.body.password) return resetUserCredentials(req, res, 401, 'Passwort nicht gueltig')
 
   verifyPassword(foundUser.password_hash, req.body.password)
-    .then((isVerified) => {
-      if (isVerified) setUserCredentials(req, res, foundUser)
-      else resetUserCredentials(req, res, 401, 'Falsches Passwort')
-    })
-    .catch(() => resetUserCredentials(req, res, 400, 'Unerwartetes Problem'))
+      .then((isVerified) => {
+        if (isVerified) setUserCredentials(req, res, foundUser)
+        else resetUserCredentials(req, res, 401, 'Falsches Passwort')
+      })
+      .catch(() => resetUserCredentials(req, res, 400, 'Unerwartetes Problem'))
 }
 
 /**
@@ -94,8 +94,8 @@ export async function loginUser (req, res): Promise<void> {
  * @param req
  * @param res
  */
-export async function updateSettings (req, res): Promise<void> {
-  const foundUser = await findUser({ email: req.session.email })
+export async function updateSettings(req, res): Promise<void> {
+  const foundUser = await findUser({email: req.session.email})
 
   if (!foundUser) resetUserCredentials(req, res, 401, 'Nutzer Ungültig')
 
@@ -122,15 +122,15 @@ export async function updateSettings (req, res): Promise<void> {
       } else error(req, res, 'Passwort ungültig')
       break
     case 'about':
-      if (isASCII(req.body.about)) {
-        foundUser.about = req.body.about
+      if (String(req.body.about) === 'string') {
+        foundUser.about = String(req.body.about)
         const updatedUser = await foundUser.save()
         setUserCredentials(req, res, updatedUser)
       } else error(req, res, 'Eingabe Ungültig')
       break
     case 'git':
-      if (isASCII(req.body.git) && typeof foundUser['git'] === 'string') {
-        foundUser['git'] = req.body.git
+      if (typeof foundUser['git'] === 'string' && String(req.body.git) === 'string') {
+        foundUser['git'] = String(req.body.git)
         const updatedUser = await foundUser.save()
         setUserCredentials(req, res, updatedUser)
       } else error(req, res, 'Eingabe Ungültig')

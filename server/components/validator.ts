@@ -27,7 +27,7 @@ export function isEMail(input: string): boolean {
  */
 export function isASCII(input: string): boolean {
   try {
-    return (/^[ abcdefghijklmnopqrstuvwxyzöäüABCDEFGHIJKLMNOPQRSTUVWXYZÖÄÜ0-9-]+$/.test(input))
+    return (/^[ *'#.,_-ß()!"§$%&=?abcdefghijklmnopqrstuvwxyzöäüABCDEFGHIJKLMNOPQRSTUVWXYZÖÄÜ0-9-]+$/.test(input))
   } catch {
     return false
   }
