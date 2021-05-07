@@ -122,14 +122,14 @@ export async function updateSettings(req, res): Promise<void> {
       } else error(req, res, 'Passwort ungültig')
       break
     case 'about':
-      if (String(req.body.about) === 'string') {
+      if (typeof String(req.body.about) === 'string') {
         foundUser.about = String(req.body.about)
         const updatedUser = await foundUser.save()
         setUserCredentials(req, res, updatedUser)
       } else error(req, res, 'Eingabe Ungültig')
       break
     case 'git':
-      if (typeof foundUser['git'] === 'string' && String(req.body.git) === 'string') {
+      if (typeof foundUser['git'] === 'string' && typeof String(req.body.git) === 'string') {
         foundUser['git'] = String(req.body.git)
         const updatedUser = await foundUser.save()
         setUserCredentials(req, res, updatedUser)
