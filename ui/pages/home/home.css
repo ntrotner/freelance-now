@@ -1,8 +1,8 @@
 #welcome {
     width: 95%;
-    border-bottom: 1px black solid;
     visibility: hidden;
     padding: 5px 20px;
+    margin: 15px 0;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -22,8 +22,14 @@
     width: 15vw;
 }
 
+#bottomWrapper {
+    opacity: 0;
+}
+
+#bottomWrapper > h4 {
+ margin: 16px 15px;
+}
+
 .material-icons {
     margin-right: 10px;
 }
-
-

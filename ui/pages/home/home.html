@@ -5,6 +5,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="default.css">
     <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="contracts.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://code.jquery.com/jquery-latest.js"></script>
     <script src="sidebar.js" type="module"></script>
@@ -16,6 +17,8 @@
         <h2 id="user"></h2>
     </div>
 
+    <hr>
+
     <div id="information">
         <div id="contr1" class="shadow">
         </div>
@@ -24,12 +27,22 @@
         <div id="contr3" class="shadow">
         </div>
     </div>
+    <hr>
+    <div id="bottomWrapper">
+        <h4>Aufträge in Arbeit</h4>
+        <div>
+            <h4>Titel</h4>
+            <h4>Ansprechpartner</h4>
+            <h4>Entlohnung</h4>
+            <h4>Status</h4>
+        </div>
+    </div>
 </main>
 
 <script type="module">
     import {checkSession} from './check_session.js';
     import {unauthorize} from './session_manager.js'
-    import {getPaidContracts, getToPayContracts, getInProgressContracts} from './contracts.js'
+    import {getPaidContracts, getToPayContracts, getInProgressContracts, getPersonalContracts} from './contracts.js'
 
     checkSession(() => {
         document.getElementById("user")
@@ -66,8 +79,6 @@
         }, (err) => console.error(err))
 
     } else {
-
-
         getPaidContracts((msg) => {
             $('#contr1')
                 .append($('<h4>').text('Erhaltene Bezahlungen'))
@@ -92,9 +103,46 @@
                     else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
                 }))
         }, (err) => console.error(err))
-
-
     }
+
+    getPersonalContracts(
+        (response) => {
+            response = response.sort((contract1, contract2) => {
+                const value1 = contract1.isPaid ? 4 : contract1.isDone ? 3 : contract1.participant ? 2 : 1;
+                const value2 = contract2.isPaid ? 4 : contract2.isDone ? 3 : contract2.participant ? 2 : 1;
+                return value1 - value2;
+            });
+            response = response.filter((contract) => !contract.isDone && contract.participant)
+            if (response.length > 0) $('#bottomWrapper').css('opacity', 1)
+
+            $('#bottomWrapper').append(
+                response.map((contract) => {
+
+                    return $('<div>').attr('class', 'contract shadow')
+                        .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
+                        .append(
+                            Object.keys(contract).map((key) => {
+                                if (key === '_id') return
+                                let value = contract[key];
+                                if (key === 'isPaid') return
+                                if (key === 'isDone') value =
+                                    contract['isPaid'] ?
+                                        'Bezahlt' : contract[key] ?
+                                        'Fertig (Bezahlung Offen)' : contract['participant'] ?
+                                            'In Arbeit' : 'Nicht Angefangen'
+                                if (key === 'reward') value += '€'
+
+                                if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler'
+
+                                return $('<p>').attr('class', 'contractInfo').text(value)
+                            }))
+                })
+            )
+        },
+        (error) => {
+
+        }
+    )
 </script>
 </body>
 </html>
