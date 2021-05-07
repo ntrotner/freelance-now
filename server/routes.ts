@@ -5,7 +5,7 @@ import { sendSessionStorage } from './user_action/credentials'
 import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat'
 import { getProfile } from './user_action/profile'
 import {
-  addDeveloperReward,
+  addDeveloperReward, amountInProgressContracts, amountOfPaidContracts, amountToPayContracts,
   createContract, finishContract,
   getContractInformation,
   getContractsMeta,
@@ -40,7 +40,10 @@ const getRoutes = {
   '/api/getActiveChats': sendActiveChats,
   '/api/getPersonalContracts': getPersonalContracts,
   '/api/paypalLogin': loginPayPal,
-  '/api/successPayPal': setMerchantID
+  '/api/successPayPal': setMerchantID,
+  '/api/paidContracts': amountOfPaidContracts,
+  '/api/toPayContracts': amountToPayContracts,
+  '/api/inProgressContracts': amountInProgressContracts
 
 }
 

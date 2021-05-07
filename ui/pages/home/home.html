@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="default.css">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
     <script src="sidebar.js" type="module"></script>
 </head>
 <body>
@@ -14,11 +15,21 @@
     <div id="welcome">
         <h2 id="user"></h2>
     </div>
+
+    <div id="information">
+        <div id="contr1" class="shadow">
+        </div>
+        <div id="contr2" class="shadow">
+        </div>
+        <div id="contr3" class="shadow">
+        </div>
+    </div>
 </main>
 
 <script type="module">
     import {checkSession} from './check_session.js';
     import {unauthorize} from './session_manager.js'
+    import {getPaidContracts, getToPayContracts, getInProgressContracts} from './contracts.js'
 
     checkSession(() => {
         document.getElementById("user")
@@ -26,6 +37,64 @@
         document.getElementById("welcome")
             .style.visibility = 'visible';
     }, unauthorize);
+
+    if (sessionStorage.getItem('type') === 'client') {
+
+        getPaidContracts((msg) => {
+            $('#contr1')
+                .append($('<h4>').text('Bezahlte Aufträge'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+        getToPayContracts((msg) => {
+            $('#contr2')
+                .append($('<h4>').text('Zu Bezahlen'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+        getInProgressContracts((msg) => {
+            $('#contr3')
+                .append($('<h4>').text('Aufträge in Arbeit'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+
+    } else {
+
+
+        getPaidContracts((msg) => {
+            $('#contr1')
+                .append($('<h4>').text('Erhaltene Bezahlungen'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+        getToPayContracts((msg) => {
+            $('#contr2')
+                .append($('<h4>').text('Offene Zahlungen'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+        getInProgressContracts((msg) => {
+            $('#contr3')
+                .append($('<h4>').text('Aufträge in Arbeit'))
+                .append(Object.keys(msg).map((key) => {
+                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
+                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
+                }))
+        }, (err) => console.error(err))
+
+
+    }
 </script>
 </body>
 </html>

@@ -8,6 +8,20 @@
     align-items: baseline;
 }
 
+#information {
+    margin: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#information > div {
+    margin: 50px 0;
+    padding: 5px 15px;
+    border: 1px black solid;
+    width: 15vw;
+}
+
 .material-icons {
     margin-right: 10px;
 }
