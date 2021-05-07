@@ -176,7 +176,8 @@
                 if (response.isDone && !response.isPaid && response.clientEmail === sessionStorage.getItem('email')) {
                     $('#paypal-button').css('opacity', 1)
                     const clientID = 'AZSx6E9sfRj52Y5ry6XP3GNsvEjrAMjrM47BhbzZLd9Jqzl0YjFHBkJsqijl-cZGT0hefwqCQWlbueQe'
-                    const reqString = `https://www.paypal.com/sdk/js?&client-id=${clientID}&currency=EUR`
+                    const merchantID = String(response.developerMerchant);
+                    const reqString = `https://www.paypal.com/sdk/js?&client-id=${clientID}&merchant-id=${merchantID}&currency=EUR`
                     $.ajaxSetup({
                         cache: true
                     });

@@ -55,7 +55,7 @@ export async function createOrder(req, res) {
   const foundContract = await Contract.findOne({_id: req.body.contractID});
   if (!foundContract) return error(req, res, 'Auftrag nicht gefunden');
 
-  const foundDev = findUser({_id: foundContract.developer})
+  const foundDev = await findUser({_id: foundContract.developer})
   if (!foundDev) return error(req, res, 'Entwickler nicht gefunden');
 
   request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
@@ -70,11 +70,11 @@ export async function createOrder(req, res) {
         'amount': {
           'currency_code': 'EUR',
           'value': String(foundContract.reward)
+        },
+        'payee': {
+          'merchant_id': String(foundDev['merchant'])
         }
       }],
-      'payee': {
-        'merchant_id': String(foundDev['merchant'])
-      },
       'payment_instruction': {
         'disbursement_mode': 'INSTANT',
         'platform_fees': []
@@ -111,17 +111,22 @@ export function captureOrder(req, res) {
           body = JSON.parse(body);
           const foundContract = await Contract.findOne({_id: contractID});
 
-          if (body.purchase_units[0].payments.captures[0].status === 'COMPLETED' &&
-              body.purchase_units[0].payments.captures[0].amount.currency_code === 'EUR' &&
-              Number(body.purchase_units[0].payments.captures[0].amount.value) === Number(foundContract.reward)
-          ) {
-            console.log('Paid Contract')
-            foundContract.isPaid = true;
-            foundContract.save();
+          console.log(body)
+          try {
+            if (body.purchase_units[0].payments.captures[0].status === 'COMPLETED' &&
+                body.purchase_units[0].payments.captures[0].amount.currency_code === 'EUR' &&
+                Number(body.purchase_units[0].payments.captures[0].amount.value) === Number(foundContract.reward)
+            ) {
+              console.log('Paid Contract')
+              foundContract.isPaid = true;
+              foundContract.save();
 
-            res.json({
-              status: 'success'
-            });
+              res.json({
+                status: 'success'
+              });
+            }
+          } catch {
+            return res.sendStatus(500);
           }
         }
       }
