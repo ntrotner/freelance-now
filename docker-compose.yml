@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  #----------  HTML/Fetch Services  -------
+  #----------  HTML Services  -------
   freelancenow:
     build: ./
     container_name: freelancenow
@@ -9,15 +9,23 @@ services:
     depends_on:
       - mongodb
     environment:
-      - EXPRESSPORT=8080
-      - EXPRESS_SESSION_SECRET=ADDSESSIONKEY
+      - EXPRESSPORT=
+      - EXPRESS_SESSION_SECRET=
       - BID=
       - paypalUser=
       - paypalPass=
+    networks:
+      - nginx_network
 
   #-----------      DATABASE     ----------
   mongodb:
     image: mongo:latest
     container_name: mongodb
     volumes:
-      - "${GITLABRUNNERDB}/mongodbfreelance:/data/db"
+      - "./db:/data/db"
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    external: true

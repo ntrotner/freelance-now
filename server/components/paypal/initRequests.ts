@@ -51,7 +51,6 @@ export function requestPayPalDeveloperLink(callbackSuccess, email, authToken) {
       const parsed = JSON.parse(body);
       callbackSuccess(parsed.links.find((link) => link.rel === 'action_url').href)
     } else {
-      console.log(body)
     }
   }
 

@@ -42,6 +42,7 @@
                     <a data-paypal-button="true" href="/api/paypalLogin" target="PPFrame">
                         PayPal Geschäftsaccount verbinden
                     </a>
+                    <i class="material-icons md-26" title="Bitte die Anmeldung bis zum Ende abschließen">info</i>
                 </div>
 
             </div>
@@ -167,15 +168,17 @@
     checkSession(updateHeader, unauthorize);
 
 
-    ['name', 'git', 'about', 'email', 'password', 'stack']
-        .forEach((desc) => document.getElementById('c' + desc).addEventListener("submit", (event) => handleSubmitChange(event, desc, true)))
+    [['name', true], ['git', false], ['about', false], ['email', true], ['password', true], ['stack', false]]
+        .forEach(([desc, doubleCheck]) =>
+            document.getElementById('c' + desc)
+                .addEventListener("submit", (event) => handleSubmitChange(event, desc, doubleCheck)))
 
 
     function handleSubmitChange(event, type = 'name', check) {
         event.preventDefault();
         const data = new FormData(event.target);
         const inputData = data.get(type);
-        const repInputData = data.get(check ? 'rep' : '' + type);
+        const repInputData = data.get((check ? 'rep' : '') + type);
 
         if (inputData === repInputData) {
             switch (type) {
