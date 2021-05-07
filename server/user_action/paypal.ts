@@ -8,12 +8,24 @@ var request = require('request');
 
 let authToken;
 
+/**
+ * send link for developer login
+ *
+ * @param req
+ * @param res
+ */
 export function loginPayPal(req, res) {
   requestPayPalDeveloperLink((link) => {
     res.redirect(302, link)
   }, req.session.email, authToken)
 }
 
+/**
+ * set id of developer for receiving payments
+ *
+ * @param req
+ * @param res
+ */
 export async function setMerchantID(req, res) {
   if (!isAuthenticated(req) || !req.session.email || !req.query.merchantId) return error(req, res, 'Nicht Authorisiert');
   const foundUser = await findUser({email: req.session.email})
@@ -26,32 +38,38 @@ export async function setMerchantID(req, res) {
   ) return error(req, res, 'Nicht Erlaubt');
 
   foundUser['merchant'] = req.query.merchantIdInPayPal;
-  foundUser.save()
+  await foundUser.save()
   res.redirect(302, '/settings');
-
-  /**
-   * merchantId=abc
-   * merchantIdInPayPal=JTARYZ92XQAR4
-   * permissionsGranted=true&consentStatus=true
-   * productIntentId=addipmt
-   * productIntentID=addipmt
-   * isEmailConfirmed=false
-   * accountStatus=BUSINESS_ACCOUNT
-   */
 }
 
+/**
+ * check if paypal account is linked
+ *
+ * @param req
+ * @param res
+ */
 export async function hasConfirmedPayPal(req, res) {
   const foundUser = await findUser({email: req.body.email});
   res.status(200).json(foundUser['merchant'] && (foundUser['merchant'].length > 0))
 }
 
-export async function isPayPalVerficated(email) {
+/**
+ * return if paypal account is linked
+ *
+ * @param email
+ */
+export async function isPayPalVerficated(email): Promise<boolean> {
   const foundUser = await findUser({email});
   return foundUser['merchant'] && (foundUser['merchant'].length > 0)
 }
 
+/**
+ * make first step towards paying for a contract
+ *
+ * @param req
+ * @param res
+ */
 export async function createOrder(req, res) {
-
   const foundContract = await Contract.findOne({_id: req.body.contractID});
   if (!foundContract) return error(req, res, 'Auftrag nicht gefunden');
 
@@ -92,6 +110,12 @@ export async function createOrder(req, res) {
   });
 }
 
+/**
+ * finish off contract and mark it as paid if the return message of paypal is positive
+ *
+ * @param req
+ * @param res
+ */
 export function captureOrder(req, res) {
   var OrderID = req.body.id;
   var contractID = req.body.contractID
@@ -133,6 +157,9 @@ export function captureOrder(req, res) {
   );
 }
 
+/**
+ * refresh paypal authentication token
+ */
 function refreshAuthToken() {
   getAuthorizationToken((token) => {
     authToken = token;
@@ -140,4 +167,4 @@ function refreshAuthToken() {
 }
 
 setInterval(refreshAuthToken, 1000 * 60 * 60 * 8)
-refreshAuthToken()
+refreshAuthToken();

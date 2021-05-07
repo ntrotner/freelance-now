@@ -254,6 +254,13 @@ export async function isInContract(req, _id) {
   }
 }
 
+
+/**
+ * send amount of paid contracts
+ *
+ * @param req
+ * @param res
+ */
 export async function amountOfPaidContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert')
 
@@ -269,6 +276,12 @@ export async function amountOfPaidContracts(req, res) {
   });
 }
 
+/**
+ * send amount of contracts to pay
+ *
+ * @param req
+ * @param res
+ */
 export async function amountToPayContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert')
 
@@ -284,6 +297,12 @@ export async function amountToPayContracts(req, res) {
   });
 }
 
+/**
+ * send amount of contracts that are in progress
+ *
+ * @param req
+ * @param res
+ */
 export async function amountInProgressContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert')
 

@@ -2,39 +2,12 @@
     display: flex;
 }
 
-.imagecontainer {
-    position: relative;
-    text-align: center;
-    color: white;
-}
-
-.imagecontainer > img {
-    object-fit: cover;
-    width: 80%;
-}
-
-.imagecontainer > h1, .imagecontainer > span {
-    position: absolute;
-    color: white;
-    width: 80%;
-}
-
-.imagecontainer > h1 {
-    top: 8px;
-    left: 16px;
-}
-
-.imagecontainer > span {
-    top: 64px;
-    left: 16px;
-}
 
 .top {
-    width: 75%;
+    width: 60%;
     margin: 0 auto;
     padding-top: 24px;
 }
-
 
 .registration {
     display: flex;
@@ -58,7 +31,7 @@
 }
 
 .middle {
-    width: 75%;
+    width: 60%;
     margin: 0 auto;
     line-height: 1.5;
     font-size: 18px;

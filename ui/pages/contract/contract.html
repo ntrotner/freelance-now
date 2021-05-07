@@ -208,7 +208,7 @@
                                     body: JSON.stringify({id: data.orderID, contractID: _id})
                                 }).then(function (res) {
                                     if (!res.ok) {
-                                        alert('Something went wrong');
+                                        error('Der Entwickler hat kein Business Account auf PayPal');
                                     }
                                     redirect(`/contract?_id=${_id}`)
                                 });

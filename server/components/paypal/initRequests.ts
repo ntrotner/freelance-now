@@ -1,5 +1,10 @@
 var request = require('request');
 
+/**
+ * get authentication token for paypal requests
+ *
+ * @param callback
+ */
 export function getAuthorizationToken(callback) {
   var headersAuthorize = {
     'Accept': 'application/json',
@@ -30,6 +35,14 @@ export function getAuthorizationToken(callback) {
   request(optionsAuthorize, callbackAuthorize);
 }
 
+
+/**
+ * get link for log in
+ *
+ * @param callbackSuccess
+ * @param email
+ * @param authToken
+ */
 export function requestPayPalDeveloperLink(callbackSuccess, email, authToken) {
   var headers = {
     'Content-Type': 'application/json',

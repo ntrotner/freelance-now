@@ -101,6 +101,12 @@ export async function sendChatUpdate (req, res, options?: { chat: IChat, index: 
   res.status(200).json({ update: messages })
 }
 
+/**
+ * add message to chat
+ *
+ * @param req
+ * @param res
+ */
 export async function addMessage (req, res) {
   if (!validMessage(req.body) || !isAuthenticated(req)) return error(req, res, 'Anfrage ungültig')
   const foundUser = await findUser({ email: req.body.to })
