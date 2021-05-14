@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="snackbar.css">
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="snackbar.css">
 </head>
 <body>
 
 <form id="login" class="shadow">
-    <h3>Freelance Now!</h3>
+  <h3>Freelance Now!</h3>
 
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email"/>
+  <label for="email">Email</label>
+  <input type="email" name="email" id="email"/>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password"/>
-    <button type="submit">Login</button>
+  <label for="password">Password</label>
+  <input type="password" name="password" id="password"/>
+  <button type="submit">Login</button>
 
-    <h5 id="register" class="link">Kein Account?</h5>
+  <h5 id="register" class="link">Kein Account?</h5>
 </form>
 
 <script type="module">
-    import {sendLogin, redirectRegister} from './session_manager.js';
+  import { sendLogin, redirectRegister } from './session_manager.js';
 
-    sessionStorage.clear();
+  sessionStorage.clear();
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        const email = data.get('email');
-        const password = data.get('password');
-        sendLogin(email, password);
-    }
+  function handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const email = data.get('email');
+    const password = data.get('password');
+    sendLogin(email, password);
+  }
 
-    document.querySelector('form').addEventListener('submit', handleSubmit);
-    document.getElementById("register").addEventListener("click", redirectRegister);
+  document.querySelector('form').addEventListener('submit', handleSubmit);
+  document.getElementById("register").addEventListener("click", redirectRegister);
 </script>
 
 <div id="snackbar"></div>

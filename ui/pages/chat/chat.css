@@ -1,111 +1,111 @@
 #search {
-    margin: 16px 12px;
+  margin: 16px 12px;
 }
 
 #chatWrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 8px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 8px 0;
 }
 
 #usersWrapper {
-    outline: 1px black solid;
-    margin: 0;
-    padding: 0;
-    border: 1px black solid;
+  outline: 1px black solid;
+  margin: 0;
+  padding: 0;
+  border: 1px black solid;
 }
 
 #users {
-    list-style-type: none;
-    min-width: 15vw;
-    height: 71vh;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  min-width: 15vw;
+  height: 71vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
 }
 
 #users > li {
-    overflow-wrap: anywhere;
-    width: 15vw;
-    padding: 10px 25px;
-    margin: 0 0;
-    border-bottom: 1px #333333 solid;
-    cursor: pointer;
-    white-space: pre-line;
+  overflow-wrap: anywhere;
+  width: 15vw;
+  padding: 10px 25px;
+  margin: 0 0;
+  border-bottom: 1px #333333 solid;
+  cursor: pointer;
+  white-space: pre-line;
 }
 
 #profileRef {
-    position: relative;
-    height: 25px;
-    margin: 10px 5px;
-    text-decoration: none;
-    color: black;
+  position: relative;
+  height: 25px;
+  margin: 10px 5px;
+  text-decoration: none;
+  color: black;
 }
 
 #profileRef:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 #profileTop {
-    border: 1px black solid;
+  border: 1px black solid;
 }
 
 .chatWindow {
-    width: 100%;
-    outline: 1px black solid;
-    margin: 0;
-    height: 68vh;
-    position: relative;
-    padding-bottom: 32px;
+  width: 100%;
+  outline: 1px black solid;
+  margin: 0;
+  height: 68vh;
+  position: relative;
+  padding-bottom: 32px;
 }
 
 .chatWindow > #send {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    align-content: space-around;
-    flex-wrap: nowrap;
-    width: 100%;
-    justify-content: flex-end;
-    outline: 1px black solid;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: space-around;
+  flex-wrap: nowrap;
+  width: 100%;
+  justify-content: flex-end;
+  outline: 1px black solid;
 }
 
 #sendMessage {
-    height: 32px;
-    font-size: 18px;
+  height: 32px;
+  font-size: 18px;
 }
 
 #chatContent {
-    height: 96%;
-    overflow: auto;
-    margin: 0 0 32px 0;
-    line-height: 2;
-    list-style-type: none;
-    padding-left: 36px;
-    padding-right: 36px;
-    border: 1px black solid;
+  height: 96%;
+  overflow: auto;
+  margin: 0 0 32px 0;
+  line-height: 2;
+  list-style-type: none;
+  padding-left: 36px;
+  padding-right: 36px;
+  border: 1px black solid;
 }
 
 
 #true, #false {
-    white-space: pre-line;
-    overflow-wrap: anywhere;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 #true {
-    text-align: right;
+  text-align: right;
 }
 
 #false {
-    text-align: left;
+  text-align: left;
 }
 
 .date {
-    opacity: 0.7;
-    font-size: 12px;
-    margin-top: -8px;
+  opacity: 0.7;
+  font-size: 12px;
+  margin-top: -8px;
 }

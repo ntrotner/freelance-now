@@ -1,50 +1,50 @@
 #register {
-    display: grid;
-    width: max-content;;
-    line-height: 2;
-    margin: 10% auto;
-    border: 1px black solid;
-    padding: 0px 12px;
-    padding-bottom: 12px;
-    border-radius: 4px;
+  display: grid;
+  width: max-content;;
+  line-height: 2;
+  margin: 10% auto;
+  border: 1px black solid;
+  padding: 0px 12px;
+  padding-bottom: 12px;
+  border-radius: 4px;
 }
 
 form > h5 {
-    margin: 16px auto;
+  margin: 16px auto;
 }
 
 form > h5:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 input {
-    margin: 5px 0;
-    padding: 5px;
-    font-weight: bold;
-    width: 300px;
+  margin: 5px 0;
+  padding: 5px;
+  font-weight: bold;
+  width: 300px;
 }
 
 button {
-    width: 50%;
-    margin: 0 auto;
-    margin-top: 20px;
-    transition: 0s;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 20px;
+  transition: 0s;
 }
 
 label {
-    margin: 2px 0;
+  margin: 2px 0;
 }
 
 .usertype {
-    display: inline-table;
+  display: inline-table;
 }
 
 .usertypeSelect {
-    display: flex;
+  display: flex;
 }
 
 .usertypebtn {
-    width: 48%;
-    margin: 0 2px;
+  width: 48%;
+  margin: 0 2px;
 }

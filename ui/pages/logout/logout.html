@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Logout</title>
-    <link rel="stylesheet" href="default.css">
+  <meta charset="UTF-8">
+  <title>Abmelden</title>
+  <link rel="stylesheet" href="default.css">
 </head>
 
 <style>
-    div {
-        display: grid;
-        width: max-content;
-        line-height: 2;
-        margin: 10% auto;
-        border: 1px black solid;
-        padding: 0px 12px;
-        padding-bottom: 24px;
-        border-radius: 4px;
-    }
+  div {
+    display: grid;
+    width: max-content;
+    line-height: 2;
+    margin: 10% auto;
+    border: 1px black solid;
+    padding: 0px 12px;
+    padding-bottom: 24px;
+    border-radius: 4px;
+  }
 
-    #wait {
-        position: absolute;
-    }
+  #wait {
+    position: absolute;
+  }
 
-    #infotext {
-        padding-right: 25px;
-    }
+  #infotext {
+    padding-right: 25px;
+  }
 </style>
 <body>
 
 <div class="shadow">
 
-    <h2>Logout Erfolgreich!</h2>
-    <span id="infotext">Sie werden jeden Moment weitergeleitet<span id="wait">...</span></span>
+  <h2>Logout Erfolgreich!</h2>
+  <span id="infotext">Sie werden jeden Moment weitergeleitet<span id="wait">...</span></span>
 
 </div>
 
 <script type="module">
-    import {redirectHome} from './session_manager.js';
+  import { redirectHome } from './session_manager.js';
 
-    sessionStorage.clear();
+  sessionStorage.clear();
 
-    let counter = 0;
-    var x = document.getElementById("wait");
+  let counter = 0;
+  var x = document.getElementById("wait");
 
-    function addDots(amount) {
-        x.innerText = '.'.repeat(amount)
-    }
+  function addDots(amount) {
+    x.innerText = '.'.repeat(amount);
+  }
 
-    setInterval(() => {
-        addDots(counter);
-        counter += 1;
-        counter %= 4;
-    }, 500);
+  setInterval(() => {
+    addDots(counter);
+    counter += 1;
+    counter %= 4;
+  }, 500);
 
-    setTimeout(redirectHome, 2600);
+  setTimeout(redirectHome, 2600);
 </script>
 
 </body>

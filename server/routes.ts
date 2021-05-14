@@ -1,16 +1,16 @@
-import { createDeveloper } from './user_authentication/developer_control'
-import { createClient } from './user_authentication/client_control'
-import { loginUser, updateSettings } from './user_authentication/user_control'
-import { sendSessionStorage } from './user_action/credentials'
-import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat'
-import { getProfile } from './user_action/profile'
+import { createDeveloper } from './user_authentication/developer_control';
+import { createClient } from './user_authentication/client_control';
+import { loginUser, updateSettings } from './user_authentication/user_control';
+import { sendSessionStorage } from './user_action/credentials';
+import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat';
+import { getProfile } from './user_action/profile';
 import {
   addDeveloperReward, amountInProgressContracts, amountOfPaidContracts, amountToPayContracts,
   createContract, finishContract,
   getContractInformation,
-  getContractsMeta,
+  getDeveloperRating,
   getPersonalContracts, searchContracts, selectDeveloper
-} from './user_action/contracts'
+} from './user_action/contracts';
 import { captureOrder, createOrder, hasConfirmedPayPal, loginPayPal, setMerchantID } from './user_action/paypal';
 
 /**
@@ -20,7 +20,7 @@ import { captureOrder, createOrder, hasConfirmedPayPal, loginPayPal, setMerchant
  * @param res
  */
 function healthCheck(req, res) {
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 
 /**
@@ -31,7 +31,7 @@ function healthCheck(req, res) {
  * @param message
  */
 export function error(req, res, message = 'Fehler') {
-  res.status(404).send(message)
+  res.status(404).send(message);
 }
 
 const getRoutes = {
@@ -45,7 +45,7 @@ const getRoutes = {
   '/api/toPayContracts': amountToPayContracts,
   '/api/inProgressContracts': amountInProgressContracts
 
-}
+};
 
 /**
  * executes route of get path of express
@@ -55,7 +55,7 @@ const getRoutes = {
  * @param res
  */
 export function getRoute(route: string, req, res): void {
-  (getRoutes[route] ? getRoutes[route] : error)(req, res)
+  (getRoutes[route] ? getRoutes[route] : error)(req, res);
 }
 
 const postRoutes = {
@@ -68,7 +68,7 @@ const postRoutes = {
   '/api/sendMessage': addMessage,
   '/api/updateMessages': sendChatUpdate,
   '/api/getProfile': getProfile,
-  '/api/getContractsMeta': getContractsMeta,
+  '/api/getRatings': getDeveloperRating,
   '/api/createContract': createContract,
   '/api/getContractInformation': getContractInformation,
   '/api/finishContract': finishContract,
@@ -78,7 +78,7 @@ const postRoutes = {
   '/api/isPayPalConnected': hasConfirmedPayPal,
   '/api/createOrder': createOrder,
   '/api/captureOrder': captureOrder
-}
+};
 
 /**
  * executes route of post path of express
@@ -88,5 +88,5 @@ const postRoutes = {
  * @param res
  */
 export function postRoute(route: string, req, res): void {
-  (postRoutes[route] ? postRoutes[route] : error)(req, res)
+  (postRoutes[route] ? postRoutes[route] : error)(req, res);
 }

@@ -1,3 +1,3 @@
-const pathToComponents = '/components'
+const pathToComponents = '/components';
 
-export const sidebar = (req, res, fct) => fct(pathToComponents + '/sidebar.js', res)
+export const sidebar = (req, res, fct) => fct(pathToComponents + '/sidebar.js', res);

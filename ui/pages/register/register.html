@@ -1,97 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="snackbar.css">
-    <link rel="stylesheet" href="register.css">
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="snackbar.css">
+  <link rel="stylesheet" href="register.css">
 </head>
 <body>
 
 <form id="register" class="shadow">
-    <h3>Freelance Now!</h3>
+  <h3>Freelance Now!</h3>
 
-    <div class="usertype">
-        <label>Ich bin</label> <br>
-        <div class="usertypeSelect">
-            <input id="entwickler" class="usertypebtn" type="button" value="Entwickler">
-            <input id="auftraggeber" class="usertypebtn" type="button" value="Auftraggeber">
-        </div>
+  <div class="usertype">
+    <label>Ich bin</label> <br>
+    <div class="usertypeSelect">
+      <input id="entwickler" class="usertypebtn" type="button" value="Entwickler">
+      <input id="auftraggeber" class="usertypebtn" type="button" value="Auftraggeber">
     </div>
+  </div>
 
-    <label for="name">Name</label>
-    <input type="name" name="name" id="name"/>
+  <label for="name">Name</label>
+  <input type="name" name="name" id="name"/>
 
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email"/>
+  <label for="email">Email</label>
+  <input type="email" name="email" id="email"/>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password"/>
-    <button type="submit">Registieren</button>
+  <label for="password">Password</label>
+  <input type="password" name="password" id="password"/>
+  <button type="submit">Registieren</button>
 
 </form>
 
 <div id="snackbar"></div>
 <script type="module">
-    import {sendRegistration} from './session_manager.js';
-    import {callSnackbar, closeSnackbar} from "/snackbar.js";
+  import { sendRegistration, error } from './session_manager.js';
 
-    let selection;
-    const entwickler = document.getElementById('entwickler');
-    const auftraggeber = document.getElementById('auftraggeber');
-    const form = document.querySelector('form');
+  let selection;
+  const entwickler = document.getElementById('entwickler');
+  const auftraggeber = document.getElementById('auftraggeber');
+  const form = document.querySelector('form');
 
-    entwickler.addEventListener("click", () => switchUser('entwickler'));
-    auftraggeber.addEventListener("click", () => switchUser('auftraggeber'));
-    form.addEventListener('submit', handleSubmit);
+  entwickler.addEventListener("click", () => switchUser('entwickler'));
+  auftraggeber.addEventListener("click", () => switchUser('auftraggeber'));
+  form.addEventListener('submit', handleSubmit);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    switchUser(urlParams.get('type'))
+  const urlParams = new URLSearchParams(window.location.search);
+  switchUser(urlParams.get('type'));
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        if (!selection || selection === '')
-            return callSnackbar('Bitte Wählen Sie ein Typ von Account aus!')
-        const data = new FormData(event.target);
-        const email = data.get('email');
-        const username = data.get('name');
-        const password = data.get('password');
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (!selection || selection === '')
+      return error('Bitte Wählen Sie ein Typ von Account aus!');
+    const data = new FormData(event.target);
+    const email = data.get('email');
+    const username = data.get('name');
+    const password = data.get('password');
 
-        sendRegistration(email, username, password, selection)
+    sendRegistration(email, username, password, selection);
+  }
+
+
+  function setButtonStyle(button) {
+    button.style.background = 'black';
+    button.style.opacity = 0.75;
+    button.style.color = 'white';
+  }
+
+  function resetButtonStyle(button) {
+    button.style.background = 'white';
+    button.style.opacity = 1;
+    button.style.color = 'black';
+  }
+
+  function switchUser(input) {
+    switch (input) {
+      case 'entwickler':
+        resetButtonStyle(auftraggeber);
+        setButtonStyle(entwickler);
+        selection = 'entwickler';
+        break;
+      case 'auftraggeber':
+        resetButtonStyle(entwickler);
+        setButtonStyle(auftraggeber);
+        selection = 'auftraggeber';
+        break;
+      default:
+        resetButtonStyle(entwickler);
+        resetButtonStyle(auftraggeber);
+        selection = '';
     }
-
-
-    function setButtonStyle(button) {
-        button.style.background = 'black'
-        button.style.opacity = 0.75;
-        button.style.color = 'white'
-    }
-
-    function resetButtonStyle(button) {
-        button.style.background = 'white'
-        button.style.opacity = 1;
-        button.style.color = 'black'
-    }
-
-    function switchUser(input) {
-        switch (input) {
-            case 'entwickler':
-                resetButtonStyle(auftraggeber)
-                setButtonStyle(entwickler)
-                selection = 'entwickler'
-                break;
-            case 'auftraggeber':
-                resetButtonStyle(entwickler)
-                setButtonStyle(auftraggeber)
-                selection = 'auftraggeber'
-                break;
-            default:
-                resetButtonStyle(entwickler)
-                resetButtonStyle(auftraggeber)
-                selection = ''
-        }
-    }
+  }
 </script>
 </body>
 </html>

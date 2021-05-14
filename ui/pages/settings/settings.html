@@ -1,225 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Settings</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="settings.css">
-    <link rel="stylesheet" href="snackbar.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script src="sidebar.js" type="module"></script>
+  <meta charset="UTF-8">
+  <title>Settings</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="snackbar.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="sidebar.js" type="module"></script>
 </head>
 <body>
 <sidebar-component></sidebar-component>
 <main>
-    <div id="welcome">
-        <h2 id="user"></h2>
+  <div id="welcome">
+    <h2 id="user"></h2>
+  </div>
+
+  <div class="settings">
+    <div class="row">
+      <div>
+        <form id="cabout">
+          <h3>Über Mich</h3>
+          <label for="about">Ändern</label>
+          <textarea type="text" name="about" id="about"></textarea>
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
+      <div class="devFields">
+        <form id="cgit">
+          <h3>Git</h3>
+          <label for="git">Ändern</label>
+          <input type="text" name="git" id="git"/>
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
+      <div class="devFields">
+        <div id="paypalWrapper">
+          <h3>PayPal</h3>
+          <div id="isPayPalVerified"></div>
+
+          <a data-paypal-button="true" href="/api/paypalLogin" target="PPFrame">
+            PayPal Verbinden
+          </a>
+          <i class="material-icons md-26"
+             title="Bitte die Anmeldung bis zum Ende abschließen und ein Verifiziertes Konto nutzen">info</i>
+        </div>
+      </div>
+      <div class="devFields">
+        <form id="cstack">
+          <h3>Skills</h3>
+          <div>
+            <input type="checkbox" id="frontend" name="frontend" value="front">
+            <label for="frontend">Front-End</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="backend" name="backend">
+            <label for="backend">Back-End</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="servermanagement" name="servermanagement">
+            <label for="servermanagement">Server-Management</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="docker" name="docker">
+            <label for="docker">Docker</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="js" name="js">
+            <label for="js">JavaScript</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="php" name="php">
+            <label for="php">PHP</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="angular" name="angular">
+            <label for="angular">Angular</label>
+          </div>
+
+          <div>
+            <input type="checkbox" id="vuejs" name="vuejs">
+            <label for="vuejs">Vue.js</label>
+          </div>
+
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
     </div>
 
-    <div class="settings">
-        <div class="row">
-            <div>
-                <form id="cabout">
-                    <h3>Über Mich</h3>
-                    <label for="about">Ändern</label>
-                    <textarea type="text" name="about" id="about"></textarea>
-                    <button type="submit">Speichern</button>
-                </form>
-            </div>
-            <div class="devFields">
-                <form id="cgit">
-                    <h3>Git</h3>
-                    <label for="git">Ändern</label>
-                    <input type="text" name="git" id="git"/>
-                    <button type="submit">Speichern</button>
-                </form>
-                <div id="paypalWrapper">
-                    <h3>PayPal</h3>
-                    <div id="isPayPalVerified"></div>
+    <div class="row">
+      <div>
+        <form id="cname">
+          <h3>Name</h3>
+          <label for="name">Ändern</label>
+          <input type="text" name="name" id="name"/>
+          <label for="repname">Wiederholen</label>
+          <input type="text" name="repname" id="repname"/>
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
 
-                    <a data-paypal-button="true" href="/api/paypalLogin" target="PPFrame">
-                        PayPal Geschäftsaccount verbinden
-                    </a>
-                    <i class="material-icons md-26"
-                       title="Bitte die Anmeldung bis zum Ende abschließen und ein Verifiziertes Konto nutzen">info</i>
-                </div>
-
-            </div>
-            <div class="devFields">
-                <form id="cstack">
-                    <h3>Skills</h3>
-                    <div>
-                        <input type="checkbox" id="frontend" name="frontend" value="front">
-                        <label for="frontend">Front-End</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="backend" name="backend">
-                        <label for="backend">Back-End</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="servermanagement" name="servermanagement">
-                        <label for="servermanagement">Server-Management</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="docker" name="docker">
-                        <label for="docker">Docker</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="js" name="js">
-                        <label for="js">JavaScript</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="php" name="php">
-                        <label for="php">PHP</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="angular" name="angular">
-                        <label for="angular">Angular</label>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="vuejs" name="vuejs">
-                        <label for="vuejs">Vue.js</label>
-                    </div>
-
-                    <button type="submit">Speichern</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="row">
-            <div>
-                <form id="cname">
-                    <h3>Name</h3>
-                    <label for="name">Ändern</label>
-                    <input type="text" name="name" id="name"/>
-                    <label for="repname">Wiederholen</label>
-                    <input type="text" name="repname" id="repname"/>
-                    <button type="submit">Speichern</button>
-                </form>
-            </div>
-
-            <div>
-                <form id="cemail">
-                    <h3>E-Mail</h3>
-                    <label for="email">Ändern</label>
-                    <input type="email" name="email" id="email"/>
-                    <label for="repemail">Wiederholen</label>
-                    <input type="email" name="repemail" id="repemail"/>
-                    <button type="submit">Speichern</button>
-                </form>
-            </div>
-            <div>
-                <form id="cpassword">
-                    <h3>Passwort</h3>
-                    <label for="password">Ändern</label>
-                    <input type="password" name="password" id="password"/>
-                    <label for="reppassword">Wiederholen</label>
-                    <input type="password" name="reppassword" id="reppassword"/>
-                    <button type="submit">Speichern</button>
-                </form>
-            </div>
-        </div>
-
+      <div>
+        <form id="cemail">
+          <h3>E-Mail</h3>
+          <label for="email">Ändern</label>
+          <input type="email" name="email" id="email"/>
+          <label for="repemail">Wiederholen</label>
+          <input type="email" name="repemail" id="repemail"/>
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
+      <div>
+        <form id="cpassword">
+          <h3>Passwort</h3>
+          <label for="password">Ändern</label>
+          <input type="password" name="password" id="password"/>
+          <label for="reppassword">Wiederholen</label>
+          <input type="password" name="reppassword" id="reppassword"/>
+          <button type="submit">Speichern</button>
+        </form>
+      </div>
     </div>
+
+  </div>
 </main>
 
 <script type="module">
-    import {checkSession} from './check_session.js';
-    import {unauthorize, changeAttribute, checkPayPalVerification, error} from './session_manager.js';
-    import {getProfile} from './profile.js';
+  import { checkSession } from './check_session.js';
+  import { unauthorize, changeAttribute, checkPayPalVerification, error } from './session_manager.js';
+  import { getProfile } from './profile.js';
 
-    checkPayPalVerification(sessionStorage.getItem('email'), (msg) => {
-        $('#isPayPalVerified').text(msg ? 'Verifiziert' : 'Nicht Verifiziert');
-    }, () => {
-    })
+  checkPayPalVerification(sessionStorage.getItem('email'), (msg) => {
+    $('#isPayPalVerified').text(msg ? 'Verifiziert' : 'Nicht Verifiziert');
+  }, () => {
+  });
 
-    function updateHeader() {
-        $('#user').text("Hallo " + sessionStorage.getItem("username"));
+  function updateHeader() {
+    $('#user').text("Hallo " + sessionStorage.getItem("username"));
 
-        document.getElementById("welcome").style.visibility = 'visible';
+    document.getElementById("welcome").style.visibility = 'visible';
 
-        document.getElementById("name").value = sessionStorage.getItem(("username"));
-        document.getElementById("email").value = sessionStorage.getItem(("email"));
+    document.getElementById("name").value = sessionStorage.getItem(("username"));
+    document.getElementById("email").value = sessionStorage.getItem(("email"));
 
-        getProfile(sessionStorage.getItem(("email")), (response) => {
-            $('#about').text(response.about ? response.about : '')
-            $('#git').text(response.git ? response.git : '')
+    getProfile(sessionStorage.getItem(("email")), (response) => {
+      $('#about').text(response.about ? response.about : '');
+      $('#git').val(response.git ? response.git : '');
 
-            if (response.type === 'dev') {
-                $('#cgit').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
-                $('#cstack').css('visibility', 'unset').css('width', 'unset').css('height', 'unset')
-                $('#paypalWrapper').css('opacity', '1')
-            } else {
-                $('.devFields').remove()
-            }
-            if (response.stack) response.stack.forEach((skill) => document.getElementById(skill).checked = true)
+      if (response.type === 'dev') {
+        $('#cgit').css('visibility', 'unset').css('width', 'unset').css('height', 'unset');
+        $('#cstack').css('visibility', 'unset').css('width', 'unset').css('height', 'unset');
+        $('#paypalWrapper').css('opacity', '1');
+      } else {
+        $('.devFields').remove();
+      }
+      if (response.stack) response.stack.forEach((skill) => document.getElementById(skill).checked = true);
 
-        }, (response) => console.error(response))
-    }
+    }, (response) => console.error(response));
+  }
 
-    checkSession(updateHeader, unauthorize);
-
-
-    [['name', true], ['git', false], ['about', false], ['email', true], ['password', true], ['stack', false]]
-        .forEach(([desc, doubleCheck]) =>
-            document.getElementById('c' + desc)
-                .addEventListener("submit", (event) => handleSubmitChange(event, desc, doubleCheck)))
+  checkSession(updateHeader, unauthorize);
 
 
-    function handleSubmitChange(event, type = 'name', check) {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        const inputData = data.get(type);
-        const repInputData = data.get((check ? 'rep' : '') + type);
+  [['name', true], ['git', false], ['about', false], ['email', true], ['password', true], ['stack', false]]
+      .forEach(([desc, doubleCheck]) =>
+          document.getElementById('c' + desc)
+              .addEventListener("submit", (event) => handleSubmitChange(event, desc, doubleCheck)));
 
-        if (inputData === repInputData) {
-            switch (type) {
-                case 'name':
-                    changeAttribute({username: inputData}, updateHeader)
-                    break;
-                case 'email':
-                    changeAttribute({email: inputData}, updateHeader)
-                    break;
-                case 'password':
-                    changeAttribute({password: inputData})
-                    break;
-                case 'git':
-                    changeAttribute({git: inputData})
-                    break;
-                case 'about':
-                    changeAttribute({about: inputData})
-                    break;
-                case 'stack':
-                    changeAttribute({
-                            stack:
-                                [
-                                    ['frontend', document.getElementById("frontend")],
-                                    ['backend', document.getElementById("backend")],
-                                    ['servermanagement', document.getElementById("servermanagement")],
-                                    ['docker', document.getElementById("docker")],
-                                    ['js', document.getElementById("js")],
-                                    ['php', document.getElementById("php")],
-                                    ['angular', document.getElementById("angular")],
-                                    ['vuejs', document.getElementById("vuejs")]
-                                ].map((element) => {
-                                    if (element[1].checked) return element[0]
-                                }).filter((element) => element)
-                        }
-                    )
-                    break;
-            }
-        } else
-            error('Datenfelder stimmen nicht überein')
-    }
+
+  function handleSubmitChange(event, type = 'name', check) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const inputData = data.get(type);
+    const repInputData = data.get((check ? 'rep' : '') + type);
+
+    if (inputData === repInputData) {
+      switch (type) {
+        case 'name':
+          changeAttribute({username: inputData}, updateHeader);
+          break;
+        case 'email':
+          changeAttribute({email: inputData}, updateHeader);
+          break;
+        case 'password':
+          changeAttribute({password: inputData});
+          break;
+        case 'git':
+          changeAttribute({git: inputData});
+          break;
+        case 'about':
+          changeAttribute({about: inputData});
+          break;
+        case 'stack':
+          changeAttribute({
+                stack:
+                    [
+                      ['frontend', document.getElementById("frontend")],
+                      ['backend', document.getElementById("backend")],
+                      ['servermanagement', document.getElementById("servermanagement")],
+                      ['docker', document.getElementById("docker")],
+                      ['js', document.getElementById("js")],
+                      ['php', document.getElementById("php")],
+                      ['angular', document.getElementById("angular")],
+                      ['vuejs', document.getElementById("vuejs")]
+                    ].map((element) => {
+                      if (element[1].checked) return element[0];
+                    }).filter((element) => element)
+              }
+          );
+          break;
+      }
+    } else
+      error('Datenfelder stimmen nicht überein');
+  }
 </script>
 
 <div id="snackbar"></div>

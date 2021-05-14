@@ -1,192 +1,230 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Chat</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="snackbar.css">
-    <link rel="stylesheet" href="chat.css">
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script src="sidebar.js" type="module"></script>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="snackbar.css">
+  <link rel="stylesheet" href="chat.css">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="sidebar.js" type="module"></script>
 </head>
 <body>
 <sidebar-component></sidebar-component>
 
 <main>
-    <div>
-        <form id="search">
-            <h3>Nutzer Suchen</h3>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email"/>
-            <button type="submit">Chat erstellen</button>
-        </form>
+  <div>
+    <form id="search">
+      <h3>Nutzer Suchen</h3>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email"/>
+      <button type="submit">Chat erstellen</button>
+    </form>
+  </div>
+
+  <hr>
+
+  <div id="chatWrapper" class="shadow">
+    <div id="usersWrapper">
+      <ul id="users">
+      </ul>
     </div>
+    <div class="chatWindow">
+      <div id="profileTop">
+        <a id="profileRef"></a>
+      </div>
+      <ul id="chatContent">
+      </ul>
 
-    <hr>
-
-    <div id="chatWrapper" class="shadow">
-        <div id="usersWrapper">
-            <ul id="users">
-            </ul>
-        </div>
-        <div class="chatWindow">
-            <div id="profileTop">
-                <a id="profileRef"></a>
-            </div>
-            <ul id="chatContent">
-            </ul>
-
-            <form autocomplete="off" id="send">
-                <label for="sendMessage"></label>
-                <input id="sendMessage"/>
-            </form>
-        </div>
+      <form autocomplete="off" id="send">
+        <label for="sendMessage"></label>
+        <input id="sendMessage"/>
+      </form>
     </div>
+  </div>
 </main>
 <script type="module">
-    import {checkSession} from './check_session.js';
-    import {unauthorize, error} from './session_manager.js';
-    import {startChat, getAllChats, sendMessage, checkChatUpdate} from './chat.js';
+  import { checkSession } from './check_session.js';
+  import { unauthorize, error } from './session_manager.js';
+  import { startChat, getAllChats, sendMessage, checkChatUpdate } from './chat.js';
 
-    let currentUser;
-    let username;
-    let prevLen = 0;
-    let previousSelectedUser;
+  let currentUser;
+  let username;
+  let prevLen = 0;
 
-    function initUI() {
-        document.getElementById('search').addEventListener('submit', handleSearch);
-        document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, getChatLength()));
+  function initUI() {
+    // add event handler for search and send
+    document.getElementById('search').addEventListener('submit', handleSearch);
+    document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, getChatLength()));
 
-        checkSession(() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('email')) {
-                currentUser = urlParams.get('email');
-                startChat(currentUser, () => {
-                    refreshUI();
-                })
-            } else refreshUI();
-        }, unauthorize);
-    }
-
-    function refreshUI() {
-        getAllChats((response) => {
-            clearChatReceiver();
-            setChatReceiver(response.chats);
-        }, (msg) => error(msg));
-        if (currentUser) getChat(currentUser, getChatLength())
-    }
-
-    function handleSearch(event) {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        const email = data.get('email');
-
-        startChat(email, () => {
-            currentUser = email;
-            clearChatUI();
-            refreshUI();
-            getChat(email, 0)
-        }, () => {
-        });
-    }
-
-
-    function updateChatUI(messageArray) {
-        addChatMessages(messageArray)
-
-        // jump to most recent message
-        if (prevLen !== (messageArray.length + prevLen)) {
-            const messageBody = document.querySelector('#chatContent');
-            messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-        }
-        prevLen += messageArray.length;
-    }
-
-    function getChat(email, index) {
-        checkChatUpdate(email, index,
-            (updatedChat) => {
-                updateChatUI(updatedChat.update)
-                currentUser = email
-                setProfileRef()
-            },
-            (msg) => error(msg)
+    // check if user is authenticated
+    checkSession(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('email')) {
+        currentUser = urlParams.get('email');
+        startChat(currentUser, () => {
+              refreshUI();
+            }, () => {
+              currentUser = '';
+              refreshUI();
+            }
         );
+      } else refreshUI();
+    }, unauthorize);
+  }
+
+  /**
+   * refresh chat list and chat content
+   */
+  function refreshUI() {
+    getAllChats((response) => {
+      clearChatReceiver();
+      setChatReceiver(response.chats);
+    }, (msg) => error(msg));
+    if (currentUser) getChat(currentUser, getChatLength());
+  }
+
+  /**
+   * handle (new) chat creation with email
+   *
+   * @param event
+   */
+  function handleSearch(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const email = data.get('email');
+
+    startChat(email, () => {
+      currentUser = email;
+      clearChatUI();
+      refreshUI();
+      getChat(email, 0);
+    }, () => {
+    });
+  }
+
+  /**
+   * add message to chat UI
+   *
+   * @param messageArray
+   */
+  function updateChatUI(messageArray) {
+    addChatMessages(messageArray);
+
+    // jump to most recent message
+    if (prevLen !== (messageArray.length + prevLen)) {
+      const messageBody = document.querySelector('#chatContent');
+      messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
     }
+    prevLen += messageArray.length;
+  }
 
-    function sendChatMessage(event, index) {
-        event.preventDefault();
-        const content = String(document.getElementById('sendMessage').value);
-        if (currentUser && content.length > 0) {
-            closeInput();
-            sendMessage(currentUser, content, index, (msg) => {
-                    openInput()
-                    document.getElementById('sendMessage').value = '';
-                    updateChatUI(msg['update']);
-                },
-                (msg) => {
-                    openInput()
-                    error(msg)
-                })
+  /**
+   * get content of chat
+   *
+   * @param email
+   * @param index
+   */
+  function getChat(email, index) {
+    checkChatUpdate(email, index,
+        (updatedChat) => {
+          updateChatUI(updatedChat.update);
+          currentUser = email;
+          setProfileRef();
+        },
+        (msg) => error(msg)
+    );
+  }
 
-        } else openInput();
+  /**
+   * send message
+   *
+   * @param event
+   * @param index
+   */
+  function sendChatMessage(event, index) {
+    event.preventDefault();
+    const content = String(document.getElementById('sendMessage').value);
+    if (currentUser && content.length > 0) {
+      closeInput();
+      sendMessage(currentUser, content, index, (msg) => {
+            openInput();
+            document.getElementById('sendMessage').value = '';
+            updateChatUI(msg['update']);
+          },
+          (msg) => {
+            openInput();
+            error(msg);
+          });
 
-    }
+    } else openInput();
+  }
 
-    function addChatMessages(messageArray) {
-        const listRef = $('#chatContent');
-        messageArray.forEach((user) => {
-            listRef.append($('<li>').attr('id', String(user.ownMessage))
-                .text(`${user.message}`)).append(
-                $('<li>').attr('id', String(user.ownMessage)).attr('class', 'date')
-                    .text((new Date(user.date)).toLocaleString())
-            );
-        })
-    }
+  /**
+   * add html element for messages
+   *
+   * @param messageArray
+   */
+  function addChatMessages(messageArray) {
+    const listRef = $('#chatContent');
+    messageArray.forEach((user) => {
+      listRef.append($('<li>').attr('id', String(user.ownMessage))
+          .text(`${user.message}`)).append(
+          $('<li>').attr('id', String(user.ownMessage)).attr('class', 'date')
+              .text((new Date(user.date)).toLocaleString())
+      );
+    });
+  }
 
-    function setChatReceiver(chats) {
-        const listRef = $('#users');
-        chats.forEach((user) => {
-            listRef.append(
-                $('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`)
-            );
-            document.getElementById(user.email)
-                .addEventListener('click', () => {
-                    clearChatUI();
-                    openInput();
-                    prevLen = 0;
-                    getChat(user.email, 0);
-                });
-        });
-    }
+  /**
+   * select user for getting/sending messages
+   *
+   * @param chats
+   */
+  function setChatReceiver(chats) {
+    const listRef = $('#users');
+    chats.forEach((user) => {
+      listRef.append(
+          $('<li>').attr('id', user.email).text(`${user.username}\n${user.email}`)
+      );
+      document.getElementById(user.email)
+          .addEventListener('click', () => {
+            clearChatUI();
+            openInput();
+            prevLen = 0;
+            getChat(user.email, 0);
+          });
+    });
+  }
 
-    function setProfileRef() {
-        $('#profileRef').attr('href', `/profile?email=${currentUser}`).text(`Zum Profil: ${currentUser}`);
-    }
+  function setProfileRef() {
+    $('#profileRef').attr('href', `/profile?email=${currentUser}`).text(`Zum Profil: ${currentUser}`);
+  }
 
-    function getChatLength() {
-        return Number($('#chatContent li').length / 2)
-    }
+  function getChatLength() {
+    return Number($('#chatContent li').length / 2);
+  }
 
-    function closeInput() {
-        document.getElementById("sendMessage").disabled = true;
-    }
+  function closeInput() {
+    document.getElementById("sendMessage").disabled = true;
+  }
 
-    function openInput() {
-        document.getElementById("sendMessage").disabled = false;
-    }
+  function openInput() {
+    document.getElementById("sendMessage").disabled = false;
+  }
 
-    function clearChatUI() {
-        $('#chatContent').empty();
-    }
+  function clearChatUI() {
+    $('#chatContent').empty();
+  }
 
-    function clearChatReceiver() {
-        $('#users').empty();
-    }
+  function clearChatReceiver() {
+    $('#users').empty();
+  }
 
-    setInterval(refreshUI, 5000);
-    initUI();
+  setInterval(refreshUI, 5000);
+  initUI();
 </script>
-<div id="snackbar"></div>
 
+<div id="snackbar"></div>
 </body>
 </html>

@@ -1,355 +1,359 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Auftrag</title>
-    <script src="sidebar.js" type="module"></script>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="contract.css">
-    <link rel="stylesheet" href="snackbar.css">
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta charset="UTF-8">
+  <title>Auftrag</title>
+  <script src="sidebar.js" type="module"></script>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="contract.css">
+  <link rel="stylesheet" href="snackbar.css">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 <sidebar-component></sidebar-component>
 
 <main>
-    <div id="topWrapper">
-        <h3>Auftrag</h3>
+  <div id="topWrapper">
+    <h3>Auftrag</h3>
+  </div>
+  <hr>
+
+  <div id="middleWrapper">
+    <div class="progressWrapper">
+      <div class="progress" id="finding"></div>
+      <div class="progressDescription">Entwickler Finden</div>
     </div>
-    <hr>
-
-    <div id="middleWrapper">
-        <div class="progressWrapper">
-            <div class="progress" id="finding"></div>
-            <div class="progressDescription">Entwickler Finden</div>
-        </div>
-        <div class="progressWrapper">
-            <div class="progress" id="working"></div>
-            <div class="progressDescription">In Arbeit</div>
-        </div>
-        <div class="progressWrapper">
-            <div class="progress" id="doneContract"></div>
-            <div class="progressDescription">Fertig</div>
-        </div>
-        <div class="progressWrapper">
-            <div class="progress" id="payContract"></div>
-            <div class="progressDescription">Bezahlt</div>
-        </div>
+    <div class="progressWrapper">
+      <div class="progress" id="working"></div>
+      <div class="progressDescription">In Arbeit</div>
     </div>
+    <div class="progressWrapper">
+      <div class="progress" id="doneContract"></div>
+      <div class="progressDescription">Fertig</div>
+    </div>
+    <div class="progressWrapper">
+      <div class="progress" id="payContract"></div>
+      <div class="progressDescription">Bezahlt</div>
+    </div>
+  </div>
 
-    <div id="bottomMain">
-        <table>
-            <tr>
-                <td>Title</td>
-                <td id="name"></td>
-            </tr>
-            <tr>
-                <td>Entlohnung</td>
-                <td id="reward"></td>
-            </tr>
-            <tr>
-                <td>Auftraggeber</td>
-                <td id="client"></td>
-            </tr>
-            <tr>
-                <td>Entwickler</td>
-                <td id="developer"></td>
-            </tr>
-            <tr>
-                <td>Skills</td>
-                <td id="stack"></td>
-            </tr>
+  <div id="bottomMain">
+    <table>
+      <tr>
+        <td>Title</td>
+        <td id="name"></td>
+      </tr>
+      <tr>
+        <td>Entlohnung</td>
+        <td id="reward"></td>
+      </tr>
+      <tr>
+        <td>Auftraggeber</td>
+        <td id="client"></td>
+      </tr>
+      <tr>
+        <td>Entwickler</td>
+        <td id="developer"></td>
+      </tr>
+      <tr>
+        <td>Skills</td>
+        <td id="stack"></td>
+      </tr>
 
-            <tr>
-                <td>Start</td>
-                <td id="starting_date"></td>
-            </tr>
+      <tr>
+        <td>Start</td>
+        <td id="starting_date"></td>
+      </tr>
 
-            <tr>
-                <td>Ende</td>
-                <td id="end_date"></td>
-            </tr>
+      <tr>
+        <td>Ende</td>
+        <td id="end_date"></td>
+      </tr>
 
-            <tr>
-                <td>Beschreibung</td>
-                <td id="description"></td>
-            </tr>
-        </table>
-        <div id="paypal-button"></div>
-        <div id="finish" class="shadow">
-            <label for="progress">In Arbeit</label>
-            <input type="radio" id="progress" name="status" value="In Arbeit">
-            <label for="done">Fertig</label>
-            <input type="radio" id="done" name="status" value="Fertig">
+      <tr>
+        <td>Beschreibung</td>
+        <td id="description"></td>
+      </tr>
+    </table>
+    <div id="paypal-button"></div>
+    <div id="finish" class="shadow">
+      <label for="progress">In Arbeit</label>
+      <input type="radio" id="progress" name="status" value="In Arbeit">
+      <label for="done">Fertig</label>
+      <input type="radio" id="done" name="status" value="Fertig">
 
-            <div id="communication">
-                <p>Kommunikation</p>
-                <div>
-                    <span onclick="takeFirstNStars('communication', 1)" id="c1" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('communication', 2)" id="c2" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('communication', 3)" id="c3" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('communication', 4)" id="c4" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('communication', 5)" id="c5" class="fa fa-star"></span>
-                </div>
-            </div>
-            <div id="speed">
-                <p>Geschwindigkeit</p>
-                <div>
-                    <span onclick="takeFirstNStars('speed', 1)" id="s1" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('speed', 2)" id="s2" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('speed', 3)" id="s3" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('speed', 4)" id="s4" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('speed', 5)" id="s5" class="fa fa-star"></span>
-                </div>
-            </div>
-            <div id="quality">
-                <p>Qualität</p>
-                <div>
-                    <span onclick="takeFirstNStars('quality', 1)" id="q1" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('quality', 2)" id="q2" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('quality', 3)" id="q3" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('quality', 4)" id="q4" class="fa fa-star"></span>
-                    <span onclick="takeFirstNStars('quality', 5)" id="q5" class="fa fa-star"></span>
-                </div>
-            </div>
-            <button id="submit">Abschließen</button>
-        </div>
-
+      <div id="communication">
+        <p>Kommunikation</p>
         <div>
-            <div id="devs" class="shadow">
-                <div>
-                    <h4 id="devsTitle">Entwickler Auswählen</h4>
-                </div>
-            </div>
-
-            <div id="apply" class="shadow">
-                <h4 id="applyTitle">Bewerben für den Auftrag</h4>
-                <div class="inputWrapper">
-                    <input type="number" min="0.00" step="0.01" name="reward" id="rewardInput">
-                    €
-                </div>
-                <button id="newOffer">Bieten</button>
-            </div>
+          <span onclick="takeFirstNStars('communication', 1)" id="c1" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('communication', 2)" id="c2" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('communication', 3)" id="c3" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('communication', 4)" id="c4" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('communication', 5)" id="c5" class="fa fa-star"></span>
         </div>
+      </div>
+      <div id="speed">
+        <p>Geschwindigkeit</p>
+        <div>
+          <span onclick="takeFirstNStars('speed', 1)" id="s1" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('speed', 2)" id="s2" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('speed', 3)" id="s3" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('speed', 4)" id="s4" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('speed', 5)" id="s5" class="fa fa-star"></span>
+        </div>
+      </div>
+      <div id="quality">
+        <p>Qualität</p>
+        <div>
+          <span onclick="takeFirstNStars('quality', 1)" id="q1" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('quality', 2)" id="q2" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('quality', 3)" id="q3" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('quality', 4)" id="q4" class="fa fa-star"></span>
+          <span onclick="takeFirstNStars('quality', 5)" id="q5" class="fa fa-star"></span>
+        </div>
+      </div>
+      <button id="submit">Abschließen</button>
     </div>
+
+    <div>
+      <div id="devs" class="shadow">
+        <div>
+          <h4 id="devsTitle">Entwickler Auswählen</h4>
+        </div>
+      </div>
+
+      <div id="apply" class="shadow">
+        <h4 id="applyTitle">Bewerben für den Auftrag</h4>
+        <div class="inputWrapper">
+          <input type="number" min="0.01" step="0.01" name="reward" id="rewardInput">
+          €
+        </div>
+        <button id="newOffer">Bieten</button>
+      </div>
+    </div>
+  </div>
 </main>
 
 <script type="text/javascript">
-    function takeFirstNStars(selector, n) {
-        $(`#${selector} > div > span:nth-child(n)`).attr('class', 'fa fa-star')
-        $(`#${selector} > div > span:nth-child(-n+${n})`).attr('class', 'fa fa-star checked')
-    }
+  function takeFirstNStars(selector, n) {
+    $(`#${selector} > div > span:nth-child(n)`).attr('class', 'fa fa-star');
+    $(`#${selector} > div > span:nth-child(-n+${n})`).attr('class', 'fa fa-star checked');
+  }
 </script>
 
 <script type="module">
-    import {getContract, sendFinishContract, selectDeveloper, sendDeveloperReward} from './contracts.js';
-    import {prettifySkill} from './profile.js';
-    import {redirect, error, unauthorize} from './session_manager.js';
-    import {checkSession} from './check_session.js';
+  import { getContract, sendFinishContract, selectDeveloper, sendDeveloperReward } from './contracts.js';
+  import { prettifySkill } from './profile.js';
+  import { redirect, error, unauthorize } from './session_manager.js';
+  import { checkSession } from './check_session.js';
 
-    const _id = (new URLSearchParams(window.location.search)).get('_id')
+  // query parameter
+  const _id = (new URLSearchParams(window.location.search)).get('_id');
+
+  // event handler
+  document.getElementById('submit').addEventListener("click", finishContract);
+  document.getElementById('newOffer').addEventListener("click",
+      () => sendDeveloperReward(_id, sessionStorage.getItem('email'), document.getElementById('rewardInput').value,
+          (response) => redirect(`/contract?_id=${_id}`),
+          (err) => error(err)));
+
+  // remove rating and finish section if developer
+  if (sessionStorage.getItem('type') === 'dev') $('#finish').remove();
 
 
-    document.getElementById('submit')
-        .addEventListener("click", finishContract);
+  checkSession(() => {
+  }, unauthorize);
 
-    document.getElementById('newOffer')
-        .addEventListener("click",
-            () => sendDeveloperReward(_id, sessionStorage.getItem('email'), document.getElementById('rewardInput').value,
-                (response) => redirect(`/contract?_id=${_id}`),
-                (err) => error(err)));
-
-    if (sessionStorage.getItem('type') === 'dev') {
-        $('#finish').remove()
-    }
-
-    checkSession(() => {
-    }, unauthorize);
-
-    getContract(_id,
-        (response) => {
-            try {
-                if (!response.developer) $('#finish').remove()
-                else $('#devs').remove()
-            } catch {
-            }
-
-            try {
-                if (response.isDone && !response.isPaid && response.clientEmail === sessionStorage.getItem('email')) {
-                    $('#paypal-button').css('opacity', 1)
-                    const clientID = 'AZSx6E9sfRj52Y5ry6XP3GNsvEjrAMjrM47BhbzZLd9Jqzl0YjFHBkJsqijl-cZGT0hefwqCQWlbueQe'
-                    const merchantID = String(response.developerMerchant);
-                    const reqString = `https://www.paypal.com/sdk/js?&client-id=${clientID}&merchant-id=${merchantID}&currency=EUR`
-                    $.ajaxSetup({
-                        cache: true
-                    });
-
-                    $.getScript(reqString, function (data, textStatus, jqxhr) {
-                        paypal.Buttons({
-                            createOrder: (data, actions) => {
-                                return fetch('/api/createOrder', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        contractID: _id
-                                    })
-                                }).then((res) => {
-                                    return res.json();
-                                }).then(function (data) {
-                                    return data.id;
-                                });
-                            },
-                            onApprove: function (data, actions) {
-                                return fetch('/api/captureOrder', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({id: data.orderID, contractID: _id})
-                                }).then(function (res) {
-                                    if (!res.ok) {
-                                        error('Der Entwickler hat kein Business Account auf PayPal');
-                                    }
-                                    redirect(`/contract?_id=${_id}`)
-                                });
-                            },
-                            style: {
-                                color: 'blue',
-                                label: 'paypal'
-                            }
-                        }).render('#paypal-button');
-                    });
-                } else $('#paypal-button').remove()
-            } catch {
-
-            }
-
-            Object.keys(response).forEach((key) => {
-                if (key === 'reward') {
-                    document.getElementById(key).innerText = response[key] + ' €'
-                    return
-                }
-
-                if (['starting_date', 'end_date'].includes(key)) {
-                    document.getElementById(key).innerText = (new Date(response[key])).toLocaleDateString()
-                    return
-                }
-
-                if (key === 'clientEmail') {
-                    $('#client').text(response[key]).append(
-                        $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)))
-                    return
-                }
-
-                if (key === 'developerEmail') {
-                    if (response.developer) $('#developer').text(response[key]).append(
-                        $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)))
-                    else $('#developer').html('&nbsp;')
-                    return
-                }
-
-                if (key === 'isDone') {
-                    response[key] ? setBarArea(3) : (response.developer ? setBarArea(2) : setBarArea(1))
-                    response[key] && response['isPaid'] ? setBarArea(4) : null
-                    if (response[key]) {
-                        try {
-                            $('#apply').remove()
-                            $('#finish').remove()
-                            $('#devs').remove()
-                        } catch {
-                        }
-                    } else {
-                        if (sessionStorage.getItem('type') === 'dev') $('#apply').css('opacity', '1')
-                    }
-                    return
-                }
-
-                if (key === 'potentialDevelopers') {
-                    if (response.developer) {
-                        try {
-                            $('#devs').remove()
-                            $('#apply').remove()
-                        } catch {
-                        }
-                        return
-                    }
-
-                    response[key] = response[key].sort((a, b) => a.reward - b.reward)
-
-                    response[key].forEach((dev) =>
-                        $('#devs').append(
-                            $('<div>').attr('class', sessionStorage.getItem('email') === response['clientEmail'] ? 'dev clickable' : 'dev')
-                                .click(() =>
-                                    sessionStorage.getItem('email') === response['clientEmail'] ?
-                                        selectDeveloper(_id, dev.email, dev.reward,
-                                            (response) => redirect(`/contract?_id=${_id}`),
-                                            (err) => console.error(err))
-                                        : null)
-                                .append($('<p>').text(dev.email))
-                                .append($('<p>').text(`Entlohnung: ${dev.reward}€`))))
-
-                    if (response[key].length === 0) $('#devs').append($('<p>').text('Keine Entwickler'))
-
-                    $('#devs').css('opacity', '1')
-                    return
-                }
-
-                if (key === 'details') {
-                    Object.keys(response[key]).forEach((key2) => {
-                        try {
-                            if (key2 === 'stack') {
-                                response[key][key2].forEach((skill) => $(`#${key2}`).append($('<li>').text(prettifySkill(skill))));
-                            } else document.getElementById(key2).innerText = response[key][key2]
-                        } catch {
-                        }
-                    });
-                    return
-                }
-                try {
-                    document.getElementById(key).innerText = response[key]
-                } catch {
-                }
-            });
-            if (sessionStorage.getItem('type') === 'client') {
-                $('#apply').remove()
-                $('#finish').css('opacity', '1')
-            } else {
-                $('#devsTitle').text('Entwickler')
-            }
-        },
-        (error) => console.error(error))
-
-    function finishContract() {
-        const communication = $(`#communication > div > .checked`).length
-        const speed = $(`#speed > div > .checked`).length
-        const quality = $(`#quality > div > .checked`).length
-        const isChecked = document.getElementById('done').checked
-        if (!isChecked) return error('Der Auftrag kann nur abgeschlossen werden wenn er fertig ist')
-        if (!communication || !speed || !quality) return error('Bitte bewerten Sie den Entwickler')
-
-        sendFinishContract(_id, communication, speed, quality,
-            (response) => redirect(`/contract?_id=${_id}`),
-            (error) => callSnackbar(error)
-        )
-    }
-
-    function setBarArea(n) {
-        switch (n) {
-            case 4:
-                $(`#middleWrapper #payContract`).css('background-color', '#558b2f')
-            case 3:
-                $(`#middleWrapper #doneContract`).css('background-color', '#558b2f')
-            case 2:
-                $(`#middleWrapper #working`).css('background-color', '#558b2f')
-            case 1:
-                $(`#middleWrapper #finding`).css('background-color', '#558b2f')
+  // get contract information
+  getContract(_id,
+      (response) => {
+        try {
+          // remove rating and finish section if no developer was choosen for the task
+          if (!response.developer) $('#finish').remove();
+          // else remove dev list
+          else $('#devs').remove();
+        } catch {
         }
+
+        try {
+          if (response.isDone && !response.isPaid && response.clientEmail === sessionStorage.getItem('email')) {
+            // create PayPal button if contract is done
+            $('#paypal-button').css('opacity', 1);
+            const reqString = `https://www.paypal.com/sdk/js?&client-id=${response.clientID}&merchant-id=${String(response.developerMerchant)}&currency=EUR`;
+            $.ajaxSetup({cache: true});
+
+            if (!response.clientID || !response.developerMerchant) error('Entwickler hat sein PayPal Account nicht verbunden');
+
+            // get script with corresponding ids
+            $.getScript(reqString, (data, textStatus, jqxhr) => {
+              paypal.Buttons({
+                createOrder: (data, actions) => {
+                  return fetch('/api/createOrder', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      contractID: _id
+                    })
+                  }).then((res) => {
+                    return res.json();
+                  }).then((data) => {
+                    return data.id;
+                  });
+                },
+                onApprove: (data, actions) => {
+                  return fetch('/api/captureOrder', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({id: data.orderID, contractID: _id})
+                  }).then((res) => {
+                    if (!res.ok) error('Der Entwickler hat kein Business Account auf PayPal');
+
+                    redirect(`/contract?_id=${_id}`);
+                  });
+                },
+                style: {
+                  color: 'blue',
+                  label: 'paypal'
+                }
+              }).render('#paypal-button');
+            });
+          } else $('#paypal-button').remove();
+        } catch {
+        }
+
+        // iterate through keys of response and set values in html elements
+        Object.keys(response).forEach((key) => {
+          if (key === 'reward') {
+            document.getElementById(key).innerText = response[key] + ' €';
+            return;
+          }
+
+          if (['starting_date', 'end_date'].includes(key)) {
+            document.getElementById(key).innerText = (new Date(response[key])).toLocaleDateString();
+            return;
+          }
+
+          if (key === 'clientEmail') {
+            $('#client').text(response[key]).append(
+                $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)));
+            return;
+          }
+
+          if (key === 'developerEmail') {
+            if (response.developer) $('#developer').text(response[key]).append(
+                $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)));
+            else $('#developer').html('&nbsp;');
+            return;
+          }
+
+          if (key === 'isDone') {
+            response[key] ? setBarArea(3) : (response.developer ? setBarArea(2) : setBarArea(1));
+            response[key] && response['isPaid'] ? setBarArea(4) : null;
+            if (response[key]) {
+              try {
+                // remove all actions that modify the contract
+                $('#apply').remove();
+                $('#finish').remove();
+                $('#devs').remove();
+              } catch {
+              }
+            } else {
+              if (sessionStorage.getItem('type') === 'dev') $('#apply').css('opacity', '1');
+            }
+            return;
+          }
+
+          if (key === 'potentialDevelopers') {
+            if (response.developer) {
+              try {
+                $('#devs').remove();
+                $('#apply').remove();
+              } catch {
+              }
+              return;
+            }
+
+            // sort by reward ascending
+            response[key] = response[key].sort((a, b) => a.reward - b.reward);
+
+            // show all developers that want to do the task
+            response[key].forEach((dev) =>
+                $('#devs').append(
+                    $('<div>').attr('class', sessionStorage.getItem('email') === response['clientEmail'] ?
+                        'dev clickable' : 'dev')
+                        .click(() =>
+                            sessionStorage.getItem('email') === response['clientEmail'] ?
+                                selectDeveloper(_id, dev.email, dev.reward,
+                                    (response) => redirect(`/contract?_id=${_id}`),
+                                    (err) => error(err))
+                                : null)
+                        .append($('<p>').text(dev.email))
+                        .append($('<p>').text(`Entlohnung: ${Number(dev.reward).toFixed(2)}€`))));
+
+            if (response[key].length === 0) $('#devs').append($('<p>').text('Keine Entwickler'));
+
+            $('#devs').css('opacity', '1');
+            return;
+          }
+
+          if (key === 'details') {
+            Object.keys(response[key]).forEach((key2) => {
+              try {
+                if (key2 === 'stack') response[key][key2].forEach((skill) => $(`#${key2}`).append($('<li>').text(prettifySkill(skill))));
+                else document.getElementById(key2).innerText = response[key][key2];
+              } catch {
+              }
+            });
+            return;
+          }
+          try {
+            document.getElementById(key).innerText = response[key];
+          } catch {
+          }
+        });
+        if (sessionStorage.getItem('type') === 'client') {
+          $('#apply').remove();
+          $('#finish').css('opacity', '1');
+        } else {
+          $('#devsTitle').text('Entwickler');
+        }
+      },
+      (err) => error(err));
+
+  function finishContract() {
+    const communication = $(`#communication > div > .checked`).length;
+    const speed = $(`#speed > div > .checked`).length;
+    const quality = $(`#quality > div > .checked`).length;
+    const isChecked = document.getElementById('done').checked;
+    if (!isChecked) return error('Der Auftrag kann nur abgeschlossen werden wenn er fertig ist');
+    if (!communication || !speed || !quality) return error('Bitte bewerten Sie den Entwickler');
+
+    sendFinishContract(_id, communication, speed, quality,
+        (response) => redirect(`/contract?_id=${_id}`),
+        (err) => error(err)
+    );
+  }
+
+  function setBarArea(n) {
+    switch (n) {
+      case 4:
+        $(`#middleWrapper #payContract`).css('background-color', '#558b2f');
+      case 3:
+        $(`#middleWrapper #doneContract`).css('background-color', '#558b2f');
+      case 2:
+        $(`#middleWrapper #working`).css('background-color', '#558b2f');
+      case 1:
+        $(`#middleWrapper #finding`).css('background-color', '#558b2f');
     }
+  }
 </script>
+
 <div id="snackbar"></div>
 </body>
 </html>

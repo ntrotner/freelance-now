@@ -1,53 +1,56 @@
 .settings {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 form > div:last-child {
-    margin: 2px 0;
+  margin: 2px 0;
 }
 
 #cstack > div:nth-last-child(2) {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 form > input {
-    margin: 8px 0;
+  margin: 8px 0;
 }
 
 #about {
-    height: 100px;
-    width: 250px;
-    resize: none;
-    margin: 10px 0;
+  height: 100px;
+  width: 250px;
+  resize: none;
+  margin: 10px 0;
 }
 
 #cgit, #cstack {
-    width: 0;
-    height: 0;
-    visibility: hidden;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+#git {
+  width: 15vw;
 }
 
 #paypalWrapper {
-    width: 20vw;
-    opacity: 0;
+  opacity: 0;
 }
 
 #paypalWrapper > div {
-    margin: 8px 0;
+  margin: 8px 0;
 }
 
 .row {
-    display: flex;
+  display: flex;
 }
 
 .row > div {
-    margin: 32px;
+  margin: 32px;
 }

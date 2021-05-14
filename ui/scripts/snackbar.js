@@ -1,15 +1,21 @@
-export function callSnackbar (message) {
-  const x = document.getElementById('snackbar')
+/**
+ * open snackbar for 3 seconds with custom message
+ *
+ * @param message
+ */
+export function callSnackbar(message) {
+  const x = document.getElementById('snackbar');
 
-  x.innerText = message
-  x.className = 'show'
+  x.innerText = message;
+  x.className = 'show';
 
-  setTimeout(function () {
-    x.className = x.className.replace('show', '')
-  }, 3000)
+  setTimeout(() => x.className = x.className.replace('show', ''), 3000);
 }
 
-export function closeSnackbar () {
-  const x = document.getElementById('snackbar')
-  x.className = x.className.replace('show', '')
+/**
+ * close snackbar
+ */
+export function closeSnackbar() {
+  const x = document.getElementById('snackbar');
+  x.className = x.className.replace('show', '');
 }

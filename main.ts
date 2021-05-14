@@ -1,6 +1,6 @@
-import * as server from './server'
-import * as ui from './ui'
+import * as server from './server';
+import * as ui from './ui';
 
-server.connectDB()
-server.startServer()
-ui.startUI()
+server.connectDB();
+server.startServer();
+ui.startUI();

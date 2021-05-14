@@ -6,7 +6,7 @@ var request = require('request');
  * @param callback
  */
 export function getAuthorizationToken(callback) {
-  var headersAuthorize = {
+  const headersAuthorize = {
     'Accept': 'application/json',
     'Accept-Language': 'en_US'
   };
@@ -26,7 +26,7 @@ export function getAuthorizationToken(callback) {
 
   function callbackAuthorize(error, response, body) {
     if (!error && response.statusCode == 200) {
-      const parsed = JSON.parse(body)
+      const parsed = JSON.parse(body);
       const authorization = parsed.token_type + ' ' + parsed.access_token;
       callback(authorization);
     }
@@ -44,15 +44,14 @@ export function getAuthorizationToken(callback) {
  * @param authToken
  */
 export function requestPayPalDeveloperLink(callbackSuccess, email, authToken) {
-  var headers = {
+  const headers = {
     'Content-Type': 'application/json',
     'Authorization': authToken
   };
 
-  var dataString = `{"partner_config_override": {"return_url": "https://freelance.ttnr.me/api/successPayPal"}, "tracking_id": "${email}", "operations": [ { "operation": "API_INTEGRATION", "api_integration_preference": { "rest_api_integration": { "integration_method": "PAYPAL", "integration_type": "THIRD_PARTY", "third_party_details": { "features": [ "PAYMENT", "REFUND" ] } } } } ], "products": [ "EXPRESS_CHECKOUT" ], "legal_consents": [ { "type": "SHARE_DATA_CONSENT", "granted": true } ] }`;
+  const dataString = `{"partner_config_override": {"return_url": "https://freelance.ttnr.me/api/successPayPal"}, "tracking_id": "${email}", "operations": [ { "operation": "API_INTEGRATION", "api_integration_preference": { "rest_api_integration": { "integration_method": "PAYPAL", "integration_type": "THIRD_PARTY", "third_party_details": { "features": [ "PAYMENT", "REFUND" ] } } } } ], "products": [ "EXPRESS_CHECKOUT" ], "legal_consents": [ { "type": "SHARE_DATA_CONSENT", "granted": true } ] }`;
 
-
-  var options = {
+  const options = {
     url: 'https://api-m.sandbox.paypal.com/v2/customer/partner-referrals',
     method: 'POST',
     headers: headers,
@@ -62,7 +61,7 @@ export function requestPayPalDeveloperLink(callbackSuccess, email, authToken) {
   function callback(error, response, body) {
     if (!error && response.statusCode == 201) {
       const parsed = JSON.parse(body);
-      callbackSuccess(parsed.links.find((link) => link.rel === 'action_url').href)
+      callbackSuccess(parsed.links.find((link) => link.rel === 'action_url').href);
     } else {
     }
   }

@@ -1,148 +1,129 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="contracts.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <script src="sidebar.js" type="module"></script>
+  <meta charset="UTF-8">
+  <title>Startseite</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="contracts.css">
+  <link rel="stylesheet" href="snackbar.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script src="sidebar.js" type="module"></script>
 </head>
 <body>
 <sidebar-component></sidebar-component>
+
 <main>
-    <div id="welcome">
-        <h2 id="user"></h2>
-    </div>
+  <div id="welcome">
+    <h2 id="user"></h2>
+  </div>
 
-    <hr>
+  <hr>
 
-    <div id="information">
-        <div id="contr1" class="shadow">
-        </div>
-        <div id="contr2" class="shadow">
-        </div>
-        <div id="contr3" class="shadow">
-        </div>
+  <div id="information">
+    <div id="contr1" class="shadow">
     </div>
-    <hr>
-    <div id="bottomWrapper">
-        <h4>Aufträge in Arbeit</h4>
-        <div>
-            <h4>Titel</h4>
-            <h4>Ansprechpartner</h4>
-            <h4>Entlohnung</h4>
-            <h4>Status</h4>
-        </div>
+    <div id="contr2" class="shadow">
     </div>
+    <div id="contr3" class="shadow">
+    </div>
+  </div>
+  <hr>
+  <div id="bottomWrapper">
+    <h4>Offene Aufträge</h4>
+    <div>
+      <h4>Titel</h4>
+      <h4>Ansprechpartner</h4>
+      <h4>Entlohnung</h4>
+      <h4>Status</h4>
+    </div>
+  </div>
 </main>
 
 <script type="module">
-    import {checkSession} from './check_session.js';
-    import {unauthorize} from './session_manager.js'
-    import {getPaidContracts, getToPayContracts, getInProgressContracts, getPersonalContracts} from './contracts.js'
+  import { checkSession } from './check_session.js';
+  import { unauthorize, error } from './session_manager.js';
+  import { getPaidContracts, getToPayContracts, getInProgressContracts, getPersonalContracts } from './contracts.js';
 
-    checkSession(() => {
-        document.getElementById("user")
-            .innerText = "Hallo " + sessionStorage.getItem("username");
-        document.getElementById("welcome")
-            .style.visibility = 'visible';
-    }, unauthorize);
+  checkSession(() => {
+    document.getElementById("user").innerText = "Hallo " + sessionStorage.getItem("username");
+    document.getElementById("welcome").style.visibility = 'visible';
+  }, unauthorize);
 
-    if (sessionStorage.getItem('type') === 'client') {
+  const isClient = sessionStorage.getItem('type') === 'client';
 
-        getPaidContracts((msg) => {
-            $('#contr1')
-                .append($('<h4>').text('Bezahlte Aufträge'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
-        getToPayContracts((msg) => {
-            $('#contr2')
-                .append($('<h4>').text('Zu Bezahlen'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
-        getInProgressContracts((msg) => {
-            $('#contr3')
-                .append($('<h4>').text('Aufträge in Arbeit'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
+  // get statistics
+  getPaidContracts((msg) => {
+    $('#contr1')
+        .append($('<h4>').text(isClient ? 'Bezahlte Aufträge' : 'Erhaltene Zahlungen'))
+        .append(Object.keys(msg).map((key) => {
+          if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key]);
+          else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €');
+        }));
+  }, (err) => error(err));
 
-    } else {
-        getPaidContracts((msg) => {
-            $('#contr1')
-                .append($('<h4>').text('Erhaltene Bezahlungen'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
-        getToPayContracts((msg) => {
-            $('#contr2')
-                .append($('<h4>').text('Offene Zahlungen'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
-        getInProgressContracts((msg) => {
-            $('#contr3')
-                .append($('<h4>').text('Aufträge in Arbeit'))
-                .append(Object.keys(msg).map((key) => {
-                    if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key])
-                    else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €')
-                }))
-        }, (err) => console.error(err))
-    }
+  getToPayContracts((msg) => {
+    $('#contr2')
+        .append($('<h4>').text(isClient ? 'Zu Bezahlen' : 'Offene Forderungen'))
+        .append(Object.keys(msg).map((key) => {
+          if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key]);
+          else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €');
+        }));
+  }, (err) => error(err));
 
-    getPersonalContracts(
-        (response) => {
-            response = response.sort((contract1, contract2) => {
-                const value1 = contract1.isPaid ? 4 : contract1.isDone ? 3 : contract1.participant ? 2 : 1;
-                const value2 = contract2.isPaid ? 4 : contract2.isDone ? 3 : contract2.participant ? 2 : 1;
-                return value1 - value2;
-            });
-            response = response.filter((contract) => !contract.isDone && contract.participant)
-            if (response.length > 0) $('#bottomWrapper').css('opacity', 1)
+  getInProgressContracts((msg) => {
+    $('#contr3')
+        .append($('<h4>').text('Aufträge in Arbeit'))
+        .append(Object.keys(msg).map((key) => {
+          if (key === 'amount') return $('<p>').text('Anzahl: ' + msg[key]);
+          else return $('<p>').text('Summe: ' + msg[key].toFixed(2) + ' €');
+        }));
+  }, (err) => error(err));
 
-            $('#bottomWrapper').append(
-                response.map((contract) => {
+  // fill personal contracts
+  getPersonalContracts(
+      (response) => {
+        response = response.sort((contract1, contract2) => {
+          const value1 = contract1.isPaid ? 4 : contract1.isDone ? 3 : contract1.participant ? 2 : 1;
+          const value2 = contract2.isPaid ? 4 : contract2.isDone ? 3 : contract2.participant ? 2 : 1;
+          return value1 - value2;
+        });
 
-                    return $('<div>').attr('class', 'contract shadow')
-                        .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
-                        .append(
-                            Object.keys(contract).map((key) => {
-                                if (key === '_id') return
-                                let value = contract[key];
-                                if (key === 'isPaid') return
-                                if (key === 'isDone') value =
-                                    contract['isPaid'] ?
-                                        'Bezahlt' : contract[key] ?
-                                        'Fertig (Bezahlung Offen)' : contract['participant'] ?
-                                            'In Arbeit' : 'Nicht Angefangen'
-                                if (key === 'reward') value += '€'
-
-                                if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler'
-
-                                return $('<p>').attr('class', 'contractInfo').text(value)
-                            }))
-                })
-            )
-        },
-        (error) => {
-
+        response = response.filter((contract) => contract.participant && !contract.isPaid);
+        if (response.length === 0) {
+          $('#bottomWrapper > *').remove();
+          $('#bottomWrapper').append($('<h4>').text('Keine Aufträge'));
         }
-    )
+
+        $('#bottomWrapper').append(
+            response.map((contract) => {
+
+              return $('<div>').attr('class', 'contract shadow')
+                  .attr('onclick', `location.href='/contract?_id=${contract._id}'`)
+                  .append(
+                      Object.keys(contract).map((key) => {
+                        if (key === '_id') return;
+                        let value = contract[key];
+                        if (key === 'isPaid') return;
+                        if (key === 'isDone') value = contract['isPaid'] ?
+                            'Bezahlt' : contract[key] ?
+                                'Fertig (Bezahlung Offen)' : contract['participant'] ?
+                                    'In Arbeit' : 'Nicht Angefangen';
+                        if (key === 'reward') value += '€';
+
+                        if (key === 'participant') value = contract[key] ? contract[key] : 'Kein Entwickler';
+
+                        return $('<p>').attr('class', 'contractInfo').text(value);
+                      }));
+            })
+        );
+      },
+      (err) => {
+        error(err);
+      }
+  );
 </script>
+<div id="snackbar"></div>
 </body>
 </html>

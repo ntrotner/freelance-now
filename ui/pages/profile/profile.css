@@ -1,68 +1,68 @@
 .link {
-    margin: 0 12px;
+  margin: 0 12px;
 }
 
 #description {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    min-width: 720px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 720px;
 }
 
 #name {
-    margin: 16px 0 0 16px;
+  margin: 16px 0 0 16px;
 }
 
 #nameWrapper {
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
 }
 
 #type, #paypalWrapper {
-    margin: 16px 0 18px 16px;
+  margin: 16px 0 18px 16px;
 }
 
 #leftWrapper, #detailWrapper, #ratingWrapper {
-    padding: 4px 16px;
-    border: 1px black solid;
-    margin: 8px 36px;
+  padding: 4px 16px;
+  border: 1px black solid;
+  margin: 8px 36px;
 }
 
 #ratingWrapper {
-    margin-top: 32px;
+  margin-top: 32px;
 }
 
 #leftWrapper {
-    min-height: 35vh;
-    min-width: 25vw;
-    max-width: 40vw;
-    margin: 8px 26px;
+  min-height: 35vh;
+  min-width: 25vw;
+  max-width: 40vw;
+  margin: 8px 26px;
 }
 
 #ratingWrapper, #detailWrapper {
-    min-width: 20vw;
+  min-width: 20vw;
 }
 
 #git {
-    width: max-content;
+  width: max-content;
 }
 
 #stack {
-    margin: 12px 18px;
+  margin: 12px 18px;
 }
 
 #paypalVerificated {
-    margin: 0;
+  margin: 0;
 }
 
 #paypalWrapper {
-    display: flex;
-    flex-direction: row;
-    align-content: stretch;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-content: stretch;
+  align-items: center;
 }
 
 .material-icons {
-    margin: 0 12px;
+  margin: 0 12px;
 }

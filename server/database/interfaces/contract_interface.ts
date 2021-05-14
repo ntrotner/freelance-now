@@ -1,4 +1,4 @@
-import { Document, Types, Schema } from 'mongoose'
+import { Document, Types, Schema } from 'mongoose';
 
 export interface IContract extends Document {
   client: Types.ObjectId,
@@ -47,4 +47,4 @@ export const Contract_Definitions = {
     default: {requirements_fulfilled: null, communication: null, speed: null, quality: null}
   },
   potentialDevelopers: {type: Array, required: false, default: []}
-}
+};

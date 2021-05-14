@@ -1,4 +1,4 @@
-import { isAuthenticated, isClient, unauthenticate } from '../server/user_authentication/session_manager'
+import { isAuthenticated, isClient, unauthenticate } from '../server/user_authentication/session_manager';
 import {
   chat,
   chatcss, contract,
@@ -13,7 +13,7 @@ import {
   settingscss,
   snackbarcss, welcome, welcomecss,
   settings, register
-} from './pages'
+} from './pages';
 import {
   chatjs,
   check_session,
@@ -22,83 +22,83 @@ import {
   profilejs,
   session_manager,
   snackbar
-} from './scripts'
-import { sidebar } from './components'
+} from './scripts';
+import { sidebar } from './components';
 import path = require('path');
 
-const sendFile = (pathFile, res) => res.sendFile(path.join(__dirname + pathFile))
-const redirect = (pathFile, res) => res.redirect(302, pathFile)
-const error = (req, res, fct) => fct('/error/error.html', res)
+const sendFile = (pathFile, res) => res.sendFile(path.join(__dirname + pathFile));
+const redirect = (pathFile, res) => res.redirect(302, pathFile);
+const error = (req, res, fct) => fct('/error/error.html', res);
 
-function isAuthorized (req, res, _) {
-  if (isAuthenticated(req)) home(req, res, sendFile)
-  else welcome(req, res, sendFile)
+function isAuthorized(req, res, _) {
+  if (isAuthenticated(req)) home(req, res, sendFile);
+  else welcome(req, res, sendFile);
 }
 
-function checkLogin (req, res, _) {
-  if (isAuthenticated(req)) redirect('/', res)
-  else login(req, res, sendFile)
+function checkLogin(req, res, _) {
+  if (isAuthenticated(req)) redirect('/', res);
+  else login(req, res, sendFile);
 }
 
-function logoutUser (req, res, _) {
+function logoutUser(req, res, _) {
   if (isAuthenticated(req)) {
-    req = unauthenticate(req)
-    logout(req, res, sendFile)
+    req = unauthenticate(req);
+    logout(req, res, sendFile);
   } else {
-    redirect('/', res)
+    redirect('/', res);
   }
 }
 
-function checkSettings (req, res, _) {
-  if (isAuthenticated(req)) settings(req, res, sendFile)
-  else redirect('/', res)
+function checkSettings(req, res, _) {
+  if (isAuthenticated(req)) settings(req, res, sendFile);
+  else redirect('/', res);
 }
 
-function registerPage (req, res, _) {
+function registerPage(req, res, _) {
   if (isAuthenticated(req)) {
-    redirect('/', res)
+    redirect('/', res);
   } else {
-    register(req, res, sendFile)
+    register(req, res, sendFile);
   }
 }
 
-function checkChat (req, res, _) {
+function checkChat(req, res, _) {
   if (isAuthenticated(req)) {
-    chat(req, res, sendFile)
+    chat(req, res, sendFile);
   } else {
-    redirect('/', res)
+    redirect('/', res);
   }
 }
 
-function checkProfile (req, res, _) {
+function checkProfile(req, res, _) {
   if (isAuthenticated(req) && req.query.email) {
-    profile(req, res, sendFile)
+    profile(req, res, sendFile);
   } else {
-    redirect('/', res)
+    redirect('/', res);
   }
 }
 
-function createContract (req, res, _) {
+function createContract(req, res, _) {
   if (isAuthenticated(req) && isClient(req)) {
-    newContract(req, res, sendFile)
+    newContract(req, res, sendFile);
   } else {
-    redirect('/', res)
+    redirect('/', res);
   }
 }
 
-async function checkContract (req, res, _) {
+async function checkContract(req, res, _) {
   if (isAuthenticated(req) && req.query._id) {
-    contract(req, res, sendFile)
+    contract(req, res, sendFile);
   } else {
-    redirect('/contracs', res)
+    redirect('/contracs', res);
   }
 }
 
-async function checkSearch (req, res, _) {
+async function checkSearch(req, res, _) {
   if (isAuthenticated(req)) {
-    search(req, res, sendFile)
+    search(req, res, sendFile);
   } else {
-    redirect('/', res)
+    redirect('/', res);
   }
 }
 
@@ -117,7 +117,7 @@ const htmlRoutes = {
   '/contract': checkContract,
   '/contracts': contracts,
   '/error': error
-}
+};
 
 const cssRoutes = {
   '/home.css': homecss,
@@ -133,7 +133,7 @@ const cssRoutes = {
   '/contracts.css': contractscss,
   '/default.css': defaultcss,
   '/snackbar.css': snackbarcss
-}
+};
 
 const jsRoutes = {
   '/http_requests.js': http_requests,
@@ -144,16 +144,16 @@ const jsRoutes = {
   '/profile.js': profilejs,
   '/sidebar.js': sidebar,
   '/contracts.js': contractsjs
-}
+};
 
 const etcRoutes = {
   '/favicon.ico': error
-}
+};
 
 const allRoutes = {
   ...htmlRoutes, ...cssRoutes, ...jsRoutes, ...etcRoutes
-}
+};
 
-export function getRoute (route: string, req, res): void {
-  allRoutes[req.params['0']] ? allRoutes[req.params['0']](req, res, sendFile) : redirect('/error', res)
+export function getRoute(route: string, req, res): void {
+  allRoutes[req.params['0']] ? allRoutes[req.params['0']](req, res, sendFile) : redirect('/error', res);
 }

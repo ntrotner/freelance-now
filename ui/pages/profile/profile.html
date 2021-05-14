@@ -1,126 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-    <script src="sidebar.js" type="module"></script>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="profile.css">
-    <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <script src="sidebar.js" type="module"></script>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="profile.css">
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 <sidebar-component></sidebar-component>
 <main>
-    <div id="nameWrapper">
-        <h2 id="name"></h2>
-        <i class="material-icons md-26 link" id="emailIcon">
-            email
-        </i>
+  <div id="nameWrapper">
+    <h2 id="name"></h2>
+    <i class="material-icons md-26 link" id="emailIcon">
+      email
+    </i>
+  </div>
+  <h3 id="type"></h3>
+  <div id="paypalWrapper">
+    <h4 id="paypalVerificated"></h4>
+    <i id="iconVerification" class="material-icons md-26"></i>
+  </div>
+  <hr>
+  <div id="description">
+    <div class="shadow" id="leftWrapper">
+      <div id="aboutWrapper">
+        <h4>Über Mich</h4>
+        <p id="about"></p>
+      </div>
     </div>
-    <h3 id="type"></h3>
-    <div id="paypalWrapper">
-        <h4 id="paypalVerificated"></h4>
-        <i id="iconVerification" class="material-icons md-26"></i>
-    </div>
-    <hr>
-    <div id="description">
-        <div class="shadow" id="leftWrapper">
-            <div id="aboutWrapper">
-                <h4>Über Mich</h4>
-                <p id="about"></p>
-            </div>
+
+    <div id="rightWrapper">
+      <div id="detailWrapper" class="shadow">
+        <div id="emailWrapper">
+          <h4 class="title">E-Mail</h4>
+          <p id="email"></p>
+        </div>
+        <div id="gitWrapper">
+          <h4>Git</h4>
+          <p id="git">&nbsp;</p>
         </div>
 
-        <div id="rightWrapper">
-            <div id="detailWrapper" class="shadow">
-                <div id="emailWrapper">
-                    <h4 class="title">E-Mail</h4>
-                    <p id="email"></p>
-                </div>
-                <div id="gitWrapper">
-                    <h4>Git</h4>
-                    <p id="git">&nbsp;</p>
-                </div>
-
-                <div id="stackWrapper">
-                    <h4>Skills</h4>
-                    <p id="stack"></p>
-                </div>
-            </div>
-
-            <div class="shadow" id="ratingWrapper">
-                <div id="contractsWrapper">
-                    <h4 class="title">Alle Aufträge: <span id="contracts"></span></h4>
-                </div>
-
-                <div id="communicationWrapper">
-                    <h4 class="title">Kommunikation: <span id="communication"></span></h4>
-                </div>
-
-                <div id="speedWrapper">
-                    <h4 class="title">Schnelligkeit: <span id="speed"></span></h4>
-                </div>
-
-                <div id="qualityWrapper">
-                    <h4 class="title">Qualität: <span id="quality"></span></h4>
-                </div>
-            </div>
+        <div id="stackWrapper">
+          <h4>Skills</h4>
+          <p id="stack"></p>
         </div>
+      </div>
+
+      <div class="shadow" id="ratingWrapper">
+        <div id="contractsWrapper">
+          <h4 class="title">Alle Aufträge: <span id="contracts"></span></h4>
+        </div>
+
+        <div id="communicationWrapper">
+          <h4 class="title">Kommunikation: <span id="communication"></span></h4>
+        </div>
+
+        <div id="speedWrapper">
+          <h4 class="title">Schnelligkeit: <span id="speed"></span></h4>
+        </div>
+
+        <div id="qualityWrapper">
+          <h4 class="title">Qualität: <span id="quality"></span></h4>
+        </div>
+      </div>
     </div>
+  </div>
 
 </main>
 <script type="module">
-    import {getProfile, prettifySkill} from './profile.js';
-    import {getContracts} from './contracts.js';
-    import {redirect, checkPayPalVerification} from './session_manager.js';
+  import { getProfile, prettifySkill } from './profile.js';
+  import { getRatings } from './contracts.js';
+  import { redirect, checkPayPalVerification, error } from './session_manager.js';
 
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('email')) {
-        getProfile(urlParams.get('email'), (response) => {
-            document.getElementById('name').innerText = response.username
-            document.getElementById('email').innerText = response.email
-            document.getElementById('type').innerText = response.type === 'client' ? 'Auftraggeber' : 'Entwickler'
-            document.getElementById('about').innerText = response.about
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('email')) {
+    getProfile(urlParams.get('email'), (response) => {
+      document.getElementById('name').innerText = response.username;
+      document.getElementById('email').innerText = response.email;
+      document.getElementById('type').innerText = response.type === 'client' ? 'Auftraggeber' : 'Entwickler';
+      document.getElementById('about').innerText = response.about;
 
-            checkPayPalVerification(response.email, (msg) => {
-                $('#paypalVerificated').html(msg ? 'Verifiziert' : 'Nicht Verifiziert')
-                $('#iconVerification').text(msg ? 'credit_score' : 'credit_card_off')
-            })
+      checkPayPalVerification(response.email, (msg) => {
+        $('#paypalVerificated').html(msg ? 'Verifiziert' : 'Nicht Verifiziert');
+        $('#iconVerification').text(msg ? 'credit_score' : 'credit_card_off');
+      });
 
-            if (response.type === 'client') {
-                try {
-                    $('#gitWrapper').remove()
-                    $('#stackWrapper').remove()
-                    $('#ratingWrapper').remove()
-                    $('#paypalVerificated').remove()
-                    $('#iconVerification').remove()
-                } catch {
+      if (response.type === 'client') {
+        try {
+          $('#gitWrapper').remove();
+          $('#stackWrapper').remove();
+          $('#ratingWrapper').remove();
+          $('#paypalVerificated').remove();
+          $('#iconVerification').remove();
+        } catch {
 
-                }
-            } else {
-                fillPastContracts(response.email)
-                response.stack.forEach((skill) => $(`#stack`).append($('<li>').text(prettifySkill(skill))));
-                if (!response.stack.length) $(`#stack`).append($('<p>').text('Keine'))
-                if (response.git) document.getElementById('git').innerText = response.git
-            }
-            $('#emailIcon').click(() => redirect(`/chat?email=${response.email}`))
+        }
+      } else {
+        fillPastContracts(response.email);
+        response.stack.forEach((skill) => $(`#stack`).append($('<li>').text(prettifySkill(skill))));
+        if (!response.stack.length) $(`#stack`).append($('<p>').text('Keine'));
+        if (response.git) document.getElementById('git').innerText = response.git;
+      }
+      $('#emailIcon').click(() => redirect(`/chat?email=${response.email}`));
 
-        }, (response) => redirect('/'))
-    } else redirect('/')
+    }, (response) => redirect('/'));
+  } else redirect('/');
 
-    function fillPastContracts(email) {
-        getContracts(email, (response) => {
-            document.getElementById('contracts').innerText = response.amount
-            document.getElementById('communication').innerText = response.rating[0].toFixed(1) + '/5.0'
-            document.getElementById('speed').innerText = response.rating[1].toFixed(1) + '/5.0'
-            document.getElementById('quality').innerText = response.rating[2].toFixed(1) + '/5.0'
+  function fillPastContracts(email) {
+    getRatings(email, (response) => {
+      document.getElementById('contracts').innerText = response.amount;
+      document.getElementById('communication').innerText = response.rating[0].toFixed(1) + '/5.0';
+      document.getElementById('speed').innerText = response.rating[1].toFixed(1) + '/5.0';
+      document.getElementById('quality').innerText = response.rating[2].toFixed(1) + '/5.0';
 
-        }, (err) => {
-            console.log(err)
-        })
-    }
+    }, (err) => {
+      error(err);
+    });
+  }
 
 </script>
 </body>

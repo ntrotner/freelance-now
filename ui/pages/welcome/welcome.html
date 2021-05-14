@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="default.css">
-    <link rel="stylesheet" href="welcome.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta charset="UTF-8">
+  <title>Welcome</title>
+  <link rel="stylesheet" href="default.css">
+  <link rel="stylesheet" href="welcome.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
 
 <div class="top">
-    <h1>Willkommen Zu Freelance Now!</h1>
-    <span id="subwelcome"><h3>Ihr Ort für </h3> &nbsp; <h3 id="responsive"></h3></span>
+  <h1>Willkommen Zu Freelance Now!</h1>
+  <span id="subwelcome"><h3>Ihr Ort für </h3> &nbsp; <h3 id="responsive"></h3></span>
 
 </div>
 
 <div class="middle">
-    <p>
-        Sie sind auf der Suche nach einer Plattform, die Auftraggeber und Entwickler
-        vereint und ein reibungslosen Auftragsablauf ermöglicht?
-        Überzeugen Sie sich von den Möglichkeiten und treten Sie der Community bei!
-    </p>
+  <p>
+    Sie sind auf der Suche nach einer Plattform, die Auftraggeber und Entwickler
+    vereint und ein reibungslosen Auftragsablauf ermöglicht?
+    Überzeugen Sie sich von den Möglichkeiten und treten Sie der Community bei!
+  </p>
 
-    <hr>
+  <hr>
 
-    <ul id="menu">
-        <ul>Sichere Bezahlung<i class="material-icons">check</i></ul>
-        <ul>SSL Verschlüsselung<i class="material-icons">check</i></ul>
-        <ul>Bewertungen<i class="material-icons">check</i></ul>
-        <ul>Transparenz<i class="material-icons">check</i></ul>
-    </ul>
+  <ul id="menu">
+    <ul>Sichere Bezahlung<i class="material-icons">check</i></ul>
+    <ul>SSL Verschlüsselung<i class="material-icons">check</i></ul>
+    <ul>Bewertungen<i class="material-icons">check</i></ul>
+    <ul>Transparenz<i class="material-icons">check</i></ul>
+  </ul>
 
-    <hr>
+  <hr>
 
 </div>
 
 <div class="registration">
-    <div class="registrationcard">
-        <p>Sind Sie Entwickler?</p>
-        <button onclick="location.href='/register?type=entwickler'">Registrieren</button>
-    </div>
+  <div class="registrationcard">
+    <p>Sind Sie Entwickler?</p>
+    <button onclick="location.href='/register?type=entwickler'">Registrieren</button>
+  </div>
 
-    <div class="registrationcard">
-        <p>Sind Sie Auftraggeber?</p>
-        <button onclick="location.href='/register?type=auftraggeber'">Registrieren</button>
+  <div class="registrationcard">
+    <p>Sind Sie Auftraggeber?</p>
+    <button onclick="location.href='/register?type=auftraggeber'">Registrieren</button>
 
-    </div>
+  </div>
 
-    <div class="registrationcard">
-        <p>Schon Registriert?</p>
-        <button onclick="location.href='/login'">Anmelden</button>
+  <div class="registrationcard">
+    <p>Schon Registriert?</p>
+    <button onclick="location.href='/login'">Anmelden</button>
 
-    </div>
+  </div>
 
 </div>
 
 
 <script type="module">
-    const x = document.getElementById("responsive");
-    const tasks = ['Webdesign', 'Datenbank-Design', 'Server-Setup', 'Javascript-Entwicklung',
-        'Containerisierung', 'Dienstleistungen']
+  const x = document.getElementById("responsive");
+  const tasks = ['Webdesign', 'Datenbank-Design', 'Server-Setup', 'Javascript-Entwicklung',
+    'Containerisierung', 'Dienstleistungen'];
 
-    function addLetter(letter) {
-        x.innerText = x.innerText + letter;
+  function addLetter(letter) {
+    x.innerText = x.innerText + letter;
+  }
+
+  function removeLetter() {
+    x.innerText = x.innerText.slice(0, x.innerText.length - 1);
+  }
+
+  for (let i of tasks) {
+    for (let underlines = 4; underlines >= 0; underlines--) {
+      if (underlines % 2) addLetter('_');
+      else removeLetter();
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
 
-    function removeLetter() {
-        x.innerText = x.innerText.slice(0, x.innerText.length - 1);
+    let counter;
+    for (counter = 0; counter < i.length; counter++) {
+      addLetter(i[counter]);
+      await new Promise(resolve => setTimeout(resolve, 90));
     }
 
-    for (let i of tasks) {
-        for (let underlines = 4; underlines >= 0; underlines--) {
-            if (underlines % 2) addLetter('_')
-            else removeLetter()
-            await new Promise(resolve => setTimeout(resolve, 300))
-        }
-
-        let counter;
-        for (counter = 0; counter < i.length; counter++) {
-            addLetter(i[counter])
-            await new Promise(resolve => setTimeout(resolve, 90))
-        }
-
-        if (tasks.indexOf(i) !== (tasks.length - 1)) {
-            for (let underlines = 4; underlines >= 0; underlines--) {
-                if (!(underlines % 2)) addLetter('_')
-                else removeLetter()
-                await new Promise(resolve => setTimeout(resolve, 300))
-            }
-            for (; 0 < counter; counter--) {
-                await new Promise(resolve => setTimeout(resolve, 50))
-                removeLetter();
-            }
-        }
+    if (tasks.indexOf(i) !== (tasks.length - 1)) {
+      for (let underlines = 4; underlines >= 0; underlines--) {
+        if (!(underlines % 2)) addLetter('_');
+        else removeLetter();
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      for (; 0 < counter; counter--) {
+        await new Promise(resolve => setTimeout(resolve, 50));
+        removeLetter();
+      }
     }
+  }
 </script>
 </body>
 </html>
