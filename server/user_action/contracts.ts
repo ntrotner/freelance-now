@@ -139,7 +139,7 @@ export async function getContractInformation(req, res) {
     clientID: process.env.paypalUser,
     developerEmail: foundContract.developer ? (await findUser({_id: foundContract.developer})).email : '',
     clientEmail: foundContract.client ? (await findUser({_id: foundContract.client})).email : '',
-    developerMerchant: foundContract.developer ? String(await findUser({_id: foundContract.developer}))['merchant'] : ''
+    developerMerchant: foundContract.developer ? (await findUser({_id: foundContract.developer}))['merchant'] : ''
   });
 }
 
