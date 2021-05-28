@@ -2,7 +2,7 @@
 
 Project for Web-Engineering 2 @ DHBW-Mannheim
 
-Live site: [freelance.ttnr.me](freelance.ttnr.me)
+Live site: [freelance.ttnr.me](https://freelance.ttnr.me)
 
 ### How To Start
 
@@ -12,17 +12,16 @@ Live site: [freelance.ttnr.me](freelance.ttnr.me)
     2. paypalPass = Secret of Client ID
     3. BID = Sandbox BN Code
 3. Set Environment Variables for Express
-4. Add `nginx_network` docker network or remove it from docker-compose
 
 #### Docker
-
-- `docker-compose up -d --build`
+1. Add `nginx_network` docker network or remove it from docker-compose
+2. `docker-compose up -d --build`
 
 #### NPM
 
-- Start MongoDB
-- Add `127.0.0.1 mongodb` to `/etc/hosts`
-- `npm install && npm start`
+1. Start MongoDB
+2. Add `127.0.0.1 mongodb` to `/etc/hosts`
+3. `npm install && npm start`
 
 
 #### General Information
