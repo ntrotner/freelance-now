@@ -10,9 +10,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-    - name: Navigate to dir
-      run: cd freelance-now
     - name: Install npm dependencies
-      run: npm install
+      run: cd freelance-now && npm install
     - name: Run linter
-      run: npm run linter
+      run: cd freelance-now && npm run linter
