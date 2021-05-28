@@ -6,7 +6,7 @@ export import mongoose = require('mongoose');
 export function connectDB(): void {
   mongoose.connection.once('open', () => console.log('Mongoose successfully connected'));
   mongoose.connect(
-      'mongodb://mongodb:27017/freelance',
-      {useNewUrlParser: true, useUnifiedTopology: true})
-      .catch((err: { message: string; }) => console.log(err.message));
+    'mongodb://mongodb:27017/freelance',
+    {useNewUrlParser: true, useUnifiedTopology: true})
+    .catch((err: { message: string; }) => console.log(err.message));
 }

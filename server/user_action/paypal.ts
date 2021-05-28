@@ -83,23 +83,23 @@ export async function createOrder(req, res) {
   request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': authToken,
+      Authorization: authToken,
       'PayPal-Partner-Attribution-Id': process.env.EXPRESSPORT
     },
     body: {
-      'intent': 'CAPTURE',
-      'purchase_units': [{
-        'amount': {
-          'currency_code': 'EUR',
-          'value': String(foundContract.reward)
+      intent: 'CAPTURE',
+      purchase_units: [{
+        amount: {
+          currency_code: 'EUR',
+          value: String(foundContract.reward)
         },
-        'payee': {
-          'merchant_id': String(foundDev['merchant'])
+        payee: {
+          merchant_id: String(foundDev['merchant'])
         }
       }],
-      'payment_instruction': {
-        'disbursement_mode': 'INSTANT',
-        'platform_fees': []
+      payment_instruction: {
+        disbursement_mode: 'INSTANT',
+        platform_fees: []
       }
     },
     json: true
@@ -124,39 +124,39 @@ export function captureOrder(req, res) {
   const OrderID = req.body.id;
   const contractID = req.body.contractID;
   request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders/' + OrderID + '/capture', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': authToken,
-          'PayPal-Partner-Attribution-Id': process.env.EXPRESSPORT
-        }
-      },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: authToken,
+      'PayPal-Partner-Attribution-Id': process.env.EXPRESSPORT
+    }
+  },
 
-      async function (err, response, body) {
-        if (err) {
-          console.error(err);
-          return res.sendStatus(500);
-        } else {
-          body = JSON.parse(body);
-          const foundContract = await Contract.findOne({_id: contractID});
+  async function (err, response, body) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(500);
+    } else {
+      body = JSON.parse(body);
+      const foundContract = await Contract.findOne({_id: contractID});
 
-          try {
-            if (body.purchase_units[0].payments.captures[0].status === 'COMPLETED' &&
+      try {
+        if (body.purchase_units[0].payments.captures[0].status === 'COMPLETED' &&
                 body.purchase_units[0].payments.captures[0].amount.currency_code === 'EUR' &&
                 Number(body.purchase_units[0].payments.captures[0].amount.value) === Number(foundContract.reward)
-            ) {
-              console.log(`Paid Contract ${foundContract._id}`);
-              foundContract.isPaid = true;
-              foundContract.save();
+        ) {
+          console.log(`Paid Contract ${foundContract._id}`);
+          foundContract.isPaid = true;
+          foundContract.save();
 
-              res.json({
-                status: 'success'
-              });
-            }
-          } catch {
-            return res.sendStatus(500);
-          }
+          res.json({
+            status: 'success'
+          });
         }
+      } catch {
+        return res.sendStatus(500);
       }
+    }
+  }
   );
 }
 

@@ -16,6 +16,21 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "semi": [
+      2,
+      "always"
+    ],
+    "dot-notation": "off",
+    "space-before-function-paren": "off",
+    "object-curly-spacing": "off",
+    "indent": [
+      "error",
+      2
+    ],
+    "import/no-absolute-path": "off",
+    "no-useless-constructor": "off"
   },
-  "ignorePatterns": ["**/node_modules/*"]
+  "ignorePatterns": [
+    "**/node_modules/*"
+  ]
 }

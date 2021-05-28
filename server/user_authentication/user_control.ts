@@ -81,11 +81,11 @@ export async function loginUser(req, res): Promise<void> {
   if (!req.body.password) return resetUserCredentials(req, res, 401, 'Passwort nicht gueltig');
 
   verifyPassword(foundUser.password_hash, req.body.password)
-      .then((isVerified) => {
-        if (isVerified) setUserCredentials(req, res, foundUser);
-        else resetUserCredentials(req, res, 401, 'Falsches Passwort');
-      })
-      .catch(() => resetUserCredentials(req, res, 400, 'Unerwartetes Problem'));
+    .then((isVerified) => {
+      if (isVerified) setUserCredentials(req, res, foundUser);
+      else resetUserCredentials(req, res, 401, 'Falsches Passwort');
+    })
+    .catch(() => resetUserCredentials(req, res, 400, 'Unerwartetes Problem'));
 }
 
 /**
@@ -100,47 +100,47 @@ export async function updateSettings(req, res): Promise<void> {
   if (!foundUser) resetUserCredentials(req, res, 401, 'Nutzer Ungültig');
 
   switch (Object.keys(req.body)[0]) {
-    case 'username':
-      if (isValidName(req.body.username)) {
-        foundUser.username = req.body.username;
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, 'Ungültiger Name');
-      break;
-    case 'email':
-      if (!(await existsAnyEMail(req.body.email)) && isEMail(req.body.email)) {
-        foundUser.email = req.body.email;
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, isEMail(req.body.email) ? 'E-Mail vergeben' : 'E-Mail ungültig');
-      break;
-    case 'password':
-      if (isValidPassword(req.body.password)) {
-        foundUser.password_hash = await hashPassword(req.body.password);
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, 'Passwort ungültig');
-      break;
-    case 'about':
-      if (typeof String(req.body.about) === 'string') {
-        foundUser.about = String(req.body.about);
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, 'Eingabe Ungültig');
-      break;
-    case 'git':
-      if (typeof foundUser['git'] === 'string' && typeof String(req.body.git) === 'string') {
-        foundUser['git'] = String(req.body.git);
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, 'Eingabe Ungültig');
-      break;
-    case 'stack':
-      if (typeof foundUser['stack'] === 'object') {
-        foundUser['stack'] = req.body.stack;
-        const updatedUser = await foundUser.save();
-        setUserCredentials(req, res, updatedUser);
-      } else error(req, res, 'Eingabe Ungültig');
-      break;
+  case 'username':
+    if (isValidName(req.body.username)) {
+      foundUser.username = req.body.username;
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, 'Ungültiger Name');
+    break;
+  case 'email':
+    if (!(await existsAnyEMail(req.body.email)) && isEMail(req.body.email)) {
+      foundUser.email = req.body.email;
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, isEMail(req.body.email) ? 'E-Mail vergeben' : 'E-Mail ungültig');
+    break;
+  case 'password':
+    if (isValidPassword(req.body.password)) {
+      foundUser.password_hash = await hashPassword(req.body.password);
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, 'Passwort ungültig');
+    break;
+  case 'about':
+    if (typeof String(req.body.about) === 'string') {
+      foundUser.about = String(req.body.about);
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, 'Eingabe Ungültig');
+    break;
+  case 'git':
+    if (typeof foundUser['git'] === 'string' && typeof String(req.body.git) === 'string') {
+      foundUser['git'] = String(req.body.git);
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, 'Eingabe Ungültig');
+    break;
+  case 'stack':
+    if (typeof foundUser['stack'] === 'object') {
+      foundUser['stack'] = req.body.stack;
+      const updatedUser = await foundUser.save();
+      setUserCredentials(req, res, updatedUser);
+    } else error(req, res, 'Eingabe Ungültig');
+    break;
   }
 }

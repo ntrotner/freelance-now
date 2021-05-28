@@ -10,15 +10,15 @@ import { error } from './session_manager.js';
  */
 export function getProfile(email, success, failed) {
   POST('/api/getProfile',
-      [{name: 'Content-Type', value: 'application/json'}],
-      {email},
-      (response) => {
-        success(response);
-      },
-      (response) => {
-        error(response);
-        failed(response);
-      }
+    [{name: 'Content-Type', value: 'application/json'}],
+    {email},
+    (response) => {
+      success(response);
+    },
+    (response) => {
+      error(response);
+      failed(response);
+    }
   );
 }
 

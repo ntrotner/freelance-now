@@ -12,6 +12,6 @@ import { resetUserCredentials } from './session_manager';
 export async function createDeveloper(req, res) {
   if (validInputCreateUser(req.body)) {
     createUser(req, res, Developer, {})
-        .catch(() => resetUserCredentials(req, res, 400, 'Nutzer konnte nicht erstellt werden'));
+      .catch(() => resetUserCredentials(req, res, 400, 'Nutzer konnte nicht erstellt werden'));
   } else resetUserCredentials(req, res, 400, 'Name muss mindestens 3 Zeichen enthalten\nPasswort muss mindestens 8 Zeichen enthalten');
 }

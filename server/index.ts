@@ -29,6 +29,6 @@ export function startServer(): void {
   app.post('/api/*', (req, res) => postRoute(req._parsedOriginalUrl.pathname, req, res));
 
   app.listen(process.env.EXPRESSPORT, () =>
-      console.log(`Server started at http://localhost:${process.env.EXPRESSPORT}`)
+    console.log(`Server started at http://localhost:${process.env.EXPRESSPORT}`)
   );
 }

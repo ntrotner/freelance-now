@@ -10,13 +10,13 @@ import { callSnackbar, closeSnackbar } from '/snackbar.js';
 export function sendLogin(email, password) {
   closeSnackbar();
   POST('/api/login',
-      [{name: 'Content-Type', value: 'application/json'}],
-      {email, password},
-      successfulLogin,
-      (msg) => {
-        sessionStorage.clear();
-        error(msg);
-      }
+    [{name: 'Content-Type', value: 'application/json'}],
+    {email, password},
+    successfulLogin,
+    (msg) => {
+      sessionStorage.clear();
+      error(msg);
+    }
   );
 }
 
@@ -31,13 +31,13 @@ export function sendLogin(email, password) {
 export function sendRegistration(email, username, password, type) {
   closeSnackbar();
   POST(type === 'entwickler' ? '/api/newDeveloper' : '/api/newClient',
-      [{name: 'Content-Type', value: 'application/json'}],
-      {username, email, password},
-      successfulLogin,
-      (msg) => {
-        sessionStorage.clear();
-        error(msg);
-      }
+    [{name: 'Content-Type', value: 'application/json'}],
+    {username, email, password},
+    successfulLogin,
+    (msg) => {
+      sessionStorage.clear();
+      error(msg);
+    }
   );
 }
 
@@ -50,17 +50,17 @@ export function sendRegistration(email, username, password, type) {
  */
 export function changeAttribute(attribute, successful, failed) {
   POST('/api/updateSettings',
-      [{name: 'Content-Type', value: 'application/json'}],
-      attribute,
-      (msg) => {
-        callSnackbar('Einstellung übernommen!');
-        saveSessionData(msg);
-        successful();
-      },
-      (msg) => {
-        error(msg);
-        failed();
-      }
+    [{name: 'Content-Type', value: 'application/json'}],
+    attribute,
+    (msg) => {
+      callSnackbar('Einstellung übernommen!');
+      saveSessionData(msg);
+      successful();
+    },
+    (msg) => {
+      error(msg);
+      failed();
+    }
   );
 }
 
@@ -73,15 +73,15 @@ export function changeAttribute(attribute, successful, failed) {
  */
 export function checkPayPalVerification(email, success, failed) {
   POST('/api/isPayPalConnected',
-      [{name: 'Content-Type', value: 'application/json'}],
-      {email},
-      (msg) => {
-        success(msg);
-      },
-      (msg) => {
-        error(msg);
-        failed(msg);
-      }
+    [{name: 'Content-Type', value: 'application/json'}],
+    {email},
+    (msg) => {
+      success(msg);
+    },
+    (msg) => {
+      error(msg);
+      failed(msg);
+    }
   );
 }
 

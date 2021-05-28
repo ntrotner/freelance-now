@@ -30,19 +30,19 @@ export async function getDeveloperRating(req, res) {
   let amountOfRatings = 0;
 
   const rating = foundContract
-      // map it to an array for reduce sum
-      .map((contract) =>
-          // check if contract was rated
-          contract.rating
-              ? [contract.rating.communication, contract.rating.speed, contract.rating.quality]
-              : undefined)
-      // remove undefined
-      .filter((rating) => rating)
-      // sum for each array position
-      .reduce((prev, next) => {
-        amountOfRatings += next[0] || next[1] || next[2] ? 1 : 0;
-        return [prev[0] + next[0], prev[1] + next[1], prev[2] + next[2]];
-      }, [0, 0, 0]);
+  // map it to an array for reduce sum
+    .map((contract) =>
+    // check if contract was rated
+      contract.rating
+        ? [contract.rating.communication, contract.rating.speed, contract.rating.quality]
+        : undefined)
+  // remove undefined
+    .filter((rating) => rating)
+  // sum for each array position
+    .reduce((prev, next) => {
+      amountOfRatings += next[0] || next[1] || next[2] ? 1 : 0;
+      return [prev[0] + next[0], prev[1] + next[1], prev[2] + next[2]];
+    }, [0, 0, 0]);
 
   if (amountOfRatings === 0) return res.status(200).json({rating: [0, 0, 0], amount: 0});
 
@@ -192,7 +192,7 @@ export async function selectDeveloper(req, res) {
 
   // find offer of developer
   const foundDeveloper = foundContract.potentialDevelopers.find((dev) =>
-      dev.email === req.body.email && Number(dev.reward) === Number(req.body.reward)
+    dev.email === req.body.email && Number(dev.reward) === Number(req.body.reward)
   );
   if (!foundDeveloper) return error(req, res, 'Entwickler nicht gefunden');
 
@@ -244,7 +244,7 @@ export async function searchContracts(req, res) {
   if (new Date(req.body.starting_date) > new Date(req.body.end_date)) return error(req, res, 'End Datum kann nicht vor dem Start Datum liegen');
 
   const finalQuery = (await Contract.find()).filter((contract) =>
-      (!contract.developer == req.body.needDeveloper) &&
+    (!contract.developer == req.body.needDeveloper) &&
       (contract.reward >= req.body.minReward) && (contract.reward <= req.body.maxReward) &&
       (contract.starting_date >= new Date(req.body.starting_date)) &&
       (contract.end_date <= new Date(req.body.end_date))
@@ -280,7 +280,6 @@ export async function isInContract(req, _id) {
     return Contract.findOne({_id: Types.ObjectId(_id), developer: Types.ObjectId(req.session._id)});
   }
 }
-
 
 /**
  * send amount of paid contracts
@@ -344,5 +343,3 @@ export async function amountInProgressContracts(req, res) {
     amount: foundContracts.length
   });
 }
-
-

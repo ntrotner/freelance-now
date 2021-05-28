@@ -1,12 +1,12 @@
 import {unauthorize, redirect} from '/session_manager.js';
 
 class Sidebar extends HTMLElement {
-    constructor() {
-        super()
-    }
+  constructor() {
+    super();
+  }
 
-    connectedCallback() {
-        this.innerHTML = `
+  connectedCallback() {
+    this.innerHTML = `
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <style>
         #sidebar {
@@ -76,10 +76,10 @@ class Sidebar extends HTMLElement {
                 <i onclick="unauthorize();" class="material-icons md-26 link" id="logout">logout</i>
             </div>
         </div>
-        `
-        document.getElementById("person").addEventListener('click', () => redirect(`/profile?email=${sessionStorage.getItem('email')}`))
-        document.getElementById("logout").addEventListener('click', unauthorize)
-    }
+        `;
+    document.getElementById('person').addEventListener('click', () => redirect(`/profile?email=${sessionStorage.getItem('email')}`));
+    document.getElementById('logout').addEventListener('click', unauthorize);
+  }
 }
 
-customElements.define('sidebar-component', Sidebar)
+customElements.define('sidebar-component', Sidebar);
