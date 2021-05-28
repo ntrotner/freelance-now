@@ -12,7 +12,7 @@ import { sendSessionStorage } from '../user_action/credentials';
 export function setUserCredentials(req, res, user: IClient | IDeveloper) {
   req.session._id = user._id;
   req.session.email = user.email;
-  req.session.password_hash = user.password_hash;
+  req.session.passwordHash = user.passwordHash;
   req.session.type = user['stack'] ? 'dev' : 'client';
   console.log(`User ${user.email} authenticated as ${req.session.type}`);
   sendSessionStorage(req, res);
@@ -27,7 +27,7 @@ export function unauthenticate(req) {
   console.log(`Session ${req.session.email} unauthenticated`);
   delete req.session._id;
   delete req.session.email;
-  delete req.session.password_hash;
+  delete req.session.passwordHash;
   delete req.type;
   return req;
 }
@@ -51,7 +51,7 @@ export function resetUserCredentials(req, res, code: number, message: string) {
  * @param req
  */
 export function isAuthenticated(req): boolean {
-  return req.session._id && req.session.email && req.session.password_hash && req.session.type;
+  return req.session._id && req.session.email && req.session.passwordHash && req.session.type;
 }
 
 /**

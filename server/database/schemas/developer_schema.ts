@@ -1,9 +1,9 @@
 import { model, Model, Schema } from 'mongoose';
-import { User_Definitions } from '../interfaces/user_interface';
+import { UserDefinitions } from '../interfaces/user_interface';
 import { IDeveloper } from '../interfaces/developer_interface';
 
 const DeveloperSchema: Schema = new Schema({
-  ...User_Definitions,
+  ...UserDefinitions,
   stack: {type: Array, required: false, default: []},
   git: {type: String, required: false, default: ''},
   merchant: {type: String, required: false, default: ''}

@@ -13,7 +13,7 @@ export async function sendSessionStorage(req, res) {
   const foundUser = await findUser({
     _id: req.session._id,
     email: req.session.email,
-    password_hash: req.session.password_hash
+    passwordHash: req.session.passwordHash
   });
   if (!foundUser) return resetUserCredentials(req, res, 401, 'Nutzer nicht gefunden');
 

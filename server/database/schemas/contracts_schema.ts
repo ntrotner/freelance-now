@@ -1,8 +1,8 @@
 import { model, Model, Schema } from 'mongoose';
-import { Contract_Definitions, IContract } from '../interfaces/contract_interface';
+import { ContractDefinitions, IContract } from '../interfaces/contract_interface';
 
 const ContractSchema: Schema = new Schema({
-  ...Contract_Definitions
+  ...ContractDefinitions
 });
 
 export const Contract: Model<IContract> = model('contract', ContractSchema);

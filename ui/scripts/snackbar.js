@@ -9,7 +9,9 @@ export function callSnackbar(message) {
   x.innerText = message;
   x.className = 'show';
 
-  setTimeout(() => x.className = x.className.replace('show', ''), 3000);
+  setTimeout(() => {
+    x.className = x.className.replace('show', '');
+  }, 3000);
 }
 
 /**

@@ -109,8 +109,8 @@ export async function createContract(req, res) {
     client: req.session._id,
     name: req.body.title,
     reward: Number(req.body.reward),
-    starting_date: new Date(req.body.startDate),
-    end_date: new Date(req.body.endDate),
+    startingDate: new Date(req.body.startDate),
+    endDate: new Date(req.body.endDate),
     details: {
       stack: req.body.stack,
       description: req.body.description,
@@ -239,15 +239,15 @@ export async function searchContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
 
   // check if date was parsed correctly
-  if (isNaN((new Date(req.body.starting_date).getMilliseconds()))) return error(req, res, 'Start Datum unzulässig');
-  if (isNaN((new Date(req.body.end_date).getMilliseconds()))) return error(req, res, 'End Datum unzulässig');
-  if (new Date(req.body.starting_date) > new Date(req.body.end_date)) return error(req, res, 'End Datum kann nicht vor dem Start Datum liegen');
+  if (isNaN((new Date(req.body.startingDate).getMilliseconds()))) return error(req, res, 'Start Datum unzulässig');
+  if (isNaN((new Date(req.body.endDate).getMilliseconds()))) return error(req, res, 'End Datum unzulässig');
+  if (new Date(req.body.startingDate) > new Date(req.body.endDate)) return error(req, res, 'End Datum kann nicht vor dem Start Datum liegen');
 
   const finalQuery = (await Contract.find()).filter((contract) =>
-    (!contract.developer == req.body.needDeveloper) &&
+    (!contract.developer === req.body.needDeveloper) &&
       (contract.reward >= req.body.minReward) && (contract.reward <= req.body.maxReward) &&
-      (contract.starting_date >= new Date(req.body.starting_date)) &&
-      (contract.end_date <= new Date(req.body.end_date))
+      (contract.startingDate >= new Date(req.body.startingDate)) &&
+      (contract.endDate <= new Date(req.body.endDate))
   );
 
   const finalResponse = [];

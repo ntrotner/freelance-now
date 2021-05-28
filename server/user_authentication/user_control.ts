@@ -50,13 +50,13 @@ export async function findUser(property: Object): Promise<IDeveloper | IClient> 
  * @param model
  * @param options
  */
-export async function createUser(req, res, model: Model<IDeveloper> | Model<IClient>, options: Object) {
+export async function createUser(req, res, Model: Model<IDeveloper> | Model<IClient>, options: Object) {
   if (await existsAnyEMail(req.body.email)) return resetUserCredentials(req, res, 400, 'E-Mail existiert schon');
 
-  const password_hash = await hashPassword(req.body.password);
-  const newModel = new model({
+  const passwordHash = await hashPassword(req.body.password);
+  const newModel = new Model({
     username: req.body.username,
-    password_hash,
+    passwordHash,
     email: req.body.email,
     ...options
   });
@@ -80,7 +80,7 @@ export async function loginUser(req, res): Promise<void> {
   if (!foundUser) return resetUserCredentials(req, res, 401, 'Nutzer nicht gefunden');
   if (!req.body.password) return resetUserCredentials(req, res, 401, 'Passwort nicht gueltig');
 
-  verifyPassword(foundUser.password_hash, req.body.password)
+  verifyPassword(foundUser.passwordHash, req.body.password)
     .then((isVerified) => {
       if (isVerified) setUserCredentials(req, res, foundUser);
       else resetUserCredentials(req, res, 401, 'Falsches Passwort');
@@ -116,7 +116,7 @@ export async function updateSettings(req, res): Promise<void> {
     break;
   case 'password':
     if (isValidPassword(req.body.password)) {
-      foundUser.password_hash = await hashPassword(req.body.password);
+      foundUser.passwordHash = await hashPassword(req.body.password);
       const updatedUser = await foundUser.save();
       setUserCredentials(req, res, updatedUser);
     } else error(req, res, 'Passwort ungültig');

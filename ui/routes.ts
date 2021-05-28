@@ -16,11 +16,11 @@ import {
 } from './pages';
 import {
   chatjs,
-  check_session,
+  checkSession,
   contractsjs,
-  http_requests,
+  httpRequests,
   profilejs,
-  session_manager,
+  sessionManager,
   snackbar
 } from './scripts';
 import { sidebar } from './components';
@@ -136,10 +136,10 @@ const cssRoutes = {
 };
 
 const jsRoutes = {
-  '/http_requests.js': http_requests,
-  '/session_manager.js': session_manager,
+  '/http_requests.js': httpRequests,
+  '/session_manager.js': sessionManager,
   '/snackbar.js': snackbar,
-  '/check_session.js': check_session,
+  '/check_session.js': checkSession,
   '/chat.js': chatjs,
   '/profile.js': profilejs,
   '/sidebar.js': sidebar,

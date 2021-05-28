@@ -64,12 +64,12 @@
 
       <tr>
         <td>Start</td>
-        <td id="starting_date"></td>
+        <td id="startingDate"></td>
       </tr>
 
       <tr>
         <td>Ende</td>
-        <td id="end_date"></td>
+        <td id="endDate"></td>
       </tr>
 
       <tr>
@@ -234,7 +234,7 @@
             return;
           }
 
-          if (['starting_date', 'end_date'].includes(key)) {
+          if (['startingDate', 'endDate'].includes(key)) {
             document.getElementById(key).innerText = (new Date(response[key])).toLocaleDateString();
             return;
           }

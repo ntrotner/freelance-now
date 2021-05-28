@@ -11,10 +11,10 @@ export interface IContract extends Document {
     stack: Array<string>,
     description: string
   },
-  starting_date: Date,
-  end_date: Date,
+  startingDate: Date,
+  endDate: Date,
   rating: {
-    requirements_fulfilled: boolean,
+    requirementsFulfilled: boolean,
     communication: number,
     speed: number,
     quality: number
@@ -22,7 +22,7 @@ export interface IContract extends Document {
   potentialDevelopers: Array<{ email: string, reward: number }>
 }
 
-export const Contract_Definitions = {
+export const ContractDefinitions = {
   client: {type: Schema.Types.ObjectId, ref: 'client'},
   developer: {type: Schema.Types.ObjectId, ref: 'developer', required: false},
   name: {type: String, required: true},
@@ -34,17 +34,17 @@ export const Contract_Definitions = {
     required: false,
     default: {stack: [], description: ''}
   },
-  starting_date: {type: Date, required: true},
-  end_date: {type: Date, required: true},
+  startingDate: {type: Date, required: true},
+  endDate: {type: Date, required: true},
   rating: {
     type: {
-      requirements_fulfilled: Boolean,
+      requirementsFulfilled: Boolean,
       communication: Number,
       speed: Number,
       quality: Number
     },
     required: false,
-    default: {requirements_fulfilled: null, communication: null, speed: null, quality: null}
+    default: {requirementsFulfilled: null, communication: null, speed: null, quality: null}
   },
   potentialDevelopers: {type: Array, required: false, default: []}
 };

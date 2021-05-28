@@ -131,7 +131,7 @@ export function captureOrder(req, res) {
     }
   },
 
-  async function (err, response, body) {
+  async function(err, response, body) {
     if (err) {
       console.error(err);
       return res.sendStatus(500);
