@@ -10,8 +10,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     steps:
-    - name: Test
-      run: pwd && ls
+    - uses: actions/checkout@v2
     - name: Install npm dependencies
       run: npm install
     - name: Run linter
