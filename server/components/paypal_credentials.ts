@@ -25,6 +25,7 @@ export function getAuthorizationToken(callback) {
   };
 
   function callbackAuthorize(error, response, body) {
+	 console.log("Authorizationtoken Response: " + response);
     if (!error && response.statusCode === 200) {
       const parsed = JSON.parse(body);
       const authorization = parsed.token_type + ' ' + parsed.access_token;
