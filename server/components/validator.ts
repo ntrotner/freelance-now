@@ -65,9 +65,13 @@ export function isValidPassword(password): boolean {
  * @param body
  */
 export function validInputCreateUser(body): boolean {
-  if (body.username && body.password && body.email) {
-    return isEMail(body.email) && isValidName(body.username) && isValidPassword(body.password);
-  } else {
+  try {
+    if (body.username && body.password && body.email) {
+      return isEMail(body.email) && isValidName(body.username) && isValidPassword(body.password);
+    } else {
+      return false;
+    }
+  } catch {
     return false;
   }
 }
@@ -78,9 +82,13 @@ export function validInputCreateUser(body): boolean {
  * @param body
  */
 export function validInputLogin(body) {
-  if (body.email && body.password) {
-    return isEMail(body.email) && body.email.length <= MAX_EMAIL_LENGTH &&
-        isASCII(body.password) && body.password.length <= MAX_PASSWORD_LENGTH;
+  try {
+    if (body.email && body.password) {
+      return isEMail(body.email) && body.email.length <= MAX_EMAIL_LENGTH &&
+          isASCII(body.password) && body.password.length <= MAX_PASSWORD_LENGTH;
+    }
+  } catch {
+    return false;
   }
 }
 
@@ -90,5 +98,9 @@ export function validInputLogin(body) {
  * @param body
  */
 export function validMessage(body) {
-  return body.to && isEMail(body.to) && body.message && isASCII(body.message);
+  try {
+    return body.to && isEMail(body.to) && body.message && isASCII(body.message);
+  } catch {
+    return false;
+  }
 }

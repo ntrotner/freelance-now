@@ -14,7 +14,7 @@ Live site: [freelance.ttnr.me](https://freelance.ttnr.me)
 3. Set Environment Variables for Express
 
 #### Docker
-1. Add `nginx_network` docker network or remove it from docker-compose
+1. Add `nginx_network` docker network or remove it from docker-compose (`docker network create nginx_network`)
 2. `docker-compose up -d --build`
 
 #### NPM

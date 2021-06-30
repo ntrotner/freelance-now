@@ -81,11 +81,11 @@ export function getContract(_id, success, failed) {
 
 /**
  * add comment as developer to a contract
- * 
- * @param _id 
- * @param comment 
- * @param success 
- * @param failed 
+ *
+ * @param _id
+ * @param comment
+ * @param success
+ * @param failed
  */
 export function setDoneComment(_id, comment, success, failed) {
   POST('/api/addDoneComment',

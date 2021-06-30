@@ -24,6 +24,7 @@ import {
   snackbar
 } from './scripts';
 import { sidebar } from './components';
+import { paypalError } from './resources';
 import path = require('path');
 
 const sendFile = (pathFile, res) => res.sendFile(path.join(__dirname + pathFile));
@@ -116,7 +117,8 @@ const htmlRoutes = {
   '/create/contract': createContract,
   '/contract': checkContract,
   '/contracts': contracts,
-  '/error': error
+  '/error': error,
+  '/paypalError': paypalError
 };
 
 const cssRoutes = {

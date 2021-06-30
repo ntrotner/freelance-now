@@ -51,6 +51,8 @@ export async function setMerchantID(req, res) {
 export async function hasConfirmedPayPal(req, res) {
   const foundUser = await findUser({email: req.body.email});
   let isConfirmed = false;
+
+  if (!foundUser) return res.status(200).json(isConfirmed);
   if (foundUser['merchant'] && (foundUser['merchant'].length > 0)) isConfirmed = true;
 
   res.status(200).json(isConfirmed);
@@ -84,7 +86,7 @@ export async function createOrder(req, res) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: authToken,
-      'PayPal-Partner-Attribution-Id': process.env.EXPRESSPORT
+      'PayPal-Partner-Attribution-Id': process.env.BID
     },
     body: {
       intent: 'CAPTURE',
@@ -106,7 +108,7 @@ export async function createOrder(req, res) {
   }, (err, response, body) => {
     if (err) {
       console.error(err);
-      return res.sendStatus(500);
+      return res.redirect(302, '/paypalError');
     }
     res.status(200).json({
       id: body.id
@@ -127,14 +129,14 @@ export function captureOrder(req, res) {
     headers: {
       'Content-Type': 'application/json',
       Authorization: authToken,
-      'PayPal-Partner-Attribution-Id': process.env.EXPRESSPORT
+      'PayPal-Partner-Attribution-Id': process.env.BID
     }
   },
 
   async function(err, response, body) {
     if (err) {
       console.error(err);
-      return res.sendStatus(500);
+      return res.redirect(302, '/paypalError');
     } else {
       body = JSON.parse(body);
       const foundContract = await Contract.findOne({_id: contractID});
@@ -153,7 +155,7 @@ export function captureOrder(req, res) {
           });
         }
       } catch {
-        return res.sendStatus(500);
+        return res.redirect(302, '/paypalError');
       }
     }
   }

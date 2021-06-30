@@ -30,7 +30,7 @@ export async function allChats(from: string): Promise<IChat[]> {
 }
 
 /**
- * send cleaned list of chats with other users, so only email and name is transfered
+ * send cleaned list of chats with other users, so only email and name is transferred
  *
  * @param req
  * @param res
