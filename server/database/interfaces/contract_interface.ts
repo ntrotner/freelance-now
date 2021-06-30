@@ -11,6 +11,7 @@ export interface IContract extends Document {
     stack: Array<string>,
     description: string
   },
+  doneDescription: string,
   startingDate: Date,
   endDate: Date,
   rating: {
@@ -34,6 +35,7 @@ export const ContractDefinitions = {
     required: false,
     default: {stack: [], description: ''}
   },
+  doneDescription: {type: String, require: false, default: ''},
   startingDate: {type: Date, required: true},
   endDate: {type: Date, required: true},
   rating: {

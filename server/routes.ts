@@ -5,7 +5,7 @@ import { sendSessionStorage } from './user_action/credentials';
 import { addMessage, sendActiveChats, sendChatUpdate, sendWholeChat, startChat } from './user_action/chat';
 import { getProfile } from './user_action/profile';
 import {
-  addDeveloperReward, amountInProgressContracts, amountOfPaidContracts, amountToPayContracts,
+  addDeveloperReward, addDoneComment, amountInProgressContracts, amountOfPaidContracts, amountToPayContracts,
   createContract, finishContract,
   getContractInformation,
   getDeveloperRating,
@@ -66,6 +66,7 @@ const postRoutes = {
   '/api/startChat': startChat,
   '/api/getAllChats': sendWholeChat,
   '/api/sendMessage': addMessage,
+  '/api/addDoneComment': addDoneComment,
   '/api/updateMessages': sendChatUpdate,
   '/api/getProfile': getProfile,
   '/api/getRatings': getDeveloperRating,

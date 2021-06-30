@@ -80,6 +80,26 @@ export function getContract(_id, success, failed) {
 }
 
 /**
+ * add comment as developer to a contract
+ * 
+ * @param _id 
+ * @param comment 
+ * @param success 
+ * @param failed 
+ */
+export function setDoneComment(_id, comment, success, failed) {
+  POST('/api/addDoneComment',
+    [{name: 'Content-Type', value: 'application/json'}],
+    {_id, comment},
+    (response) => success(response),
+    (err) => {
+      error(err);
+      failed(err);
+    }
+  );
+}
+
+/**
  * finish contract and send rating
  *
  * @param _id

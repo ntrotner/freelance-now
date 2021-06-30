@@ -67,7 +67,7 @@ export async function getPersonalContracts(req, res) {
   for (const contract of allContracts) {
     let participant: Types.ObjectId | string = req.session.type === 'client' ? contract.developer : contract.client;
 
-    // if participant isn't existant, then this means that no developer exists for this contract
+    // if participant isn't existent, then this means that no developer exists for this contract
     // else the client's email is included
     if (!participant) participant = '';
     else participant = (await findUser({_id: participant})).email;
@@ -101,6 +101,7 @@ export async function createContract(req, res) {
   if (isNaN((new Date(req.body.startDate).getMilliseconds()))) return error(req, res, 'Start Datum unzulässig');
   if (isNaN((new Date(req.body.endDate).getMilliseconds()))) return error(req, res, 'End Datum unzulässig');
   if (new Date(req.body.startDate) > new Date(req.body.endDate)) return error(req, res, 'End Datum kann nicht vor dem Start Datum liegen');
+  if (Number(new Date(req.body.startDate)) < (new Date()).setHours(0, 0, 0, 0)) return error(req, res, 'Start Datum kann nicht in der Vergangenheit liegen');
 
   if (!req.body.description || req.body.description.length <= 0) return error(req, res, 'Beschreibung unzulässig');
   if (!req.body.stack) return error(req, res, 'Stack unzulässig');
@@ -300,6 +301,26 @@ export async function amountOfPaidContracts(req, res) {
     paid: foundContracts.reduce((prev, curr) => prev + curr.reward, 0),
     amount: foundContracts.length
   });
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ */
+export async function addDoneComment(req, res) {
+  if (!isAuthenticated(req) || !isClient(req)) return error(req, res, 'Nicht Authentifiziert');
+  if (!req.body.comment) return error(req, res, 'Kein Kommentar übergeben');
+  if (!req.body._id) return error(req, res, 'Keine Auftrag ID übergeben');
+
+  const foundContract = await Contract.findOne({ _id: req.body._id });
+  if (!foundContract) return error(req, res, 'Kein Auftrag gefunden');
+
+  if (req.session.type !== 'developer' || String(foundContract.developer) !== String(req.session._id)) return error(req, res, 'Unerlaubter Zugriff');
+
+  foundContract.doneDescription = String(req.body.comment);
+  await foundContract.save();
+  req.status(200).send(String(req.body.comment));
 }
 
 /**
