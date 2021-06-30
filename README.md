@@ -27,3 +27,9 @@ Live site: [freelance.ttnr.me](https://freelance.ttnr.me)
 #### General Information
 - Don't use real passwords
 - Only use Sandbox PayPal Accounts
+
+#### PayPal
+When using a local version to run the app (without a host domain) then
+on verification with a business PayPal Account the URL on the "Go back to Test Store"
+needs to be copied and adjusted to `http://localhost:port/api/successPayPal?...`.
+Also adjust the protocol to http.

@@ -76,6 +76,11 @@
         <td>Beschreibung</td>
         <td id="description"></td>
       </tr>
+
+      <tr id=devcommentsWrapper>
+        <td>Entwickler Kommentare</td>
+        <td id="devcomments"></td>
+      </tr>
     </table>
     <div id="paypal-button"></div>
     <div id="finish" class="shadow">
@@ -144,7 +149,7 @@
 </script>
 
 <script type="module">
-  import { getContract, sendFinishContract, selectDeveloper, sendDeveloperReward } from './contracts.js';
+  import { getContract, sendFinishContract, selectDeveloper, sendDeveloperReward, setDoneComment } from './contracts.js';
   import { prettifySkill } from './profile.js';
   import { redirect, error, unauthorize } from './session_manager.js';
   import { checkSession } from './check_session.js';
@@ -170,12 +175,14 @@
   getContract(_id,
       (response) => {
         try {
-          // remove rating and finish section if no developer was choosen for the task
+          // remove rating and finish section if no developer was chosen for the task
           if (!response.developer) $('#finish').remove();
           // else remove dev list
           else $('#devs').remove();
         } catch {
         }
+
+        if (response['clientEmail'] !== sessionStorage.getItem('email') ) $('#finish').remove();
 
         try {
           if (response.isDone && !response.isPaid && response.clientEmail === sessionStorage.getItem('email')) {
@@ -250,6 +257,21 @@
                 $('<i>').attr('class', 'material-icons md-26 link').text('person').click(() => redirect(`/profile?email=${response[key]}`)));
             else $('#developer').html('&nbsp;');
             return;
+          }
+
+          if (key === 'doneDescription') {
+              if (sessionStorage.getItem('email') == response['developerEmail']) {
+                if (!response['isDone']) {
+                  $('#devcomments').replaceWith([$('<textarea>').attr('id', 'devcommentTextBox').val(response[key]), $('<button>').attr('id', 'devcommentButton').text('Speichern')]);
+                  return document.getElementById('devcommentButton').addEventListener("click", saveDevComment);
+                } else {
+                  return $('#devcomments').text(response[key]);
+                }
+              }
+              else if (sessionStorage.getItem('email') == response['clientEmail']) {
+                return $('#devcomments').text(response[key]);
+              }
+              $('#devcommentsWrapper').remove()
           }
 
           if (key === 'isDone') {
@@ -338,6 +360,13 @@
         (response) => redirect(`/contract?_id=${_id}`),
         (err) => error(err)
     );
+  }
+
+  function saveDevComment() {
+    const text = $('#devcommentTextBox').val();
+    setDoneComment(_id, text, (resp) => {
+      $('#devcommentTextBox').text(resp)
+    })
   }
 
   function setBarArea(n) {

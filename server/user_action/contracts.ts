@@ -309,18 +309,18 @@ export async function amountOfPaidContracts(req, res) {
  * @param res
  */
 export async function addDoneComment(req, res) {
-  if (!isAuthenticated(req) || !isClient(req)) return error(req, res, 'Nicht Authentifiziert');
+  if (!isAuthenticated(req) || isClient(req)) return error(req, res, 'Nicht Authentifiziert');
   if (!req.body.comment) return error(req, res, 'Kein Kommentar übergeben');
   if (!req.body._id) return error(req, res, 'Keine Auftrag ID übergeben');
 
   const foundContract = await Contract.findOne({ _id: req.body._id });
   if (!foundContract) return error(req, res, 'Kein Auftrag gefunden');
 
-  if (req.session.type !== 'developer' || String(foundContract.developer) !== String(req.session._id)) return error(req, res, 'Unerlaubter Zugriff');
+  if (req.session.type !== 'dev' || String(foundContract.developer) !== String(req.session._id)) return error(req, res, 'Unerlaubter Zugriff');
 
   foundContract.doneDescription = String(req.body.comment);
   await foundContract.save();
-  req.status(200).send(String(req.body.comment));
+  res.status(200).send(foundContract.doneDescription);
 }
 
 /**
