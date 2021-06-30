@@ -55,7 +55,11 @@ export function changeAttribute(attribute, successful, failed) {
     (msg) => {
       callSnackbar('Einstellung übernommen!');
       saveSessionData(msg);
-      successful();
+      try {
+        successful();
+      } catch {
+        console.log('No Function Defined');
+      }
     },
     (msg) => {
       error(msg);

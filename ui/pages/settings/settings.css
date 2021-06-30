@@ -8,6 +8,7 @@
 form {
   display: flex;
   flex-direction: column;
+  width: 12vw;
 }
 
 form > div:last-child {
@@ -22,9 +23,13 @@ form > input {
   margin: 8px 0;
 }
 
+#cabout {
+  width: unset;
+}
+
 #about {
-  height: 100px;
-  width: 250px;
+  height: 150px;
+  width: 40vw;
   resize: none;
   margin: 10px 0;
 }
@@ -52,11 +57,5 @@ form > input {
 }
 
 .row > div {
-  margin: 32px;
-}
-
-.row > * {
-  border-left: 1px solid #000;
-  border-right: 1px solid #000;
-  padding: 12px;
+  margin: 16px 32px;
 }
