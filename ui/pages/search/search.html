@@ -89,6 +89,10 @@
           });
 
           $('#bottomWrapper > *').remove();
+          if (response.length === 0) {
+            return $('#bottomWrapper').append([$('<h4>').text('Keine Aufträge')])
+          }
+
           $('#bottomWrapper').append(
               [$('<div>').append(['Titel', 'Auftraggeber', 'Auftragnehmer', 'Entlohnung', 'Status'].map((desc) => {
                 return $('<h4>').text(desc);
