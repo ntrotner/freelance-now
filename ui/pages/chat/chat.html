@@ -55,7 +55,7 @@
   function initUI() {
     // add event handler for search and send
     document.getElementById('search').addEventListener('submit', handleSearch);
-    document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, getChatLength()));
+    document.querySelector("#send").addEventListener('submit', (event) => sendChatMessage(event, 0));
 
     // check if user is authenticated
     checkSession(() => {
@@ -109,14 +109,16 @@
    * @param messageArray
    */
   function updateChatUI(messageArray) {
+    clearChatUI();
     addChatMessages(messageArray);
-
     // jump to most recent message
-    if (prevLen !== (messageArray.length + prevLen)) {
+    if (prevLen !== (messageArray.length)) {
       const messageBody = document.querySelector('#chatContent');
       messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
     }
-    prevLen += messageArray.length;
+    console.log(prevLen);
+    prevLen = messageArray.length;
+    console.log(prevLen);
   }
 
   /**
@@ -126,7 +128,7 @@
    * @param index
    */
   function getChat(email, index) {
-    checkChatUpdate(email, index,
+    checkChatUpdate(email, 0,
         (updatedChat) => {
           updateChatUI(updatedChat.update);
           currentUser = email;
@@ -151,6 +153,7 @@
             openInput();
             document.getElementById('sendMessage').value = '';
             document.getElementById('sendMessage').focus();
+            clearChatUI();
             updateChatUI(msg['update']);
           },
           (msg) => {
