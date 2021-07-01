@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - EXPRESSPORT=
+      - EXPRESSPORT=8080
       - EXPRESS_SESSION_SECRET=
       - BID=
       - paypalUser=
