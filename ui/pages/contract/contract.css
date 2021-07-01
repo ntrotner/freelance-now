@@ -3,7 +3,6 @@ th, td {
   margin: 0 -1px;
   border-bottom: 1px black solid;
   overflow-wrap: anywhere;
-  white-space: pre;
 }
 
 tr {
@@ -39,6 +38,10 @@ table {
   flex-direction: row;
   height: 25px;
   text-align: center;
+}
+
+#devcommentsWrapper > td {
+  white-space: pre;
 }
 
 #devcommentsWrapper > textarea {

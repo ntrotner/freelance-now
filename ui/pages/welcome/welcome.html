@@ -73,23 +73,23 @@
     for (let underlines = 4; underlines >= 0; underlines--) {
       if (underlines % 2) addLetter('_');
       else removeLetter();
-      await new Promise(resolve => setTimeout(resolve, 250));
+      await new Promise(resolve => {setTimeout(resolve, 250)});
     }
 
     let counter;
     for (counter = 0; counter < i.length; counter++) {
       addLetter(i[counter]);
-      await new Promise(resolve => setTimeout(resolve, 80));
+      await new Promise(resolve => {setTimeout(resolve, 80)});
     }
 
     if (tasks.indexOf(i) !== (tasks.length - 1)) {
       for (let underlines = 4; underlines >= 0; underlines--) {
         if (!(underlines % 2)) addLetter('_');
         else removeLetter();
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await new Promise(resolve => {setTimeout(resolve, 250)});
       }
       for (; 0 < counter; counter--) {
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise(resolve => {setTimeout(resolve, 50)});
         removeLetter();
       }
     }
