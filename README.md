@@ -21,7 +21,8 @@ Live site: [freelance.ttnr.me](https://freelance.ttnr.me)
 
 1. Start MongoDB
 2. Add `127.0.0.1 mongodb` to `/etc/hosts`
-3. `npm install && npm start`
+3. Set `EXPRESSPORT=8080 EXPRESS_SESSION_SECRET=ADDSESSIONKEY BID=xxx paypalUser=xxx paypalPass=xxx nodemon --watch './**/*.ts' --exec 'ts-node' main.ts` in package.json/scripts/start
+4. `npm install && npm start`
 
 
 #### General Information

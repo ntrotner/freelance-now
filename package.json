@@ -4,7 +4,7 @@
   "description": "Web-Engineering 2 Project for 4. Semester",
   "main": "main.ts",
   "scripts": {
-    "start": "EXPRESSPORT=8080 EXPRESS_SESSION_SECRET=ADDSESSIONKEY nodemon --watch './**/*.ts' --exec 'ts-node' main.ts",
+    "start": "nodemon --watch './**/*.ts' --exec 'ts-node' main.ts",
     "linter": "eslint --ext .ts,.js . ",
     "linter:fix": "eslint --ext .ts,.js --fix . "
   },
