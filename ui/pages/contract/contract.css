@@ -3,6 +3,7 @@ th, td {
   margin: 0 -1px;
   border-bottom: 1px black solid;
   overflow-wrap: anywhere;
+  white-space: pre;
 }
 
 tr {
@@ -43,6 +44,7 @@ table {
 #devcommentsWrapper > textarea {
   width: 100%;
   height: 100px;
+  resize: none;
 }
 
 .checked {
@@ -93,7 +95,7 @@ span.fa-star {
   justify-content: center;
 }
 
-#developer .link {
+#developer .link, #client .link {
   margin: 0 8px;
 }
 

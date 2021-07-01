@@ -153,6 +153,7 @@
   import { prettifySkill } from './profile.js';
   import { redirect, error, unauthorize } from './session_manager.js';
   import { checkSession } from './check_session.js';
+  import { callSnackbar } from './snackbar.js';
 
   // query parameter
   const _id = (new URLSearchParams(window.location.search)).get('_id');
@@ -365,6 +366,7 @@
   function saveDevComment() {
     const text = $('#devcommentTextBox').val();
     setDoneComment(_id, text, (resp) => {
+      callSnackbar('Gespeichert');
       $('#devcommentTextBox').text(resp)
     })
   }

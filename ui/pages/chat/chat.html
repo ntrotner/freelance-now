@@ -150,6 +150,7 @@
       sendMessage(currentUser, content, index, (msg) => {
             openInput();
             document.getElementById('sendMessage').value = '';
+            document.getElementById('sendMessage').focus();
             updateChatUI(msg['update']);
           },
           (msg) => {
