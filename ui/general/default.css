@@ -41,6 +41,10 @@ button {
     transition: 0.3s;
 }
 
+input {
+    border: 1px solid black;
+}
+
 button:hover {
     cursor: pointer;
     opacity: 1;

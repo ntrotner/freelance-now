@@ -291,9 +291,8 @@ export async function isInContract(req, _id) {
 export async function amountOfPaidContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
 
-  let type;
+  let type = 'developer';
   if (isClient(req)) type = 'client';
-  else type = 'developer';
 
   const foundContracts = await Contract.find({[type]: req.session._id, isPaid: true, isDone: true});
 
@@ -332,9 +331,8 @@ export async function addDoneComment(req, res) {
 export async function amountToPayContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
 
-  let type;
+  let type = 'developer';
   if (isClient(req)) type = 'client';
-  else type = 'developer';
 
   const foundContracts = await Contract.find({[type]: req.session._id, isPaid: false, isDone: true});
 
@@ -353,11 +351,12 @@ export async function amountToPayContracts(req, res) {
 export async function amountInProgressContracts(req, res) {
   if (!isAuthenticated(req)) return error(req, res, 'Nicht Authentifiziert');
 
-  let type;
+  let type = 'developer';
   if (isClient(req)) type = 'client';
-  else type = 'developer';
 
-  const foundContracts = await Contract.find({[type]: req.session._id, isDone: false, developer: {$exists: true}});
+  let foundContracts = await Contract.find();
+
+  foundContracts = foundContracts.filter((contract) => String(contract[type]) === String(req.session._id) && !contract.isDone && !!contract.developer);
 
   res.status(200).json({
     potentialPay: foundContracts.reduce((prev, curr) => prev + curr.reward, 0),

@@ -38,10 +38,14 @@ label {
 
 .usertype {
   display: inline-table;
+  width: 100%;
 }
 
 .usertypeSelect {
   display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-evenly;
 }
 
 .usertypebtn {

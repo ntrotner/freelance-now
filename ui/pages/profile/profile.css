@@ -59,6 +59,6 @@
   align-items: center;
 }
 
-.material-icons {
+#emailIcon, #iconVerification {
   margin: 0 12px;
 }
